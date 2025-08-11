@@ -1,0 +1,23 @@
+.layout {
+  display: flex;
+  flex-direction: column;
+  height: 100vh;
+  position: relative;
+}
+.content {
+  flex: 1;
+  overflow: auto;
+  width: 100%;
+  height: 100%;
+  display: flex;
+}
+
+.footer {
+  background-color: #fff;
+  position: relative;
+  z-index: 1;
+}
+.content::-webkit-scrollbar {
+  width: 0;
+  background: transparent;
+}

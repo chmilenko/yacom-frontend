@@ -1,0 +1,85 @@
+@import "../../Styles/variables.scss";
+
+.header-navigation {
+  @include flex-center;
+  flex-direction: row;
+  gap: $gap-medium;
+  padding: $base-padding;
+  border-top: 1px solid $primary;
+  &-child {
+    @include flex-column;
+    gap: $gap-small;
+    padding: $small-padding;
+    box-sizing: border-box;
+    &-active {
+      @include flex-column;
+      gap: $gap-small;
+      font-size: $font-size-sm;
+      padding: $small-padding;
+      box-sizing: border-box;
+      color: $primary;
+    }
+    &-text {
+      font-family: "Roboto", sans-serif;
+      letter-spacing: -0.01em;
+      font-size: $font-size-sm;
+    }
+  }
+}
+
+nav {
+  display: flex;
+  justify-content: center;
+  width: 100%;
+  height: 100%;
+}
+
+.material-symbols-outlined {
+  @include flex-center;
+
+  @media screen and (max-width: $mobile-md) {
+    width: 18px;
+    height: 18px;
+  }
+
+  @media screen and (max-width: $mobile-sm) {
+    width: 16px;
+    height: 16px;
+  }
+}
+
+.active {
+  color: $primary;
+}
+
+.active-text {
+  color: $primary;
+  font-weight: 700;
+}
+.breadcrumbs {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  margin-bottom: 8px;
+}
+
+.breadcrumb-btn {
+  padding: 2px 8px;
+  font-size: 13px;
+  border: none;
+  background: lighten($primary, 45%);
+  color: $primary;
+  border-radius: 4px;
+  cursor: pointer;
+  transition: 0.1s;
+  min-width: 0;
+}
+.breadcrumb-btn.active {
+  background: $primary;
+  color: white;
+  font-weight: 700;
+}
+
+.breadcrumbs span {
+  user-select: none;
+}

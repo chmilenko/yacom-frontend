@@ -1,0 +1,63 @@
+@import "../../Styles/variables.scss";
+
+.button_base {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  border: none;
+  background: none;
+  padding: 0;
+  margin: 0;
+  font-size: 14px;
+}
+
+.default_button {
+  padding: 10px 20px;
+  border: 1px solid $primary;
+  border-radius: 5px;
+  background-color: lighten($primary, 45%);
+  color: $primary;
+
+  .button_icon {
+    color: $primary;
+  }
+
+  &.active {
+    background-color: $primary;
+    color: white;
+
+    .button_icon {
+      color: white;
+    }
+  }
+}
+
+.report_button {
+  padding: 3px;
+  border-radius: 50%;
+
+  .button_icon {
+    color: $primary;
+    font-size: 24px;
+  }
+
+  &.active {
+    background-color: rgba($primary, 0.3);
+
+    .button_icon {
+      color: darken($primary, 15%);
+    }
+  }
+}
+.nav-btn {
+  display: flex;
+  flex-direction: column-reverse;
+  border-radius: 8px;
+  background-color: transparent !important;
+}
+.active {
+  color: $primary;
+}

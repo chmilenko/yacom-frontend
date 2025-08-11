@@ -1,0 +1,108 @@
+.instructions_container {
+  padding: 10px;
+}
+.instructions_filter {
+  padding: 10px;
+  background-color: rgb(216, 216, 216);
+}
+.instructions_content {
+  position: relative;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  gap: 6px;
+}
+
+.instructions_child {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  gap: 6px;
+  padding: 12px 10px 10px 0px;
+  border-bottom: 0.5px solid black;
+}
+.instructions_child_content {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+}
+.instructions_actions {
+  display: flex;
+  flex-direction: row;
+  gap: 3px;
+}
+.instructions_child_title {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  margin-left: 8px;
+  gap: 4px;
+  font-size: 14px;
+}
+.green {
+  color: #37b116;
+}
+.no_children {
+  padding-left: 4px;
+}
+.circle {
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  border: 1px solid black;
+}
+.instructions_sub_content {
+  padding-left: 20px;
+}
+
+.instructions_sub_child {
+  display: flex;
+  flex-direction: row;
+  gap: 6px;
+  padding: 8px 0px 8px 30px;
+}
+
+.in_a_child {
+  animation: bounce 3s infinite;
+}
+@keyframes bounce {
+  0%,
+  20%,
+  50%,
+  80%,
+  100% {
+    transform: translateY(0);
+  }
+  40% {
+    transform: translateY(-10px);
+  }
+  60% {
+    transform: translateY(-5px);
+  }
+}
+
+.instructions_swipe_content {
+  position: relative;
+  z-index: 2;
+  background: white;
+}
+
+.send_email_button {
+  position: absolute;
+  right: 0;
+  top: 0;
+  bottom: 0;
+  background: #4caf50;
+  color: white;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 1;
+  transition: opacity 0.2s ease;
+  padding: 4px;
+}
+
+.send_email_button .material-symbols-outlined {
+  font-size: 24px;
+}

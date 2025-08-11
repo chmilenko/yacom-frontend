@@ -1,0 +1,34 @@
+$primary: #9f5c5c;
+$secondary: #666666;
+$accent: #ffaa33;
+$white: #ffffff;
+$black: #000000;
+$red: red;
+
+// Отступы
+$big-padding: 10px;
+$base-padding: 8px;
+$small-padding: 4px;
+$gap-small: 8px;
+$gap-medium: 19px;
+
+// Размеры шрифтов
+$font-size-sm: 14px;
+
+@mixin flex-center {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+@mixin flex-column {
+  @include flex-center;
+  flex-direction: column;
+}
+@mixin flex-column-nocenter {
+  display: flex;
+  flex-direction: column;
+}
+// Медиа-запросы
+$mobile-sm: 353px;
+$mobile-md: 395px;
