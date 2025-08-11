@@ -7,9 +7,8 @@ import { AppStateContext } from "../../Core/Context/AppStateContext";
 import { ActionsContext } from "../../Core/Context/ActionsContext";
 
 export const useHomeActions = () => {
-  const { setActions,actions } = useContext(ActionsContext);
-console.log(actions);
-
+  const { setActions, actions } = useContext(ActionsContext);
+  console.log(actions);
 
   const {
     forState,
@@ -75,17 +74,13 @@ console.log(actions);
       objectType: info.ObjectType,
     });
 
-    if (developer) {
-      setAdditionalInfo(info);
-    }
+    developer && setAdditionalInfo(info);
 
     setListData(dataToSend);
     setListName(type);
     setOpenSwiper(true);
 
-    if (!developer) {
-      clickTo1C();
-    }
+    !developer && clickTo1C();
   };
 
   const onTaskExecute = (id) => {
@@ -102,7 +97,6 @@ console.log(actions);
     }
     setTaskDoneStatus(id);
     !developer && clickTo1C();
-    
   };
 
   const taskFulfill = (id) => {
@@ -135,18 +129,19 @@ console.log(actions);
     } else return;
   };
 
-const openReport = () => {
-  setTimeout(() => {
-    setActions({
-      actionName: additionalInfo.ObjectType === "News" 
-        ? "NewsReportClick" 
-        : "TaskReportClick",
-      objectId: additionalInfo.ObjectID,
-      active: true,
-    });
-    !developer && clickTo1C();
-  }, 200); // Ждем завершения анимации
-};
+  const openReport = () => {
+    setTimeout(() => {
+      setActions({
+        actionName:
+          additionalInfo.ObjectType === "News"
+            ? "NewsReportClick"
+            : "TaskReportClick",
+        objectId: additionalInfo.ObjectID,
+        active: true,
+      });
+      !developer && clickTo1C();
+    }, 200); 
+  };
   return {
     openTasksOrNewsForm,
     handleOpenSwiper,

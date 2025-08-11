@@ -43,7 +43,6 @@ function Home() {
           user.isExpert && (
             <div>
               <Button
-                // className="report_tasks"
                 icon={
                   <span className="material-symbols-outlined">chart_data</span>
                 }
