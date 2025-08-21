@@ -25,12 +25,23 @@ function Section({ section, onOpenSwiper, openSectionForm, type }) {
   const items = type === "Tasks" ? section.TaskList : section.NewsList;
   const showExpandButton = type === "News";
 
+  const handleTouchStart = () => {
+    setIsActive(true);
+  };
+
+  const handleTouchEnd = () => {
+    setIsActive(false);
+    openSectionForm(type);
+  };
+
   return (
     <div className={`section_container ${openSwiper && "light_border"}`}>
       <div className="section_header">
         <div
           className={`section_header_left ${isActive ? "active" : ""}`}
-          onClick={handleHeaderClick}
+          onTouchStart={handleTouchStart}
+          onTouchEnd={handleTouchEnd}
+          onClick={openSectionForm.bind(null, type)}
         >
           <h3 className="section_header_title">{section.SectionName}</h3>
 

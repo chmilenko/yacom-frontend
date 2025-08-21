@@ -87,6 +87,8 @@ function AdditionalInfo({ onTaskExecute, taskFulfill }) {
   }
 
   function clickLink(attachment, send, print) {
+    console.log("aga");
+
     const actionName =
       (send && "SendEmail") || (print && "print") || "openFile";
     setActions({

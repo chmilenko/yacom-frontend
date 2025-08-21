@@ -1,4 +1,4 @@
-$primary: #9f5c5c;
+$primary: #4fae1a;
 $secondary: #666666;
 $accent: #ffaa33;
 $white: #ffffff;
@@ -19,6 +19,11 @@ $font-size-sm: 14px;
   display: flex;
   align-items: center;
   justify-content: center;
+}
+@mixin flex-center-around {
+  display: flex;
+  align-items: center;
+  justify-content: space-around;
 }
 
 @mixin flex-column {

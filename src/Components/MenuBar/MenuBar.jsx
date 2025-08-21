@@ -1,16 +1,15 @@
 import React, { useContext } from "react";
-
 import "./MenuBar.scss";
-
 import clickTo1C from "../../Utils/clicker";
 import { AppStateContext } from "../../Core/Context/AppStateContext";
 import { ActionsContext } from "../../Core/Context/ActionsContext";
+import Button from "../../Ui/Button/Button";
 
 const menuItems = [
   {
     name: "",
     label: "Главная",
-    icon: "home",
+    icon: "house",
     objectId: 1,
     item: "Main",
   },
@@ -28,26 +27,25 @@ const menuItems = [
     objectId: 5,
     item: "Support",
   },
-  // {
-  //   name: "journals",
-  //   label: "Журналы",
-  //   icon: "chrome_reader_mode",
-  //   objectId: 2,
-  //   item: "Journals",
-  // },
-  // {
-  //   name: "products",
-  //   label: "Товары",
-  //   icon: "shopping_cart",
-  //   objectId: 4,
-  //   item: "Promo",
-  // },
-  // {
+  {
+    name: "journals",
+    label: "Журналы",
+    icon: "chrome_reader_mode",
+    objectId: 2,
+    item: "Journals",
+  },
+  {
+    name: "products",
+    label: "Товары",
+    icon: "shopping_cart",
+    objectId: 4,
+    item: "Promo",
+  },
 ];
 
 function MenuBar() {
   const { developer, page, setPage } = useContext(AppStateContext);
-  const { setActions } = useContext(ActionsContext);
+  const { setActions, actions } = useContext(ActionsContext);
 
   const handleClickSetPage = (item) => {
     setPage(item.name);
@@ -73,9 +71,10 @@ function MenuBar() {
     });
     !developer && clickTo1C();
   }
+  console.log(actions);
 
   return (
-    <div>
+    <div className="menu-bar-container">
       <div className="breadcrumbs">
         {generateBreadcrumbs().map((breadcrumb, index) => (
           <span key={index}>
@@ -83,32 +82,23 @@ function MenuBar() {
           </span>
         ))}
       </div>
-      <div className="header-navigation">
+
+      <nav className="header-navigation" role="navigation">
         {menuItems.map((item) => (
-          <nav key={item.name} onClick={() => handleClickSetPage(item)}>
-            <div
-              className={`header-navigation-child${
-                page === item.name ? "-active" : ""
-              }`}
-            >
-              <span
-                className={`material-symbols-outlined ${
-                  page === item.name && "active"
-                }`}
-              >
-                {item.icon}
-              </span>
-              <div
-                className={`header-navigation-child-text ${
-                  page === item.name ? "active_text" : ""
-                }`}
-              >
-                {item.label}
-              </div>
-            </div>
-          </nav>
+          <Button
+            key={item.name}
+            onClick={() => handleClickSetPage(item)}
+            className={`menu-button ${page === item.name ? "active" : ""}`}
+            type="navigation"
+            icon={
+              <span className="material-symbols-outlined">{item.icon}</span>
+            }
+            text={item.label}
+            aria-label={item.label}
+            aria-current={page === item.name ? "page" : undefined}
+          />
         ))}
-      </div>
+      </nav>
     </div>
   );
 }

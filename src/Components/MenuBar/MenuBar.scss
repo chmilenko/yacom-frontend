@@ -1,10 +1,9 @@
 @import "../../Styles/variables.scss";
 
 .header-navigation {
-  @include flex-center;
+  @include flex-center-around;
   flex-direction: row;
-  gap: $gap-medium;
-  padding: $base-padding;
+  padding: 8px 0px 8px 0px;
   border-top: 1px solid $primary;
   &-child {
     @include flex-column;
@@ -37,15 +36,15 @@ nav {
 .material-symbols-outlined {
   @include flex-center;
 
-  @media screen and (max-width: $mobile-md) {
-    width: 18px;
-    height: 18px;
-  }
+  // @media screen and (max-width: $mobile-md) {
+  //   width: 18px;
+  //   height: 18px;
+  // }
 
-  @media screen and (max-width: $mobile-sm) {
-    width: 16px;
-    height: 16px;
-  }
+  // @media screen and (max-width: $mobile-sm) {
+  //   width: 16px;
+  //   height: 16px;
+  // }
 }
 
 .active {
@@ -62,24 +61,15 @@ nav {
   gap: 4px;
   margin-bottom: 8px;
 }
-
-.breadcrumb-btn {
-  padding: 2px 8px;
-  font-size: 13px;
-  border: none;
-  background: lighten($primary, 45%);
-  color: $primary;
-  border-radius: 4px;
-  cursor: pointer;
-  transition: 0.1s;
-  min-width: 0;
+.navigation_button {
+  display: flex;
+  flex-direction: column-reverse;
 }
-.breadcrumb-btn.active {
-  background: $primary;
-  color: white;
-  font-weight: 700;
-}
-
-.breadcrumbs span {
-  user-select: none;
+.menu-button {
+  @media screen and (max-width: 360px) {
+    font-size: 13px;
+  }
+  @media screen and (max-width: 340px) {
+    font-size: 12px;
+  }
 }
