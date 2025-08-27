@@ -58,7 +58,7 @@ function Home() {
   useEffect(() => {
     setAppState();
     setUser();
-  }, [setAppState, setUser]);
+  }, []);
 
   return (
     <div className="main">

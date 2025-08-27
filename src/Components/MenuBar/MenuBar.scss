@@ -35,16 +35,6 @@ nav {
 
 .material-symbols-outlined {
   @include flex-center;
-
-  // @media screen and (max-width: $mobile-md) {
-  //   width: 18px;
-  //   height: 18px;
-  // }
-
-  // @media screen and (max-width: $mobile-sm) {
-  //   width: 16px;
-  //   height: 16px;
-  // }
 }
 
 .active {

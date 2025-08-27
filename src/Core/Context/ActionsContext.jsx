@@ -26,12 +26,10 @@ export const ActionsProvider = ({ children }) => {
                 el.actionName === param.actionName)
           );
           if (existingIndex > -1) {
-            // Заменяем существующий
             const updated = [...prevActions];
             updated[existingIndex] = param;
             return updated;
           }
-          // Добавляем новый
           return [...prevActions, param];
         });
       } catch (err) {

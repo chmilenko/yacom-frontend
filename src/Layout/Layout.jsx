@@ -12,13 +12,13 @@ import { ActionsContext } from "../Core/Context/ActionsContext";
 
 function Layout() {
   const contentRef = useRef(null);
-  const { setAppState, page, openSwiper, developer } =
+  const { setAppState, page, setInstructionsState, developer } =
     useContext(AppStateContext);
 
   const { setActions } = useContext(ActionsContext);
 
   const funcRefresh = (currentPage) => {
-    switch (currentPage && !openSwiper) {
+    switch (currentPage) {
       case "":
         setActions({
           actionName: "pullToRefresh",
@@ -26,11 +26,19 @@ function Layout() {
         });
         !developer && clickTo1C();
         return setAppState();
+      case "instructions":
+        setActions({
+          actionName: "pullToRefresh",
+          active: true,
+        });
+        !developer && clickTo1C();
+        return setInstructionsState();
       default:
         console.log("No refresh function implemented for this page");
         return "empty";
     }
   };
+
   return (
     <div className="layout">
       <ScrollToTop scrollContainerRef={contentRef} />

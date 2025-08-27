@@ -7,8 +7,8 @@ import { AppStateContext } from "../../Core/Context/AppStateContext";
 import { ActionsContext } from "../../Core/Context/ActionsContext";
 
 export const useHomeActions = () => {
-  const { setActions, actions } = useContext(ActionsContext);
-  console.log(actions);
+  const { setActions } = useContext(ActionsContext);
+
 
   const {
     forState,
@@ -53,7 +53,7 @@ export const useHomeActions = () => {
     let id;
     if (type === "Задачи" || type === "Tasks") {
       id = info.TaskID;
-    } else if (type === "Сообщения" || type === "Messages") {
+    } else if (type === "Сообщения" || type === "Messages" || type === 'Новости') {
       id = info.ObjectID;
       setReadNews(id);
     }

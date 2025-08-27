@@ -37,21 +37,6 @@ export const AppStateProvider = ({ children }) => {
     countUnreadNews: 0,
   });
 
-  // Обновление счетчиков
-  const updateNewsCount = useCallback(() => {
-    const unreadNews = state.forState
-      .flatMap((section) => section.NewsList || [])
-      .filter((news) => news && news.New);
-    setState((prev) => ({ ...prev, countUnreadNews: unreadNews.length }));
-  }, [state.forState]);
-
-  const updateTaskCount = useCallback(() => {
-    const tasks = state.forState
-      .flatMap((section) => section.TaskList || [])
-      .filter((task) => !task.Done);
-    setState((prev) => ({ ...prev, countActualTasks: tasks.length }));
-  }, [state.forState]);
-
   // Глобальные сеттеры
   const setUser = useCallback(
     (appData) => {
@@ -74,115 +59,57 @@ export const AppStateProvider = ({ children }) => {
     setState((prev) => ({ ...prev, page: newPage }));
   }, []);
 
-  const setOpenSwiper = useCallback((swiperState) => {
-    setState((prev) => ({ ...prev, openSwiper: swiperState }));
-  }, []);
+  //Рабочий стол
+
+  // Обновление счетчиков на рабочем столе
+  const updateNewsCount = useCallback(() => {
+    const unreadNews = state.forState
+      .flatMap((section) => section.NewsList || [])
+      .filter((news) => news && news.New);
+    setState((prev) => ({ ...prev, countUnreadNews: unreadNews.length }));
+  }, [state.forState]);
+
+  const updateTaskCount = useCallback(() => {
+    const tasks = state.forState
+      .flatMap((section) => section.TaskList || [])
+      .filter((task) => !task.Done);
+    setState((prev) => ({ ...prev, countActualTasks: tasks.length }));
+  }, [state.forState]);
 
   const setAppState = useCallback(
     (appData) => {
       try {
         const res = !state.developer ? JSON.parse(appData) : data;
-        setState((prev) => ({ ...prev, forState: res }));
-        updateTaskCount();
-        updateNewsCount();
-      } catch (err) {
-        const errorDescription = `Не удалось распарсить в setAppState\nОшибка ${err.name}: ${err.message}\n${err.stack}`;
-        setState((prev) => ({ ...prev, error: errorDescription }));
-      }
-    },
-    [state.developer, updateTaskCount, updateNewsCount]
-  );
-
-  const setInstructionsState = useCallback(
-    (appData) => {
-      try {
-        const res = !state.developer ? JSON.parse(appData) : dataInstructions;
-        setState((prev) => ({ ...prev, instructions: res }));
-      } catch (err) {
-        const errorDescription = `Не удалось распарсить в setAppState\nОшибка ${err.name}: ${err.message}\n${err.stack}`;
-        setState((prev) => ({ ...prev, error: errorDescription }));
-      }
-    },
-    [state.developer]
-  );
-
-  const setListState = useCallback(
-    (listName, ListData, updateRecords = true) => {
-      try {
-        const res = JSON.parse(ListData);
-        const additionalInfoObject = res.reduce(
-          (acc, cur) => ({ ...acc, ...cur }),
-          {}
-        );
-        setState((prev) => ({ ...prev, additionalInfo: additionalInfoObject }));
-      } catch (err) {
-        const errorDescription = `Не удалось распарсить в setListState\nОшибка ${err.name}: ${err.message}\n${err.stack}`;
-        setState((prev) => ({ ...prev, error: errorDescription }));
-      }
-    },
-    []
-  );
-
-  const setListStateClear = useCallback(() => {
-    setState((prev) => ({ ...prev, additionalInfo: {} }));
-  }, []);
-
-  const setListName = useCallback((type) => {
-    setState((prev) => ({ ...prev, listName: type }));
-  }, []);
-
-  const setListData = useCallback((list) => {
-    setState((prev) => ({ ...prev, ListData: list }));
-  }, []);
-
-  const setReadNews = useCallback(
-    (id) => {
-      if (state.developer) {
-        const updatedData = state.forState.map((section) => {
-          const updatedNewsList = (section.NewsList || []).map((newsItem) =>
-            newsItem.ObjectID === id && newsItem.New
-              ? { ...newsItem, New: false }
-              : newsItem
-          );
-          return { ...section, NewsList: updatedNewsList };
-        });
-        state.forState.length = 0;
-        state.forState.push(...updatedData);
-        updateNewsCount();
-      } else {
         setState((prev) => {
-          const updatedData = prev.forState.map((section) => {
-            const updatedNewsList = (section.NewsList || []).map((newsItem) =>
-              newsItem.ObjectID === id && newsItem.New
-                ? { ...newsItem, New: false }
-                : newsItem
-            );
-            return { ...section, NewsList: updatedNewsList };
-          });
-          return { ...prev, forState: updatedData };
+          // Сначала обновляем forState
+          const newState = { ...prev, forState: res };
+
+          // Затем immediately вычисляем счетчики из НОВЫХ данных
+          const tasks = res
+            .flatMap((section) => section.TaskList || [])
+            .filter((task) => !task.Done);
+
+          const unreadNews = res
+            .flatMap((section) => section.NewsList || [])
+            .filter((news) => news && news.New);
+
+          // Возвращаем полное обновленное состояние
+          return {
+            ...newState,
+            countActualTasks: tasks.length,
+            countUnreadNews: unreadNews.length,
+          };
         });
-        updateNewsCount();
+      } catch (err) {
+        const errorDescription = `Не удалось распарсить в setAppState\nОшибка ${err.name}: ${err.message}\n${err.stack}`;
+        setState((prev) => ({ ...prev, error: errorDescription }));
       }
     },
-    [state.developer, state.forState, updateNewsCount]
+    [state.developer] // ← updateTaskCount и updateNewsCount больше не нужны!
   );
 
-  const setAdditionalInfo = useCallback((additional) => {
-    setState((prev) => ({ ...prev, loadingAdditionalInfo: true }));
-    try {
-      setState((prev) => ({
-        ...prev,
-        additionalInfo: additional,
-        loadingAdditionalInfo: false,
-      }));
-    } catch (err) {
-      const errorDescription = `Не удалось распарсить в setAdditionalInfo\nОшибка ${err.name}: ${err.message}\n${err.stack}`;
-      setState((prev) => ({
-        ...prev,
-        error: errorDescription,
-        loadingAdditionalInfo: false,
-      }));
-    }
+  const setOpenSwiper = useCallback((swiperState) => {
+    setState((prev) => ({ ...prev, openSwiper: swiperState }));
   }, []);
 
   const setTaskDoneStatus = useCallback(
@@ -302,7 +229,123 @@ export const AppStateProvider = ({ children }) => {
     [state.developer, state.forState, updateTaskCount]
   );
 
-  // Обновление pageComponent при изменении состояния
+  const setReadNews = useCallback(
+    (id) => {
+      if (state.developer) {
+        const updatedData = state.forState.map((section) => {
+          const updatedNewsList = (section.NewsList || []).map((newsItem) =>
+            newsItem.ObjectID === id && newsItem.New
+              ? { ...newsItem, New: false }
+              : newsItem
+          );
+          console.log(updatedNewsList);
+
+          return { ...section, NewsList: updatedNewsList };
+        });
+        state.forState.length = 0;
+        state.forState.push(...updatedData);
+        updateNewsCount();
+      } else {
+        setState((prev) => {
+          const updatedData = prev.forState.map((section) => {
+            const updatedNewsList = (section.NewsList || []).map((newsItem) =>
+              newsItem.ObjectID === id && newsItem.New
+                ? { ...newsItem, New: false }
+                : newsItem
+            );
+            return { ...section, NewsList: updatedNewsList };
+          });
+          return { ...prev, forState: updatedData };
+        });
+        updateNewsCount();
+      }
+    },
+    [state.developer, state.forState, updateNewsCount]
+  );
+
+  const setAdditionalInfo = useCallback((additional) => {
+    setState((prev) => ({ ...prev, loadingAdditionalInfo: true }));
+    try {
+      setState((prev) => ({
+        ...prev,
+        additionalInfo: additional,
+        loadingAdditionalInfo: false,
+      }));
+    } catch (err) {
+      const errorDescription = `Не удалось распарсить в setAdditionalInfo\nОшибка ${err.name}: ${err.message}\n${err.stack}`;
+      setState((prev) => ({
+        ...prev,
+        error: errorDescription,
+        loadingAdditionalInfo: false,
+      }));
+    }
+  }, []);
+
+  const setListStateClear = useCallback(() => {
+    setState((prev) => ({ ...prev, additionalInfo: {} }));
+  }, []);
+
+  const setListName = useCallback((type) => {
+    setState((prev) => ({ ...prev, listName: type }));
+  }, []);
+
+  const setListData = useCallback((list) => {
+    setState((prev) => ({ ...prev, ListData: list }));
+  }, []);
+
+  const setListState = useCallback(
+    (listName, ListData, updateRecords = true) => {
+      try {
+        const res = JSON.parse(ListData);
+        const additionalInfoObject = res.reduce(
+          (acc, cur) => ({ ...acc, ...cur }),
+          {}
+        );
+        setState((prev) => ({ ...prev, additionalInfo: additionalInfoObject }));
+      } catch (err) {
+        const errorDescription = `Не удалось распарсить в setListState\nОшибка ${err.name}: ${err.message}\n${err.stack}`;
+        setState((prev) => ({ ...prev, error: errorDescription }));
+      }
+    },
+    []
+  );
+
+  const setViewSection = useCallback((sectionToUpdate) => {
+    setState((prev) => {
+      // Используем prev.forState вместо state.forState
+      const updatedForState = prev.forState.map((section) => {
+        console.log("Проверяем секцию:", section.SectionName);
+
+        if (section.SectionName === sectionToUpdate.SectionName) {
+          console.log("Нашли совпадение! Старое View:", section.View);
+          const newView = !section.View;
+          console.log("Новое View:", newView);
+
+          return {
+            ...section,
+            View: newView,
+          };
+        }
+        return section;
+      });
+      return { ...prev, forState: updatedForState };
+    });
+  }, []);
+
+  // Раздел инструкций
+  const setInstructionsState = useCallback(
+    (appData) => {
+      try {
+        const res = !state.developer ? JSON.parse(appData) : dataInstructions;
+        setState((prev) => ({ ...prev, instructions: res }));
+      } catch (err) {
+        const errorDescription = `Не удалось распарсить в setInstructionsState\nОшибка ${err.name}: ${err.message}\n${err.stack}`;
+        setState((prev) => ({ ...prev, error: errorDescription }));
+      }
+    },
+    [state.developer]
+  );
+
   useEffect(() => {
     setPageComponent({
       setUser,
@@ -349,6 +392,7 @@ export const AppStateProvider = ({ children }) => {
         setListStateClear,
         updateNewsCount,
         updateTaskCount,
+        setViewSection,
       }}
     >
       {children}

@@ -1,4 +1,4 @@
-import React, { useState, useRef } from "react";
+import React, { useState, useRef, useEffect } from "react";
 import "./Button.scss";
 
 function Button({ text, onClick, icon, className, type = "default" }) {
@@ -31,7 +31,7 @@ function Button({ text, onClick, icon, className, type = "default" }) {
     touchStartedRef.current = false;
   };
 
-  React.useEffect(() => {
+  useEffect(() => {
     return () => clearTimeout(timerRef.current);
   }, []);
 
@@ -46,7 +46,6 @@ function Button({ text, onClick, icon, className, type = "default" }) {
       className={`button_base ${type}_button ${className || ""} ${
         isActive ? "active" : ""
       }`}
-      // Отключаем стандартное поведение браузера для тач-событий
       onTouchMove={(e) => e.preventDefault()}
     >
       {text}
