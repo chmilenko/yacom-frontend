@@ -22,7 +22,6 @@ const menuItems = [
     objectId: 5,
     item: "Support",
   },
-  // ... остальные пункты
 ];
 
 function MenuBar() {

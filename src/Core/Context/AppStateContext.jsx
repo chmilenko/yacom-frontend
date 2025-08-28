@@ -81,10 +81,7 @@ export const AppStateProvider = ({ children }) => {
       try {
         const res = !state.developer ? JSON.parse(appData) : data;
         setState((prev) => {
-          // Сначала обновляем forState
           const newState = { ...prev, forState: res };
-
-          // Затем immediately вычисляем счетчики из НОВЫХ данных
           const tasks = res
             .flatMap((section) => section.TaskList || [])
             .filter((task) => !task.Done);
@@ -92,8 +89,6 @@ export const AppStateProvider = ({ children }) => {
           const unreadNews = res
             .flatMap((section) => section.NewsList || [])
             .filter((news) => news && news.New);
-
-          // Возвращаем полное обновленное состояние
           return {
             ...newState,
             countActualTasks: tasks.length,
@@ -105,7 +100,7 @@ export const AppStateProvider = ({ children }) => {
         setState((prev) => ({ ...prev, error: errorDescription }));
       }
     },
-    [state.developer] // ← updateTaskCount и updateNewsCount больше не нужны!
+    [state.developer] 
   );
 
   const setOpenSwiper = useCallback((swiperState) => {
@@ -115,7 +110,6 @@ export const AppStateProvider = ({ children }) => {
   const setTaskDoneStatus = useCallback(
     (id) => {
       if (state.developer) {
-        // Developer режим - мутируем существующий state
         const updatedData = JSON.parse(JSON.stringify(state.forState));
         let taskToMove = null;
 
@@ -164,13 +158,10 @@ export const AppStateProvider = ({ children }) => {
           newsSection.NewsList = newsSection.NewsList || [];
           newsSection.NewsList.push(taskToMove);
         }
-
-        // Мутация state в developer режиме
         state.forState.length = 0;
         state.forState.push(...updatedSections);
         updateTaskCount();
       } else {
-        // Обычный режим - используем setState
         setState((prev) => {
           const updatedData = JSON.parse(JSON.stringify(prev.forState));
           let taskToMove = null;
@@ -312,7 +303,6 @@ export const AppStateProvider = ({ children }) => {
 
   const setViewSection = useCallback((sectionToUpdate) => {
     setState((prev) => {
-      // Используем prev.forState вместо state.forState
       const updatedForState = prev.forState.map((section) => {
         console.log("Проверяем секцию:", section.SectionName);
 
