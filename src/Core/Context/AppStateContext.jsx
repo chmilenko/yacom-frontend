@@ -64,15 +64,17 @@ export const AppStateProvider = ({ children }) => {
   // Обновление счетчиков на рабочем столе
   const updateNewsCount = useCallback(() => {
     const unreadNews = state.forState
-      .flatMap((section) => section.NewsList || [])
-      .filter((news) => news && news.New);
+      .flatMap((section) => section.sectionData?.list || [])
+      .filter((news) => news.New);
     setState((prev) => ({ ...prev, countUnreadNews: unreadNews.length }));
   }, [state.forState]);
 
   const updateTaskCount = useCallback(() => {
+    console.log("Обновление счетчика задач...");
+
     const tasks = state.forState
-      .flatMap((section) => section.TaskList || [])
-      .filter((task) => !task.Done);
+      .flatMap((section) => section.sectionData?.list || [])
+      .filter((item) => !item.Done);
     setState((prev) => ({ ...prev, countActualTasks: tasks.length }));
   }, [state.forState]);
 
@@ -82,13 +84,23 @@ export const AppStateProvider = ({ children }) => {
         const res = !state.developer ? JSON.parse(appData) : data;
         setState((prev) => {
           const newState = { ...prev, forState: res };
-          const tasks = res
-            .flatMap((section) => section.TaskList || [])
-            .filter((task) => !task.Done);
 
-          const unreadNews = res
-            .flatMap((section) => section.NewsList || [])
-            .filter((news) => news && news.New);
+          const tasksSection = res.find(
+            (section) =>
+              section.SectionName === "Задачи" ||
+              section.SectionName === "Tasks"
+          );
+          const tasks =
+            tasksSection?.sectionData?.list?.filter((item) => !item.Done) || [];
+
+          const newsSection = res.find(
+            (section) =>
+              section.SectionName === "Новости" ||
+              section.SectionName === "News"
+          );
+          const unreadNews =
+            newsSection?.sectionData?.list?.filter((item) => item.New) || [];
+
           return {
             ...newState,
             countActualTasks: tasks.length,
@@ -100,7 +112,7 @@ export const AppStateProvider = ({ children }) => {
         setState((prev) => ({ ...prev, error: errorDescription }));
       }
     },
-    [state.developer] 
+    [state.developer]
   );
 
   const setOpenSwiper = useCallback((swiperState) => {
@@ -114,138 +126,214 @@ export const AppStateProvider = ({ children }) => {
         let taskToMove = null;
 
         const updatedSections = updatedData.map((section) => {
-          if (!section.TaskList) return section;
+          if (!section.sectionData?.list) return section;
 
-          const updatedTaskList = section.TaskList.map((task) => {
-            if (task.TaskID !== id) return task;
+          const updatedList = section.sectionData.list
+            .map((item) => {
+              if ((item.TaskID !== id && item.ObjectID !== id) || item.Done)
+                return item;
 
-            if (task.ResultType != 8 && task.ObjectType !== "News") {
-              return { ...task, Done: true };
-            }
+              if (item.ResultType != 8 && item.ObjectType === "Task") {
+                return { ...item, Done: true };
+              }
 
-            if (task.ResultType == 8 && task.ObjectType === "News") {
-              taskToMove = {
-                ...task,
-                isReport: true,
-              };
-              delete taskToMove.ResultType;
-              return null;
-            }
+              if (item.ResultType == 8 && item.ObjectType === "News") {
+                taskToMove = {
+                  ...item,
+                  isReport: true,
+                  Done: true,
+                  New: false,
+                };
+                delete taskToMove.ResultType;
+                return null;
+              }
 
-            return task;
-          }).filter(Boolean);
+              return item;
+            })
+            .filter(Boolean);
 
-          return { ...section, TaskList: updatedTaskList };
+          return {
+            ...section,
+            sectionData: { ...section.sectionData, list: updatedList },
+          };
         });
 
         if (taskToMove) {
           let newsSection = updatedSections.find(
-            (s) => s.SectionName === "News" || s.NewsList
+            (s) => s.SectionName === "Новости"
           );
 
           if (!newsSection) {
             newsSection = {
               SectionCounter: 0,
-              SectionName: "Messages",
+              SectionName: "Новости",
               Sort: 1,
               SectionUpdate: "Обновлено недавно",
               SectionNeedsUpdate: false,
-              NewsList: [],
+              sectionData: {
+                list: [],
+              },
             };
             updatedSections.push(newsSection);
           }
 
-          newsSection.NewsList = newsSection.NewsList || [];
-          newsSection.NewsList.push(taskToMove);
+          newsSection.sectionData = newsSection.sectionData || { list: [] };
+          newsSection.sectionData.list.unshift(taskToMove);
         }
-        state.forState.length = 0;
-        state.forState.push(...updatedSections);
-        updateTaskCount();
+
+        setState((prev) => {
+          const newState = { ...prev, forState: updatedSections };
+
+          const tasksSection = updatedSections.find(
+            (section) =>
+              section.SectionName === "Задачи" ||
+              section.SectionName === "Tasks"
+          );
+          const tasks =
+            tasksSection?.sectionData?.list?.filter((item) => !item.Done) || [];
+
+          const newsSection = updatedSections.find(
+            (section) =>
+              section.SectionName === "Новости" ||
+              section.SectionName === "News"
+          );
+          const unreadNews =
+            newsSection?.sectionData?.list?.filter((item) => item.New) || [];
+
+          return {
+            ...newState,
+            countActualTasks: tasks.length,
+            countUnreadNews: unreadNews.length,
+          };
+        });
       } else {
         setState((prev) => {
           const updatedData = JSON.parse(JSON.stringify(prev.forState));
           let taskToMove = null;
 
           const updatedSections = updatedData.map((section) => {
-            if (!section.TaskList) return section;
+            if (!section.sectionData?.list) return section;
 
-            const updatedTaskList = section.TaskList.map((task) => {
-              if (task.TaskID !== id) return task;
+            const updatedList = section.sectionData.list
+              .map((item) => {
+                if ((item.TaskID !== id && item.ObjectID !== id) || item.Done)
+                  return item;
 
-              if (task.ResultType != 8 && task.ObjectType !== "News") {
-                return { ...task, Done: true };
-              }
+                if (item.ResultType != 8 && item.ObjectType === "Task") {
+                  return { ...item, Done: true };
+                }
 
-              if (task.ResultType == 8 && task.ObjectType === "News") {
-                taskToMove = {
-                  ...task,
-                  isReport: true,
-                };
-                delete taskToMove.ResultType;
-                return null;
-              }
+                if (item.ResultType == 8 && item.ObjectType === "News") {
+                  taskToMove = {
+                    ...item,
+                    isReport: true,
+                    Done: true,
+                    New: false,
+                  };
+                  delete taskToMove.ResultType;
+                  return null;
+                }
 
-              return task;
-            }).filter(Boolean);
+                return item;
+              })
+              .filter(Boolean);
 
-            return { ...section, TaskList: updatedTaskList };
+            return {
+              ...section,
+              sectionData: { ...section.sectionData, list: updatedList },
+            };
           });
 
           if (taskToMove) {
             let newsSection = updatedSections.find(
-              (s) => s.SectionName === "News" || s.NewsList
+              (s) => s.SectionName === "Новости"
             );
 
             if (!newsSection) {
               newsSection = {
                 SectionCounter: 0,
-                SectionName: "Messages",
+                SectionName: "Новости",
                 Sort: 1,
                 SectionUpdate: "Обновлено недавно",
                 SectionNeedsUpdate: false,
-                NewsList: [],
+                sectionData: {
+                  list: [],
+                },
               };
               updatedSections.push(newsSection);
             }
 
-            newsSection.NewsList = newsSection.NewsList || [];
-            newsSection.NewsList.push(taskToMove);
+            newsSection.sectionData = newsSection.sectionData || { list: [] };
+            newsSection.sectionData.list.unshift(taskToMove);
           }
 
-          return { ...prev, forState: updatedSections };
+          const tasksSection = updatedSections.find(
+            (section) =>
+              section.SectionName === "Задачи" ||
+              section.SectionName === "Tasks"
+          );
+          const tasks =
+            tasksSection?.sectionData?.list?.filter((item) => !item.Done) || [];
+
+          const newsSection = updatedSections.find(
+            (section) =>
+              section.SectionName === "Новости" ||
+              section.SectionName === "News"
+          );
+          const unreadNews =
+            newsSection?.sectionData?.list?.filter((item) => item.New) || [];
+
+          return {
+            ...prev,
+            forState: updatedSections,
+            countActualTasks: tasks.length,
+            countUnreadNews: unreadNews.length,
+          };
         });
-        updateTaskCount();
       }
     },
-    [state.developer, state.forState, updateTaskCount]
+    [state.developer, state.forState] // убрал updateTaskCount из зависимостей
   );
 
   const setReadNews = useCallback(
     (id) => {
+      console.log(id);
+
       if (state.developer) {
         const updatedData = state.forState.map((section) => {
-          const updatedNewsList = (section.NewsList || []).map((newsItem) =>
-            newsItem.ObjectID === id && newsItem.New
-              ? { ...newsItem, New: false }
-              : newsItem
-          );
-          console.log(updatedNewsList);
+          if (!section.sectionData?.list) return section;
 
-          return { ...section, NewsList: updatedNewsList };
+          const updatedList = section.sectionData.list.map((item) =>
+            item.ObjectID === id && item.New ? { ...item, New: false } : item
+          );
+          console.log(updatedList);
+
+          return {
+            ...section,
+            sectionData: { ...section.sectionData, list: updatedList },
+          };
         });
+
         state.forState.length = 0;
         state.forState.push(...updatedData);
         updateNewsCount();
       } else {
         setState((prev) => {
           const updatedData = prev.forState.map((section) => {
-            const updatedNewsList = (section.NewsList || []).map((newsItem) =>
-              newsItem.ObjectID === id && newsItem.New
-                ? { ...newsItem, New: false }
-                : newsItem
+            if (!section.sectionData?.list) return section;
+
+            const updatedList = section.sectionData.list.map((item) =>
+              item.ObjectID === id && item.New && item.ObjectType === "News"
+                ? { ...item, New: false }
+                : item
             );
-            return { ...section, NewsList: updatedNewsList };
+
+            return {
+              ...section,
+              sectionData: { ...section.sectionData, list: updatedList },
+            };
           });
+
           return { ...prev, forState: updatedData };
         });
         updateNewsCount();
@@ -304,13 +392,8 @@ export const AppStateProvider = ({ children }) => {
   const setViewSection = useCallback((sectionToUpdate) => {
     setState((prev) => {
       const updatedForState = prev.forState.map((section) => {
-        console.log("Проверяем секцию:", section.SectionName);
-
         if (section.SectionName === sectionToUpdate.SectionName) {
-          console.log("Нашли совпадение! Старое View:", section.View);
           const newView = !section.View;
-          console.log("Новое View:", newView);
-
           return {
             ...section,
             View: newView,

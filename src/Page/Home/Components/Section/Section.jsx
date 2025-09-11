@@ -15,18 +15,38 @@ function Section({ section, onOpenSwiper, openSectionForm, type }) {
     if (!openSwiper) setIsExpanded((prev) => !prev);
   };
 
-  const count = type === "Tasks" ? countActualTasks : countUnreadNews;
-  const items = type === "Tasks" ? section.TaskList : section.NewsList;
-  const showExpandButton = type === "News";
-  console.log(count);
+  const items = section.sectionData?.list || [];
 
-  const handleTouchStart = () => {
+  const filteredItems =
+    type === "Tasks"
+      ? items.filter((item) => item)
+      : items.filter((item) => item);
+
+  const count = type === "Tasks" ? countActualTasks : countUnreadNews;
+  const showExpandButton = type === "News";
+
+  const isProblemBlock = section.SectionKey === "Send_error_details";
+  const isSendingBlock = section.SectionKey === "Data_sending_status";
+  const isSpecialBlock = isProblemBlock || isSendingBlock;
+
+  const handleTouchStart = (e) => {
+    e.stopPropagation();
     setIsActive(true);
   };
 
-  const handleTouchEnd = () => {
-    setIsActive(false);
+  const handleHeaderClick = (type, e) => {
+    e.stopPropagation();
+    setIsActive(!isActive);
     openSectionForm(type);
+    setTimeout(() => setIsActive(false), 200);
+  };
+
+  const handleTouchEnd = (e) => {
+    e.stopPropagation();
+    setIsActive(false);
+    if (!isSpecialBlock) {
+      openSectionForm(type);
+    }
   };
 
   const handleShowBlock = (section) => {
@@ -35,30 +55,76 @@ function Section({ section, onOpenSwiper, openSectionForm, type }) {
 
   if (section.View) {
     return (
-      <div className={`section_container ${openSwiper ? "light_border" : ""}`}>
+      <div
+        className={`section_container ${openSwiper ? "light_border" : ""} ${
+          isProblemBlock
+            ? "problem-block"
+            : isSendingBlock
+            ? "sending-block"
+            : ""
+        }`}
+      >
         <div className="section_header">
           <div
-            className={`section_header_left ${isActive ? "active" : ""}`}
+            className={`section_header_left ${isActive ? "active_block" : ""} ${
+              isSpecialBlock ? "special-block" : ""
+            }`}
             onTouchStart={handleTouchStart}
             onTouchEnd={handleTouchEnd}
-            onClick={openSectionForm.bind(null, type)}
+            onClick={(e) => handleHeaderClick(section.SectionName, e)}
           >
-            <h3 className="section_header_title">{section.SectionName}</h3>
-
-            {count > 0 && (
-              <div
-                className={`section_header_count ${
-                  type === "Tasks" ? "actual-tasks" : "actual-news"
-                } ${openSwiper && "dark_count"}`}
-              >
-                {count}
+            {isSpecialBlock ? (
+              <div className="special-block-content">
+                <div>
+                  <div
+                    className={`section_header_title ${
+                      isActive ? "active_block" : ""
+                    }`}
+                    onClick={(e) => handleHeaderClick(section.SectionName, e)}
+                    onTouchStart={handleTouchStart}
+                    onTouchEnd={handleTouchEnd}
+                  >
+                    {section.SectionName}
+                  </div>
+                  {section.SectionSubtitle && (
+                    <div className="section_subtitle">
+                      {section.SectionSubtitle}
+                    </div>
+                  )}
+                </div>
+                <span
+                  class={`material-symbols-outlined  ${
+                    section.SectionKey === "send_error_details" ? "red" : "blue"
+                  }`}
+                >
+                  exclamation
+                </span>
               </div>
+            ) : (
+              <>
+                <div className="section_header_title">
+                  {section.SectionName}
+                </div>
+                {count > 0 && (
+                  <div
+                    className={`section_header_count ${
+                      type === "Tasks" ? "actual-tasks" : "actual-news"
+                    } ${openSwiper && "dark_count"}`}
+                  >
+                    {count}
+                  </div>
+                )}
+              </>
             )}
 
-            <div className="section_header_update">{section.SectionUpdate}</div>
+            {!isSpecialBlock && (
+              <div className="section_header_update">
+                {section.SectionUpdate}
+              </div>
+            )}
           </div>
 
-          {showExpandButton && (
+          {showExpandButton && !isSpecialBlock && (
             <span
               className={`material-symbols-outlined ${
                 isExpanded ? "active-arrow" : ""
@@ -70,10 +136,10 @@ function Section({ section, onOpenSwiper, openSectionForm, type }) {
           )}
         </div>
 
-        {isExpanded && (
+        {isExpanded && !isSpecialBlock && (
           <div className="section_content">
-            {items?.length > 0 ? (
-              items.map((item) => (
+            {filteredItems.length > 0 ? (
+              filteredItems.map((item) => (
                 <div
                   key={item.TaskID || item.ObjectID}
                   className={`section_item ${
@@ -101,11 +167,7 @@ function Section({ section, onOpenSwiper, openSectionForm, type }) {
                       </div>
                       <div
                         className={`section_item_header ${
-                          item.Done &&
-                          item.ResultType != "8" &&
-                          item.ObjectType !== "News"
-                            ? "_done"
-                            : ""
+                          item.Done && item.ResultType != "8" ? "_done" : ""
                         }`}
                       >
                         {item.Header}

@@ -7,8 +7,8 @@ import { AppStateContext } from "../../Core/Context/AppStateContext";
 import { ActionsContext } from "../../Core/Context/ActionsContext";
 
 export const useHomeActions = () => {
-  const { setActions } = useContext(ActionsContext);
-
+  const { setActions, actions } = useContext(ActionsContext);
+console.log(actions);
 
   const {
     forState,
@@ -59,13 +59,14 @@ export const useHomeActions = () => {
     }
 
     const section = forState.find((s) => s.SectionName === type);
-
     let dataToSend;
-    if (type === "Задачи" || type === "Tasks") {
-      dataToSend = section.TaskList?.find((item) => item?.ObjectID === id);
-    } else {
-      dataToSend = section.NewsList?.find((item) => item?.ObjectID === id);
+
+    if (section && section.sectionData?.list) {
+      dataToSend = section.sectionData.list.find((item) => 
+        item?.ObjectID === id || item?.TaskID === id
+      );
     }
+
     setActions({
       actionName: "clickElement",
       active: true,
@@ -117,13 +118,29 @@ export const useHomeActions = () => {
     !developer && clickTo1C();
   };
 
+    const sectionAction = (Section) => {
+    switch (Section) {
+      case "Проблема при отправке данных":
+        return "Проблема при отправке данных";
+      case "Данные отправляются":
+        return "Данные отправляются";
+      case "Сигналы":
+        return "Сигналы";
+      case "Задачи":
+        return "Задачи";
+      case "Новости":
+        return "Новости";
+      default:
+        return "empty";
+    }
+  };
+
   const openTasksOrNewsForm = (block) => {
     if (!openSwiper) {
       setActions({
         actionName: "clickElement",
         active: true,
-        currentForm:
-          block === "Tasks" ? "TasksCaptionClick" : "NewsCaptionClick",
+        currentForm: sectionAction(block)
       });
       !developer && clickTo1C();
     } else return;
