@@ -63,24 +63,24 @@
   padding: 8px 0px 8px 30px;
 }
 
-.in_a_child {
-  animation: bounce 3s infinite;
-}
-@keyframes bounce {
-  0%,
-  20%,
-  50%,
-  80%,
-  100% {
-    transform: translateY(0);
-  }
-  40% {
-    transform: translateY(-10px);
-  }
-  60% {
-    transform: translateY(-5px);
-  }
-}
+// .in_a_child {
+//   animation: bounce 3s infinite;
+// }
+// @keyframes bounce {
+//   0%,
+//   20%,
+//   50%,
+//   80%,
+//   100% {
+//     transform: translateY(0);
+//   }
+//   40% {
+//     transform: translateY(-10px);
+//   }
+//   60% {
+//     transform: translateY(-5px);
+//   }
+// }
 
 .instructions_swipe_content {
   position: relative;

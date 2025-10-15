@@ -98,26 +98,92 @@ function Instruction() {
   };
 
   const filterInstructions = (items, filterText) => {
+    if (!filterText) return items;
+
     return items
       .map((item) => {
         const filteredChildren = filterInstructions(item.Строки, filterText);
-        const isMatch =
-          item.Наименование.toLowerCase().includes(filterText.toLowerCase()) ||
-          filteredChildren.length > 0;
-        return isMatch
-          ? {
-              ...item,
-              Строки: filteredChildren,
-              hasAnimation: filteredChildren.length > 0 && filterText,
-            }
-          : null;
+        const isMatch = item.Наименование
+          .toLowerCase()
+          .includes(filterText.toLowerCase());
+
+        // Если есть совпадение или есть совпадения в детях
+        if (isMatch || filteredChildren.length > 0) {
+          return {
+            ...item,
+            Строки: isMatch ? item.Строки : filteredChildren, // Если совпадение в родителе - показываем всех детей
+            isSearchMatch: isMatch, // Помечаем совпадения
+          };
+        }
+
+        return null;
       })
       .filter(Boolean);
+  };
+
+  // В useEffect для управления открытием веток
+  useEffect(() => {
+    if (!filterText) {
+      setOpenIndexes({});
+      return;
+    }
+
+    const idsToOpen = new Set();
+
+    // Функция для поиска всех ID, которые нужно открыть
+    const findIdsToOpen = (items) => {
+      items.forEach((item) => {
+        const isMatch = item.Наименование
+          .toLowerCase()
+          .includes(filterText.toLowerCase());
+        const hasChildren = item.Строки && item.Строки.length > 0;
+
+        if (isMatch) {
+          // Добавляем всех родителей до корня
+          let parent = findParent(item.id, instructions);
+          while (parent) {
+            idsToOpen.add(parent.id);
+            parent = findParent(parent.id, instructions);
+          }
+        }
+
+        if (hasChildren) {
+          const hasMatchInChildren = findIdsToOpen(item.Строки);
+          if (hasMatchInChildren) {
+            idsToOpen.add(item.id);
+          }
+        }
+      });
+    };
+
+    findIdsToOpen(instructions);
+
+    setOpenIndexes((prev) => {
+      const newOpenIndexes = { ...prev };
+      idsToOpen.forEach((id) => {
+        newOpenIndexes[id] = true;
+      });
+      return newOpenIndexes;
+    });
+  }, [filterText, instructions]);
+
+  // Вспомогательная функция для поиска родителя
+  const findParent = (childId, items, parent = null) => {
+    for (const item of items) {
+      if (item.id === childId) return parent;
+      if (item.Строки && item.Строки.length > 0) {
+        const found = findParent(childId, item.Строки, item);
+        if (found) return found;
+      }
+    }
+    return null;
   };
 
   const renderInstructions = (items) =>
     items.map((item) => {
       const hasChildren = item.Строки.length > 0;
+      console.log(hasChildren);
+
       return (
         <InstructionItem
           key={item.id}

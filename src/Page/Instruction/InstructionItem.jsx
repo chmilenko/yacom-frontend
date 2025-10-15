@@ -18,7 +18,13 @@ function InstructionItem({
       <div className="instructions_child_wrapper">
         <div
           className={`instructions_child ${!hasChildren && "no_children"}`}
-          onClick={() => hasChildren && onToggleChild(item.id)}
+          onClick={(e) => {
+            // Если это совпадение поиска и родительская папка - разрешаем toggle
+            if (item.isSearchMatch || hasChildren) {
+              onToggleChild(item.id);
+              e.stopPropagation();
+            }
+          }}
         >
           <div className="instructions_child_content">
             {hasChildren ? (
@@ -60,20 +66,13 @@ function InstructionItem({
               </div>
             )}
           </div>
-          {hasChildren &&
-            (openIndexes[item.id] ? (
-              <span className="material-symbols-outlined">
-                keyboard_arrow_up
-              </span>
-            ) : (
-              <span
-                className={`material-symbols-outlined ${
-                  item.hasAnimation ? "in_a_child" : ""
-                }`}
-              >
-                keyboard_arrow_down
-              </span>
-            ))}
+          {hasChildren && (
+            <span className="material-symbols-outlined">
+              {openIndexes[item.id]
+                ? "keyboard_arrow_up"
+                : "keyboard_arrow_down"}
+            </span>
+          )}
         </div>
       </div>
       {open && hasChildren && (

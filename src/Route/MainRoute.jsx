@@ -2,10 +2,10 @@ import React from "react";
 import { Route, Routes } from "react-router-dom";
 import Home from "../Page/Home/Home";
 import Layout from "../Layout/Layout";
-import Instruction from "../Page/Instruction/Instruction";
 import Help from "../Page/Help/Help";
 import Journals from "../Page/Journals";
 import Products from "../Page/Products";
+import Instruction from "../Page/Instruction/Instruction";
 
 function MainRoute() {
   return (
