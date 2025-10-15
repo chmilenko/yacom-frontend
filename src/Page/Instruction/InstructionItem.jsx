@@ -19,7 +19,6 @@ function InstructionItem({
         <div
           className={`instructions_child ${!hasChildren && "no_children"}`}
           onClick={(e) => {
-            // Если это совпадение поиска и родительская папка - разрешаем toggle
             if (item.isSearchMatch || hasChildren) {
               onToggleChild(item.id);
               e.stopPropagation();

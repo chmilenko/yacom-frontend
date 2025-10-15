@@ -1,5 +1,3 @@
-// components/ErrorDisplay.jsx
-
 import { useError } from "../Core/Context/ErrorContext";
 
 export const ErrorDisplay = () => {

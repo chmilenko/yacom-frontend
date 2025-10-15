@@ -107,12 +107,11 @@ function Instruction() {
           .toLowerCase()
           .includes(filterText.toLowerCase());
 
-        // Если есть совпадение или есть совпадения в детях
         if (isMatch || filteredChildren.length > 0) {
           return {
             ...item,
-            Строки: isMatch ? item.Строки : filteredChildren, // Если совпадение в родителе - показываем всех детей
-            isSearchMatch: isMatch, // Помечаем совпадения
+            Строки: isMatch ? item.Строки : filteredChildren,
+            isSearchMatch: isMatch,
           };
         }
 
@@ -121,7 +120,6 @@ function Instruction() {
       .filter(Boolean);
   };
 
-  // В useEffect для управления открытием веток
   useEffect(() => {
     if (!filterText) {
       setOpenIndexes({});
@@ -130,7 +128,6 @@ function Instruction() {
 
     const idsToOpen = new Set();
 
-    // Функция для поиска всех ID, которые нужно открыть
     const findIdsToOpen = (items) => {
       items.forEach((item) => {
         const isMatch = item.Наименование
@@ -139,7 +136,6 @@ function Instruction() {
         const hasChildren = item.Строки && item.Строки.length > 0;
 
         if (isMatch) {
-          // Добавляем всех родителей до корня
           let parent = findParent(item.id, instructions);
           while (parent) {
             idsToOpen.add(parent.id);
@@ -167,7 +163,6 @@ function Instruction() {
     });
   }, [filterText, instructions]);
 
-  // Вспомогательная функция для поиска родителя
   const findParent = (childId, items, parent = null) => {
     for (const item of items) {
       if (item.id === childId) return parent;

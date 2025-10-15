@@ -13,7 +13,6 @@ export const ErrorProvider = ({ children }) => {
   const [errors, setErrors] = useState([]);
   const [isOnline, setIsOnline] = useState(navigator.onLine);
 
-  // Добавление ошибки
   const addError = useCallback((error) => {
     const errorWithId = {
       id: Date.now(),
@@ -24,23 +23,19 @@ export const ErrorProvider = ({ children }) => {
 
     setErrors((prev) => [...prev, errorWithId]);
 
-    // Автоматическое удаление через 30 секунд
     setTimeout(() => {
       removeError(errorWithId.id);
     }, 30000);
   }, []);
 
-  // Удаление ошибки
   const removeError = useCallback((errorId) => {
     setErrors((prev) => prev.filter((error) => error.id !== errorId));
   }, []);
 
-  // Очистка всех ошибок
   const clearErrors = useCallback(() => {
     setErrors([]);
   }, []);
 
-  // Получение ошибок по типу
   const getErrorsByType = useCallback(
     (type) => {
       return errors.filter((error) => error.type === type);
@@ -48,7 +43,6 @@ export const ErrorProvider = ({ children }) => {
     [errors]
   );
 
-  // Проверка подключения React из public
   const checkReactAvailability = useCallback(() => {
     if (!window.React) {
       addError({
@@ -62,7 +56,6 @@ export const ErrorProvider = ({ children }) => {
     return true;
   }, [addError]);
 
-  // Слушатель изменения сетевого статуса
   React.useEffect(() => {
     const handleOnline = () => setIsOnline(true);
     const handleOffline = () => {
