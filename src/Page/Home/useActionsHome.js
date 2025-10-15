@@ -7,9 +7,7 @@ import { AppStateContext } from "../../Core/Context/AppStateContext";
 import { ActionsContext } from "../../Core/Context/ActionsContext";
 
 export const useHomeActions = () => {
-  const { setActions,actions } = useContext(ActionsContext);
-console.log(actions);
-
+  const { setActions } = useContext(ActionsContext);
 
   const {
     forState,
@@ -54,19 +52,20 @@ console.log(actions);
     let id;
     if (type === "Задачи" || type === "Tasks") {
       id = info.TaskID;
-    } else if (type === "Сообщения" || type === "Messages") {
+    } else if (type === "Сообщения" || type === "Messages" || type === 'Новости') {
       id = info.ObjectID;
       setReadNews(id);
     }
 
     const section = forState.find((s) => s.SectionName === type);
-
     let dataToSend;
-    if (type === "Задачи" || type === "Tasks") {
-      dataToSend = section.TaskList?.find((item) => item?.ObjectID === id);
-    } else {
-      dataToSend = section.NewsList?.find((item) => item?.ObjectID === id);
+
+    if (section && section.sectionData?.list) {
+      dataToSend = section.sectionData.list.find((item) => 
+        item?.ObjectID === id || item?.TaskID === id
+      );
     }
+
     setActions({
       actionName: "clickElement",
       active: true,
@@ -75,17 +74,13 @@ console.log(actions);
       objectType: info.ObjectType,
     });
 
-    if (developer) {
-      setAdditionalInfo(info);
-    }
+    developer && setAdditionalInfo(info);
 
     setListData(dataToSend);
     setListName(type);
     setOpenSwiper(true);
 
-    if (!developer) {
-      clickTo1C();
-    }
+    !developer && clickTo1C();
   };
 
   const onTaskExecute = (id) => {
@@ -102,7 +97,6 @@ console.log(actions);
     }
     setTaskDoneStatus(id);
     !developer && clickTo1C();
-    
   };
 
   const taskFulfill = (id) => {
@@ -123,30 +117,47 @@ console.log(actions);
     !developer && clickTo1C();
   };
 
+    const sectionAction = (Section) => {
+    switch (Section) {
+      case "Проблема при отправке данных":
+        return "Проблема при отправке данных";
+      case "Данные отправляются":
+        return "Данные отправляются";
+      case "Сигналы":
+        return "Сигналы";
+      case "Задачи":
+        return "Задачи";
+      case "Новости":
+        return "Новости";
+      default:
+        return "empty";
+    }
+  };
+
   const openTasksOrNewsForm = (block) => {
     if (!openSwiper) {
       setActions({
         actionName: "clickElement",
         active: true,
-        currentForm:
-          block === "Tasks" ? "TasksCaptionClick" : "NewsCaptionClick",
+        currentForm: sectionAction(block)
       });
       !developer && clickTo1C();
     } else return;
   };
 
-const openReport = () => {
-  setTimeout(() => {
-    setActions({
-      actionName: additionalInfo.ObjectType === "News" 
-        ? "NewsReportClick" 
-        : "TaskReportClick",
-      objectId: additionalInfo.ObjectID,
-      active: true,
-    });
-    !developer && clickTo1C();
-  }, 200); // Ждем завершения анимации
-};
+  const openReport = () => {
+    setTimeout(() => {
+      setActions({
+        actionName:
+          additionalInfo.ObjectType === "News"
+            ? "NewsReportClick"
+            : "TaskReportClick",
+        objectId: additionalInfo.ObjectID,
+        active: true,
+      });
+      !developer && clickTo1C();
+    }, 200); 
+  };
   return {
     openTasksOrNewsForm,
     handleOpenSwiper,

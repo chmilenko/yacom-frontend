@@ -43,7 +43,6 @@ function Home() {
           user.isExpert && (
             <div>
               <Button
-                // className="report_tasks"
                 icon={
                   <span className="material-symbols-outlined">chart_data</span>
                 }
@@ -59,7 +58,7 @@ function Home() {
   useEffect(() => {
     setAppState();
     setUser();
-  }, [setAppState, setUser]);
+  }, []);
 
   return (
     <div className="main">
@@ -74,12 +73,7 @@ function Home() {
                 section={section}
                 onOpenSwiper={handleOpenSwiper}
                 openSectionForm={openTasksOrNewsForm}
-                type={
-                  section.SectionName === "Задачи" ||
-                  section.SectionName === "Tasks"
-                    ? "Tasks"
-                    : "News"
-                }
+                type={section.SectionName}
               />
             ))}
           </div>

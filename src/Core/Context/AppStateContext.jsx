@@ -1,6 +1,6 @@
 import React, { createContext, useState, useEffect, useCallback } from "react";
 import { setPageComponent } from "../../Utils/pageComponentManager.js";
-
+import { useError } from "./ErrorContext";
 export const AppStateContext = createContext();
 
 let userData;
@@ -19,14 +19,15 @@ if (process.env.REACT_APP_DEVELOPER === "true") {
 }
 
 export const AppStateProvider = ({ children }) => {
+  const { addError, isOnline } = useError();
+
   const [state, setState] = useState({
     user: null,
+    menuItems: [],
     forState: [],
     instructions: [],
     additionalInfo: [],
-    error: null,
     openSwiper: false,
-    errorDescription: null,
     listName: null,
     ListData: null,
     actions: [],
@@ -36,21 +37,6 @@ export const AppStateProvider = ({ children }) => {
     countActualTasks: 0,
     countUnreadNews: 0,
   });
-
-  // Обновление счетчиков
-  const updateNewsCount = useCallback(() => {
-    const unreadNews = state.forState
-      .flatMap((section) => section.NewsList || [])
-      .filter((news) => news && news.New);
-    setState((prev) => ({ ...prev, countUnreadNews: unreadNews.length }));
-  }, [state.forState]);
-
-  const updateTaskCount = useCallback(() => {
-    const tasks = state.forState
-      .flatMap((section) => section.TaskList || [])
-      .filter((task) => !task.Done);
-    setState((prev) => ({ ...prev, countActualTasks: tasks.length }));
-  }, [state.forState]);
 
   // Глобальные сеттеры
   const setUser = useCallback(
@@ -64,63 +50,351 @@ export const AppStateProvider = ({ children }) => {
         setState((prev) => ({ ...prev, user: userInfoObject }));
       } catch (err) {
         const errorDescription = `Не удалось распарсить в setUser\nОшибка ${err.name}: ${err.message}\n${err.stack}`;
-        setState((prev) => ({ ...prev, error: errorDescription }));
+        addError({
+          type: "parsing",
+          message: "Failed to parse user data",
+          severity: "error",
+          details: errorDescription,
+          context: "setUser",
+        });
       }
     },
-    [state.developer]
+    [state.developer, addError]
   );
 
   const setPage = useCallback((newPage) => {
     setState((prev) => ({ ...prev, page: newPage }));
   }, []);
 
-  const setOpenSwiper = useCallback((swiperState) => {
-    setState((prev) => ({ ...prev, openSwiper: swiperState }));
-  }, []);
+  //Рабочий стол
+
+  // Обновление счетчиков на рабочем столе
+  const updateNewsCount = useCallback(() => {
+    const unreadNews = state.forState
+      .flatMap((section) => section.sectionData?.list || [])
+      .filter((news) => news.New);
+    setState((prev) => ({ ...prev, countUnreadNews: unreadNews.length }));
+  }, [state.forState]);
+
+  const updateTaskCount = useCallback(() => {
+    const tasks = state.forState
+      .flatMap((section) => section.sectionData?.list || [])
+      .filter((item) => !item.Done);
+    setState((prev) => ({ ...prev, countActualTasks: tasks.length }));
+  }, [state.forState]);
 
   const setAppState = useCallback(
     (appData) => {
       try {
-        const res = !state.developer ? JSON.parse(appData) : data;
-        setState((prev) => ({ ...prev, forState: res }));
-        updateTaskCount();
+        const res = !state.developer
+          ? JSON.parse(appData).reduce((acc, val) => {
+              acc = val.Sections;
+              return acc;
+            }, {})
+          : data.reduce((acc, val) => {
+              acc = val.Sections;
+              return acc;
+            }, {});
+
+        const menuItems = !state.developer
+          ? JSON.parse(appData).reduce((acc, val) => {
+              acc = val.Tabs;
+              return acc;
+            }, [])
+          : data.reduce((acc, val) => {
+              acc = val.Tabs;
+              return acc;
+            }, []);
+
+        setState((prev) => {
+          const newState = {
+            ...prev,
+            forState: res,
+            menuItems: menuItems || [],
+          };
+
+          const tasksSection = res.find(
+            (section) =>
+              section.SectionName === "Задачи" ||
+              section.SectionName === "Tasks"
+          );
+          const tasks =
+            tasksSection?.sectionData?.list?.filter((item) => !item.Done) || [];
+
+          const newsSection = res.find(
+            (section) =>
+              section.SectionName === "Новости" ||
+              section.SectionName === "News"
+          );
+          const unreadNews =
+            newsSection?.sectionData?.list?.filter((item) => item.New) || [];
+
+          return {
+            ...newState,
+            countActualTasks: tasks.length,
+            countUnreadNews: unreadNews.length,
+          };
+        });
+      } catch (err) {
+        const errorDescription = `Не удалось распарсить в setAppState\nОшибка ${err.name}: ${err.message}\n${err.stack}`;
+        addError({
+          type: "parsing",
+          message: "Failed to parse app state",
+          severity: "error",
+          details: errorDescription,
+          context: "setAppState",
+        });
+      }
+    },
+    [addError, state.developer, data]
+  );
+
+  const setOpenSwiper = useCallback((swiperState) => {
+    setState((prev) => ({ ...prev, openSwiper: swiperState }));
+  }, []);
+
+  const setTaskDoneStatus = useCallback(
+    (id) => {
+      if (state.developer) {
+        const updatedData = JSON.parse(JSON.stringify(state.forState));
+        let taskToMove = null;
+
+        const updatedSections = updatedData.map((section) => {
+          if (!section.sectionData?.list) return section;
+
+          const updatedList = section.sectionData.list
+            .map((item) => {
+              if ((item.TaskID !== id && item.ObjectID !== id) || item.Done)
+                return item;
+
+              if (item.ResultType != 8 && item.ObjectType === "Task") {
+                return { ...item, Done: true };
+              }
+
+              if (item.ResultType == 8 && item.ObjectType === "News") {
+                taskToMove = {
+                  ...item,
+                  isReport: true,
+                  Done: true,
+                  New: false,
+                };
+                delete taskToMove.ResultType;
+                return null;
+              }
+
+              return item;
+            })
+            .filter(Boolean);
+
+          return {
+            ...section,
+            sectionData: { ...section.sectionData, list: updatedList },
+          };
+        });
+
+        if (taskToMove) {
+          let newsSection = updatedSections.find(
+            (s) => s.SectionName === "Новости" || s.SectionName === "News"
+          );
+
+          if (!newsSection) {
+            newsSection = {
+              SectionCounter: 0,
+              SectionName: "News",
+              Sort: 1,
+              SectionUpdate: "Обновлено недавно",
+              SectionNeedsUpdate: false,
+              sectionData: {
+                list: [],
+              },
+            };
+            updatedSections.push(newsSection);
+          }
+
+          newsSection.sectionData = newsSection.sectionData || { list: [] };
+          newsSection.sectionData.list.unshift(taskToMove);
+        }
+
+        setState((prev) => {
+          const newState = { ...prev, forState: updatedSections };
+
+          const tasksSection = updatedSections.find(
+            (section) =>
+              section.SectionName === "Задачи" ||
+              section.SectionName === "Tasks"
+          );
+          const tasks =
+            tasksSection?.sectionData?.list?.filter((item) => !item.Done) || [];
+
+          const newsSection = updatedSections.find(
+            (section) =>
+              section.SectionName === "Новости" ||
+              section.SectionName === "News"
+          );
+          const unreadNews =
+            newsSection?.sectionData?.list?.filter((item) => item.New) || [];
+
+          return {
+            ...newState,
+            countActualTasks: tasks.length,
+            countUnreadNews: unreadNews.length,
+          };
+        });
+      } else {
+        setState((prev) => {
+          const updatedData = JSON.parse(JSON.stringify(prev.forState));
+          let taskToMove = null;
+
+          const updatedSections = updatedData.map((section) => {
+            if (!section.sectionData?.list) return section;
+
+            const updatedList = section.sectionData.list
+              .map((item) => {
+                if ((item.TaskID !== id && item.ObjectID !== id) || item.Done)
+                  return item;
+
+                if (item.ResultType != 8 && item.ObjectType === "Task") {
+                  return { ...item, Done: true };
+                }
+
+                if (item.ResultType == 8 && item.ObjectType === "News") {
+                  taskToMove = {
+                    ...item,
+                    isReport: true,
+                    Done: true,
+                    New: false,
+                  };
+                  delete taskToMove.ResultType;
+                  return null;
+                }
+
+                return item;
+              })
+              .filter(Boolean);
+
+            return {
+              ...section,
+              sectionData: { ...section.sectionData, list: updatedList },
+            };
+          });
+
+          if (taskToMove) {
+            let newsSection = updatedSections.find(
+              (s) => s.SectionName === "Новости" || s.SectionName === "News"
+            );
+
+            if (!newsSection) {
+              newsSection = {
+                SectionCounter: 0,
+                SectionName: "News",
+                Sort: 1,
+                SectionUpdate: "Обновлено недавно",
+                SectionNeedsUpdate: false,
+                sectionData: {
+                  list: [],
+                },
+              };
+              updatedSections.push(newsSection);
+            }
+
+            newsSection.sectionData = newsSection.sectionData || { list: [] };
+            newsSection.sectionData.list.unshift(taskToMove);
+          }
+
+          const tasksSection = updatedSections.find(
+            (section) =>
+              section.SectionName === "Задачи" ||
+              section.SectionName === "Tasks"
+          );
+          const tasks =
+            tasksSection?.sectionData?.list?.filter((item) => !item.Done) || [];
+
+          const newsSection = updatedSections.find(
+            (section) =>
+              section.SectionName === "Новости" ||
+              section.SectionName === "News"
+          );
+          const unreadNews =
+            newsSection?.sectionData?.list?.filter((item) => item.New) || [];
+
+          return {
+            ...prev,
+            forState: updatedSections,
+            countActualTasks: tasks.length,
+            countUnreadNews: unreadNews.length,
+          };
+        });
+      }
+    },
+    [state.developer, state.forState]
+  );
+
+  const setReadNews = useCallback(
+    (id) => {
+      if (state.developer) {
+        const updatedData = state.forState.map((section) => {
+          if (!section.sectionData?.list) return section;
+
+          const updatedList = section.sectionData.list.map((item) =>
+            item.ObjectID === id && item.New ? { ...item, New: false } : item
+          );
+
+          return {
+            ...section,
+            sectionData: { ...section.sectionData, list: updatedList },
+          };
+        });
+
+        state.forState.length = 0;
+        state.forState.push(...updatedData);
         updateNewsCount();
-      } catch (err) {
-        const errorDescription = `Не удалось распарсить в setAppState\nОшибка ${err.name}: ${err.message}\n${err.stack}`;
-        setState((prev) => ({ ...prev, error: errorDescription }));
+      } else {
+        setState((prev) => {
+          const updatedData = prev.forState.map((section) => {
+            if (!section.sectionData?.list) return section;
+
+            const updatedList = section.sectionData.list.map((item) =>
+              item.ObjectID === id && item.New && item.ObjectType === "News"
+                ? { ...item, New: false }
+                : item
+            );
+
+            return {
+              ...section,
+              sectionData: { ...section.sectionData, list: updatedList },
+            };
+          });
+
+          return { ...prev, forState: updatedData };
+        });
+        updateNewsCount();
       }
     },
-    [state.developer, updateTaskCount, updateNewsCount]
+    [state.developer, state.forState, updateNewsCount]
   );
 
-  const setInstructionsState = useCallback(
-    (appData) => {
+  const setAdditionalInfo = useCallback(
+    (additional) => {
+      setState((prev) => ({ ...prev, loadingAdditionalInfo: true }));
       try {
-        const res = !state.developer ? JSON.parse(appData) : dataInstructions;
-        setState((prev) => ({ ...prev, instructions: res }));
+        setState((prev) => ({
+          ...prev,
+          additionalInfo: additional,
+          loadingAdditionalInfo: false,
+        }));
       } catch (err) {
-        const errorDescription = `Не удалось распарсить в setAppState\nОшибка ${err.name}: ${err.message}\n${err.stack}`;
-        setState((prev) => ({ ...prev, error: errorDescription }));
+        const errorDescription = `Не удалось распарсить в setAdditionalInfo\nОшибка ${err.name}: ${err.message}\n${err.stack}`;
+        addError({
+          type: "parsing",
+          message: "Failed to parse additional info",
+          severity: "error",
+          details: errorDescription,
+          context: "setAdditionalInfo",
+        });
+        setState((prev) => ({ ...prev, loadingAdditionalInfo: false }));
       }
     },
-    [state.developer]
-  );
-
-  const setListState = useCallback(
-    (listName, ListData, updateRecords = true) => {
-      try {
-        const res = JSON.parse(ListData);
-        const additionalInfoObject = res.reduce(
-          (acc, cur) => ({ ...acc, ...cur }),
-          {}
-        );
-        setState((prev) => ({ ...prev, additionalInfo: additionalInfoObject }));
-      } catch (err) {
-        const errorDescription = `Не удалось распарсить в setListState\nОшибка ${err.name}: ${err.message}\n${err.stack}`;
-        setState((prev) => ({ ...prev, error: errorDescription }));
-      }
-    },
-    []
+    [addError]
   );
 
   const setListStateClear = useCallback(() => {
@@ -135,176 +409,77 @@ export const AppStateProvider = ({ children }) => {
     setState((prev) => ({ ...prev, ListData: list }));
   }, []);
 
-  const setReadNews = useCallback(
-    (id) => {
-      if (state.developer) {
-        const updatedData = state.forState.map((section) => {
-          const updatedNewsList = (section.NewsList || []).map((newsItem) =>
-            newsItem.ObjectID === id && newsItem.New
-              ? { ...newsItem, New: false }
-              : newsItem
-          );
-          return { ...section, NewsList: updatedNewsList };
+  const setListState = useCallback(
+    (listName, ListData, updateRecords = true) => {
+      try {
+        const res = !state.developer ? JSON.parse(ListData) : ListData;
+
+        //уточнить структуру данных приходящего из 1с
+        // const additionalInfoObject = res.reduce(
+        //   (acc, cur) => ({ ...acc, ...cur }),
+        //   {}
+        // );
+
+        setState((prev) => ({ ...prev, additionalInfo: res }));
+      } catch (err) {
+        const errorDescription = `Не удалось распарсить в setListState\nОшибка ${err.name}: ${err.message}\n${err.stack}`;
+        addError({
+          type: "parsing",
+          message: "Failed to parse list state",
+          severity: "error",
+          details: errorDescription,
+          context: "setListState",
         });
-        state.forState.length = 0;
-        state.forState.push(...updatedData);
-        updateNewsCount();
-      } else {
-        setState((prev) => {
-          const updatedData = prev.forState.map((section) => {
-            const updatedNewsList = (section.NewsList || []).map((newsItem) =>
-              newsItem.ObjectID === id && newsItem.New
-                ? { ...newsItem, New: false }
-                : newsItem
-            );
-            return { ...section, NewsList: updatedNewsList };
-          });
-          return { ...prev, forState: updatedData };
-        });
-        updateNewsCount();
       }
     },
-    [state.developer, state.forState, updateNewsCount]
+    [addError]
   );
 
-  const setAdditionalInfo = useCallback((additional) => {
-    setState((prev) => ({ ...prev, loadingAdditionalInfo: true }));
-    try {
-      setState((prev) => ({
-        ...prev,
-        additionalInfo: additional,
-        loadingAdditionalInfo: false,
-      }));
-    } catch (err) {
-      const errorDescription = `Не удалось распарсить в setAdditionalInfo\nОшибка ${err.name}: ${err.message}\n${err.stack}`;
-      setState((prev) => ({
-        ...prev,
-        error: errorDescription,
-        loadingAdditionalInfo: false,
-      }));
-    }
+  const setViewSection = useCallback((sectionToUpdate) => {
+    setState((prev) => {
+      const updatedForState = prev.forState.map((section) => {
+        if (section.SectionName === sectionToUpdate.SectionName) {
+          const newView = !section.View;
+          return {
+            ...section,
+            View: newView,
+          };
+        }
+        return section;
+      });
+      return { ...prev, forState: updatedForState };
+    });
   }, []);
 
-  const setTaskDoneStatus = useCallback(
-    (id) => {
-      if (state.developer) {
-        // Developer режим - мутируем существующий state
-        const updatedData = JSON.parse(JSON.stringify(state.forState));
-        let taskToMove = null;
-
-        const updatedSections = updatedData.map((section) => {
-          if (!section.TaskList) return section;
-
-          const updatedTaskList = section.TaskList.map((task) => {
-            if (task.TaskID !== id) return task;
-
-            if (task.ResultType != 8 && task.ObjectType !== "News") {
-              return { ...task, Done: true };
-            }
-
-            if (task.ResultType == 8 && task.ObjectType === "News") {
-              taskToMove = {
-                ...task,
-                isReport: true,
-              };
-              delete taskToMove.ResultType;
-              return null;
-            }
-
-            return task;
-          }).filter(Boolean);
-
-          return { ...section, TaskList: updatedTaskList };
+  // Раздел инструкций
+  const setInstructionsState = useCallback(
+    (appData) => {
+      try {
+        const res = !state.developer ? JSON.parse(appData) : dataInstructions;
+        setState((prev) => ({ ...prev, instructions: res }));
+      } catch (err) {
+        const errorDescription = `Не удалось распарсить в setInstructionsState\nОшибка ${err.name}: ${err.message}\n${err.stack}`;
+        addError({
+          type: "parsing",
+          message: "Failed to parse instructions",
+          severity: "error",
+          details: errorDescription,
+          context: "setInstructionsState",
         });
-
-        if (taskToMove) {
-          let newsSection = updatedSections.find(
-            (s) => s.SectionName === "News" || s.NewsList
-          );
-
-          if (!newsSection) {
-            newsSection = {
-              SectionCounter: 0,
-              SectionName: "Messages",
-              Sort: 1,
-              SectionUpdate: "Обновлено недавно",
-              SectionNeedsUpdate: false,
-              NewsList: [],
-            };
-            updatedSections.push(newsSection);
-          }
-
-          newsSection.NewsList = newsSection.NewsList || [];
-          newsSection.NewsList.push(taskToMove);
-        }
-
-        // Мутация state в developer режиме
-        state.forState.length = 0;
-        state.forState.push(...updatedSections);
-        updateTaskCount();
-      } else {
-        // Обычный режим - используем setState
-        setState((prev) => {
-          const updatedData = JSON.parse(JSON.stringify(prev.forState));
-          let taskToMove = null;
-
-          const updatedSections = updatedData.map((section) => {
-            if (!section.TaskList) return section;
-
-            const updatedTaskList = section.TaskList.map((task) => {
-              if (task.TaskID !== id) return task;
-
-              if (task.ResultType != 8 && task.ObjectType !== "News") {
-                return { ...task, Done: true };
-              }
-
-              if (task.ResultType == 8 && task.ObjectType === "News") {
-                taskToMove = {
-                  ...task,
-                  isReport: true,
-                };
-                delete taskToMove.ResultType;
-                return null;
-              }
-
-              return task;
-            }).filter(Boolean);
-
-            return { ...section, TaskList: updatedTaskList };
-          });
-
-          if (taskToMove) {
-            let newsSection = updatedSections.find(
-              (s) => s.SectionName === "News" || s.NewsList
-            );
-
-            if (!newsSection) {
-              newsSection = {
-                SectionCounter: 0,
-                SectionName: "Messages",
-                Sort: 1,
-                SectionUpdate: "Обновлено недавно",
-                SectionNeedsUpdate: false,
-                NewsList: [],
-              };
-              updatedSections.push(newsSection);
-            }
-
-            newsSection.NewsList = newsSection.NewsList || [];
-            newsSection.NewsList.push(taskToMove);
-          }
-
-          return { ...prev, forState: updatedSections };
-        });
-        updateTaskCount();
       }
     },
-    [state.developer, state.forState, updateTaskCount]
+    [addError, state.developer]
   );
 
-  // Обновление pageComponent при изменении состояния
+  useEffect(() => {
+    if (!isOnline) {
+      setState((prev) => ({ ...prev, loadingAdditionalInfo: false }));
+    }
+  }, [isOnline]);
+
   useEffect(() => {
     setPageComponent({
+      menuItems: state.menuItems,
       setUser,
       page: state.page,
       setPage,
@@ -318,6 +493,7 @@ export const AppStateProvider = ({ children }) => {
       setListStateClear,
     });
   }, [
+    state.menuItems,
     state.page,
     state.error,
     state.forState,
@@ -349,6 +525,7 @@ export const AppStateProvider = ({ children }) => {
         setListStateClear,
         updateNewsCount,
         updateTaskCount,
+        setViewSection,
       }}
     >
       {children}

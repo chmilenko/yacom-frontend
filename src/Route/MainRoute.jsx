@@ -1,32 +1,21 @@
-import React, { useContext } from "react";
+import React from "react";
 import { Route, Routes } from "react-router-dom";
 import Home from "../Page/Home/Home";
 import Layout from "../Layout/Layout";
 import Instruction from "../Page/Instruction/Instruction";
 import Help from "../Page/Help/Help";
-import { AppStateContext } from "../Core/Context/AppStateContext";
+import Journals from "../Page/Journals";
+import Products from "../Page/Products";
 
 function MainRoute() {
-  const { page } = useContext(AppStateContext);
   return (
     <Routes>
       <Route element={<Layout />}>
-        {page === "" && (
-          <Route
-            path="/"
-            element={
-              <Home
-                ref={(pageComponent) => {
-                  window.pageComponent = pageComponent;
-                }}
-              />
-            }
-          />
-        )}
-        {page === "instructions" && (
-          <Route path="/" element={<Instruction />} />
-        )}
-        {page === "help" && <Route path="/" element={<Help />} />}
+        <Route path="/" element={<Home />} />
+        <Route path="/instructions" element={<Instruction />} />
+        <Route path="/help" element={<Help />} />
+        <Route path="/journals" element={<Journals />} />
+        <Route path="/products" element={<Products />} />
       </Route>
     </Routes>
   );

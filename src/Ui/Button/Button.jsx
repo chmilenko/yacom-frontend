@@ -1,35 +1,52 @@
-import React, { useState, useRef } from "react";
+import React, { useState, useRef, useEffect } from "react";
 import "./Button.scss";
 
 function Button({ text, onClick, icon, className, type = "default" }) {
   const [isActive, setIsActive] = useState(false);
   const timerRef = useRef(null);
+  const touchStartedRef = useRef(false);
 
-  const handleClick = (e) => {
-    // 1. Запускаем анимацию
+  const handleInteractionStart = () => {
     setIsActive(true);
+    touchStartedRef.current = true;
+  };
+
+  const handleInteractionEnd = (e) => {
+    if (!touchStartedRef.current) return;
+
     clearTimeout(timerRef.current);
 
-    // 2. Вызываем переданный onClick (если есть)
-    if (onClick) onClick(e);
+    if (onClick) {
+      setTimeout(() => onClick(e), 50);
+    }
 
-    // 3. Сбрасываем анимацию через 200 мс, даже если onClick вызвал перерендер
     timerRef.current = setTimeout(() => {
       setIsActive(false);
+      touchStartedRef.current = false;
     }, 200);
   };
 
-  // Очистка таймера при размонтировании
-  React.useEffect(() => {
+  const handleTouchCancel = () => {
+    setIsActive(false);
+    touchStartedRef.current = false;
+  };
+
+  useEffect(() => {
     return () => clearTimeout(timerRef.current);
   }, []);
 
   return (
     <button
-      onClick={handleClick}
+      onTouchStart={handleInteractionStart}
+      onTouchEnd={handleInteractionEnd}
+      onTouchCancel={handleTouchCancel}
+      onMouseDown={handleInteractionStart}
+      onMouseUp={handleInteractionEnd}
+      onMouseLeave={handleTouchCancel}
       className={`button_base ${type}_button ${className || ""} ${
         isActive ? "active" : ""
       }`}
+      onTouchMove={(e) => e.preventDefault()}
     >
       {text}
       {icon && (

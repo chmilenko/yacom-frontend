@@ -5,18 +5,21 @@ import App from "./App/App";
 import { AppStateProvider } from "./Core/Context/AppStateContext"; 
 import { ActionsProvider } from "./Core/Context/ActionsContext"; 
 import "./index.scss";
+import { ErrorProvider } from "./Core/Context/ErrorContext";
 
 document.addEventListener("DOMContentLoaded", function () {
   const root = ReactDOM.createRoot(document.getElementById("root"));
   root.render(
     <React.StrictMode>
       <Router>
-        <AppStateProvider
-        >
-          <ActionsProvider>
-            <App />
-          </ActionsProvider>
-        </AppStateProvider>
+        <ErrorProvider>
+          <AppStateProvider
+          >
+            <ActionsProvider>
+              <App />
+            </ActionsProvider>
+          </AppStateProvider>
+        </ErrorProvider>
       </Router>
      </React.StrictMode>
   );

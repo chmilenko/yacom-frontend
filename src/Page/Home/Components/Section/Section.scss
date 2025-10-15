@@ -1,11 +1,12 @@
 @import "../../../../Styles/variables.scss";
 
 .section_container {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  padding: 6px;
   border: 1px solid #d1d1d6;
   border-radius: 4px;
-  width: 100% !important;
-  margin-bottom: 12px;
-
   &.light_border {
     border: 1px solid #c6c0c0;
   }
@@ -16,20 +17,16 @@
   flex-direction: row;
   justify-content: space-between;
   align-items: center;
-  padding: 0px 4px 0px 8px;
-  height: 55px;
-
   &_left {
     display: flex;
     flex-direction: row;
     align-items: center;
     gap: 8px;
-    padding: 4px;
     position: relative;
-    height: 40px;
+    width: auto;
     cursor: pointer;
-
-    &.active::after {
+    padding: 4px;
+    &.active_block::after {
       content: "";
       position: absolute;
       top: 0;
@@ -91,17 +88,16 @@
 .section_content {
   display: flex;
   flex-direction: column;
-  padding: 0px 4px 8px 8px;
+  padding: 4px;
   gap: 8px;
 }
 
 .section_item {
   display: flex;
-  align-items: center;
+  flex-direction: column;
   cursor: pointer;
 
   &.task-item {
-    flex-direction: row;
     gap: 4px;
   }
 
@@ -109,7 +105,7 @@
     display: flex;
     align-items: flex-start;
     flex-direction: column;
-    gap: 6px;
+    gap: 4px;
   }
 
   &_checker {
@@ -169,7 +165,6 @@
 }
 
 .section_empty {
-  padding: 8px;
   color: #6d6d72;
   font-size: 14px;
 }
@@ -188,4 +183,71 @@
   60% {
     transform: translateY(-5px);
   }
+}
+// Стили для специальных блоков
+.special-block {
+  width: 100%;
+  position: relative;
+
+  &.active_block::after {
+    content: "";
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    border: 1px solid #d1d1d6;
+    background-color: #f0f8ff;
+    border-radius: 5px;
+    z-index: 0; // Измените на 0
+    opacity: 1;
+    transition: opacity 0.2s ease;
+    height: 35px;
+    padding: 5px;
+  }
+}
+
+.section_container.problem-block {
+  border-left: 4px solid #ff4757;
+  background-color: #fff5f5;
+}
+
+.section_container.sending-block {
+  border-left: 4px solid #2e86de;
+  background-color: #f0f8ff;
+}
+
+.special-block-content {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  gap: 4px;
+  width: 100%;
+  z-index: 1;
+}
+
+.section_subtitle {
+  font-size: 12px;
+  color: #666;
+  font-weight: normal;
+}
+
+.special-block .section_header_title {
+  margin-bottom: 4px;
+  color: inherit;
+}
+
+.problem-block .section_header_title {
+  color: #ff4757;
+}
+
+.sending-block .section_header_title {
+  color: #2e86de;
+}
+.red {
+  color: #ff4757 !important;
+}
+
+.blue {
+  color: #2e86de !important;
 }

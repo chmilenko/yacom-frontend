@@ -1,18 +1,15 @@
 import React, { createContext, useState, useCallback, useEffect } from "react";
 import { setPageComponent } from "../../Utils/pageComponentManager";
+import { useError } from "./ErrorContext";
 
 export const ActionsContext = createContext();
 
 export const ActionsProvider = ({ children }) => {
-  const [actions, setActionsState] = useState([]);
-  const [error, setError] = useState(null);
-  const [loadingAdditionalInfo, setLoadingAdditionalInfo] = useState(false);
+  const { addError } = useError();
 
-  const handleError = useCallback((err, context) => {
-    const errorDescription = `${context}. Ошибка ${err.name}: ${err.message}\n${err.stack}`;
-    setError(errorDescription);
-    console.error(errorDescription);
-  }, []);
+  const [actions, setActionsState] = useState([]);
+
+  const [loadingAdditionalInfo, setLoadingAdditionalInfo] = useState(false);
 
   const setActions = useCallback(
     (param) => {
@@ -26,19 +23,24 @@ export const ActionsProvider = ({ children }) => {
                 el.actionName === param.actionName)
           );
           if (existingIndex > -1) {
-            // Заменяем существующий
             const updated = [...prevActions];
             updated[existingIndex] = param;
             return updated;
           }
-          // Добавляем новый
           return [...prevActions, param];
         });
       } catch (err) {
-        handleError(err, "Не удалось вызвать процедуру в setActions");
+        const errorDescription = `Не удалось добавить Action в setActionsState\nОшибка ${err.name}: ${err.message}\n${err.stack}`;
+        addError({
+          type: "addAction",
+          message: "Failed to add action",
+          severity: "error",
+          details: errorDescription,
+          context: "setActions",
+        });
       }
     },
-    [handleError]
+    [addError]
   );
 
   const changeActionState = useCallback(
@@ -52,29 +54,50 @@ export const ActionsProvider = ({ children }) => {
           )
         );
       } catch (err) {
-        handleError(err, "Не удалось изменить статус в Action");
+        const errorDescription = `Не удалось изменить статус Action в changeActionState\nОшибка ${err.name}: ${err.message}\n${err.stack}`;
+        addError({
+          type: "changeActionState",
+          message: "Failed to give changeActionState",
+          severity: "error",
+          details: errorDescription,
+          context: "changeActionState",
+        });
       }
     },
-    [handleError]
+    [addError]
   );
 
   const getActiveActionsCount = useCallback(() => {
     try {
       return actions.filter((el) => el.active).length;
     } catch (err) {
-      handleError(err, "Не удалось получить активные Actions");
+      const errorDescription = `Не удалось получить количество активных Actions в getActiveActionsCount\nОшибка ${err.name}: ${err.message}\n${err.stack}`;
+      addError({
+        type: "getActiveActionsCount",
+        message: "Failed to  getActiveActionsCount",
+        severity: "error",
+        details: errorDescription,
+        context: "getActiveActionsCount",
+      });
       return 0;
     }
-  }, [actions, handleError]);
+  }, [actions, addError]);
 
   const getActiveActions = useCallback(() => {
     try {
       return JSON.stringify(actions.filter((el) => el.active));
     } catch (err) {
-      handleError(err, "Не удалось получить активные Actions");
+      const errorDescription = `Не удалось получить активные Actions в getActiveActions\nОшибка ${err.name}: ${err.message}\n${err.stack}`;
+      addError({
+        type: "getActiveActions",
+        message: "Failed to getActiveActions",
+        severity: "error",
+        details: errorDescription,
+        context: "getActiveActions",
+      });
       return "[]";
     }
-  }, [actions, handleError]);
+  }, [actions, addError]);
 
   useEffect(() => {
     setPageComponent({
@@ -93,7 +116,6 @@ export const ActionsProvider = ({ children }) => {
         getActiveActions,
         changeActionState,
         getActiveActionsCount,
-        error,
         loadingAdditionalInfo,
         setLoadingAdditionalInfo,
       }}
