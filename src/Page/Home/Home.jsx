@@ -73,12 +73,7 @@ function Home() {
                 section={section}
                 onOpenSwiper={handleOpenSwiper}
                 openSectionForm={openTasksOrNewsForm}
-                type={
-                  section.SectionName === "Задачи" ||
-                  section.SectionName === "Tasks"
-                    ? "Tasks"
-                    : "News"
-                }
+                type={section.SectionName}
               />
             ))}
           </div>

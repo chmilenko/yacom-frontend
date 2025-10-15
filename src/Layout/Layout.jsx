@@ -9,6 +9,7 @@ import PullToRefreshComponent from "../Components/PullToRefresh/PullToRefresh";
 import clickTo1C from "../Utils/clicker";
 import { AppStateContext } from "../Core/Context/AppStateContext";
 import { ActionsContext } from "../Core/Context/ActionsContext";
+import { ErrorDisplay } from "../Components/ErrorDisplay";
 
 function Layout() {
   const contentRef = useRef(null);
@@ -41,6 +42,7 @@ function Layout() {
 
   return (
     <div className="layout">
+      <ErrorDisplay />
       <ScrollToTop scrollContainerRef={contentRef} />
       <main className="content" ref={contentRef}>
         <PullToRefreshComponent

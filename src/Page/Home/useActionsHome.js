@@ -7,8 +7,7 @@ import { AppStateContext } from "../../Core/Context/AppStateContext";
 import { ActionsContext } from "../../Core/Context/ActionsContext";
 
 export const useHomeActions = () => {
-  const { setActions, actions } = useContext(ActionsContext);
-console.log(actions);
+  const { setActions } = useContext(ActionsContext);
 
   const {
     forState,

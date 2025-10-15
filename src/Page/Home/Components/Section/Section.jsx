@@ -18,12 +18,15 @@ function Section({ section, onOpenSwiper, openSectionForm, type }) {
   const items = section.sectionData?.list || [];
 
   const filteredItems =
-    type === "Tasks"
+    type === "Задачи"
       ? items.filter((item) => item)
       : items.filter((item) => item);
 
-  const count = type === "Tasks" ? countActualTasks : countUnreadNews;
-  const showExpandButton = type === "News";
+  const showSectionCount = type === "Сигналы";
+  const count = type === "Задачи" ? countActualTasks : countUnreadNews;
+  const displayCount = showSectionCount ? section.Count : count;
+
+  const showExpandButton = type === "Новости";
 
   const isProblemBlock = section.SectionKey === "Send_error_details";
   const isSendingBlock = section.SectionKey === "Data_sending_status";
@@ -94,7 +97,7 @@ function Section({ section, onOpenSwiper, openSectionForm, type }) {
                 </div>
                 <span
                   class={`material-symbols-outlined  ${
-                    section.SectionKey === "send_error_details" ? "red" : "blue"
+                    section.SectionKey === "Send_error_details" ? "red" : "blue"
                   }`}
                 >
                   exclamation
@@ -105,15 +108,18 @@ function Section({ section, onOpenSwiper, openSectionForm, type }) {
                 <div className="section_header_title">
                   {section.SectionName}
                 </div>
-                {count > 0 && (
-                  <div
-                    className={`section_header_count ${
-                      type === "Tasks" ? "actual-tasks" : "actual-news"
-                    } ${openSwiper && "dark_count"}`}
-                  >
-                    {count}
-                  </div>
-                )}
+                {displayCount > 0 &&
+                  (type === "Задачи" ||
+                    type === "Новости" ||
+                    type === "Сигналы") && (
+                    <div
+                      className={`section_header_count ${
+                        type === "Задачи" ? "actual-tasks" : "actual-news"
+                      } ${openSwiper && "dark_count"}`}
+                    >
+                      {displayCount}
+                    </div>
+                  )}
               </>
             )}
 
@@ -136,69 +142,69 @@ function Section({ section, onOpenSwiper, openSectionForm, type }) {
           )}
         </div>
 
-        {isExpanded && !isSpecialBlock && (
+        {isExpanded && !isSpecialBlock && !showSectionCount && (
           <div className="section_content">
-            {filteredItems.length > 0 ? (
-              filteredItems.map((item) => (
-                <div
-                  key={item.TaskID || item.ObjectID}
-                  className={`section_item ${
-                    type === "Tasks" ? "task-item" : "news-item"
-                  }`}
-                  onClick={() => onOpenSwiper(item, section.SectionName)}
-                >
-                  {type === "Tasks" ? (
-                    <>
-                      <div className="section_item_checker">
-                        {(item.ResultType == "3" ||
-                          item.ResultType == "4" ||
-                          item.ResultType == "5") &&
-                        !item.Done ? (
-                          <span className="material-symbols-outlined">
-                            add_photo_alternate
-                          </span>
-                        ) : (
-                          <Checkbox
-                            checked={item.Done}
-                            readonly={true}
-                            className={openSwiper && "dark"}
-                          />
-                        )}
-                      </div>
-                      <div
-                        className={`section_item_header ${
-                          item.Done && item.ResultType != "8" ? "_done" : ""
-                        }`}
-                      >
-                        {item.Header}
-                      </div>
-                    </>
-                  ) : (
-                    <>
-                      <div className="section_item_info">
-                        {item.New && <div className="indicator"></div>}
+            {filteredItems.length > 0
+              ? filteredItems.map((item) => (
+                  <div
+                    key={item.TaskID || item.ObjectID}
+                    className={`section_item ${
+                      type === "Задачи" ? "task-item" : "news-item"
+                    }`}
+                    onClick={() => onOpenSwiper(item, section.SectionName)}
+                  >
+                    {type === "Заадчи" ? (
+                      <>
+                        <div className="section_item_checker">
+                          {(item.ResultType == "3" ||
+                            item.ResultType == "4" ||
+                            item.ResultType == "5") &&
+                          !item.Done ? (
+                            <span className="material-symbols-outlined">
+                              add_photo_alternate
+                            </span>
+                          ) : (
+                            <Checkbox
+                              checked={item.Done}
+                              readonly={true}
+                              className={openSwiper && "dark"}
+                            />
+                          )}
+                        </div>
                         <div
-                          className={`section_item_date ${
-                            item.New && "bold_date"
+                          className={`section_item_header ${
+                            item.Done && item.ResultType != "8" ? "_done" : ""
                           }`}
                         >
-                          {item.Date}
+                          {item.Header}
                         </div>
-                      </div>
-                      <div
-                        className={`section_item_header ${
-                          item.New ? "bold" : ""
-                        }`}
-                      >
-                        {item.Title || item.Header}
-                      </div>
-                    </>
-                  )}
-                </div>
-              ))
-            ) : (
-              <div className="section_empty">No items</div>
-            )}
+                      </>
+                    ) : (
+                      <>
+                        <div className="section_item_info">
+                          {item.New && <div className="indicator"></div>}
+                          <div
+                            className={`section_item_date ${
+                              item.New && "bold_date"
+                            }`}
+                          >
+                            {item.Date}
+                          </div>
+                        </div>
+                        <div
+                          className={`section_item_header ${
+                            item.New ? "bold" : ""
+                          }`}
+                        >
+                          {item.Title || item.Header}
+                        </div>
+                      </>
+                    )}
+                  </div>
+                ))
+              : type !== "Сигналы" && (
+                  <div className="section_empty">No items</div>
+                )}
           </div>
         )}
       </div>

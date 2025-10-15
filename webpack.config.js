@@ -45,10 +45,10 @@ module.exports = {
     }),
     new HtmlInlineScriptPlugin(HtmlWebpackPlugin),
     new webpack.DefinePlugin({
-      "process.env.REACT_APP_DEVELOPER": JSON.stringify("true"),
+      "process.env.REACT_APP_DEVELOPER": JSON.stringify("false"),
     }),
-    // new webpack.IgnorePlugin({
-    //   resourceRegExp: /mock\.js$/,
-    // }),
+    new webpack.IgnorePlugin({
+      resourceRegExp: /mock\.js$/,
+    }),
   ],
 };

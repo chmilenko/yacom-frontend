@@ -6,28 +6,10 @@ import { AppStateContext } from "../../Core/Context/AppStateContext";
 import { ActionsContext } from "../../Core/Context/ActionsContext";
 import Button from "../../Ui/Button/Button";
 
-const menuItems = [
-  { path: "/", label: "Главная", icon: "house", objectId: 1, item: "Main" },
-  {
-    path: "/instructions",
-    label: "Инструкции",
-    icon: "assignment",
-    objectId: 3,
-    item: "Info",
-  },
-  {
-    path: "/help",
-    label: "Помощь",
-    icon: "chat_info",
-    objectId: 5,
-    item: "Support",
-  },
-];
-
 function MenuBar() {
   const location = useLocation();
   const navigate = useNavigate();
-  const { developer } = useContext(AppStateContext);
+  const { developer, menuItems } = useContext(AppStateContext);
   const { setActions } = useContext(ActionsContext);
 
   const handleNavigation = (item) => {

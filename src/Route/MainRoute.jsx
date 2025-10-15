@@ -4,6 +4,8 @@ import Home from "../Page/Home/Home";
 import Layout from "../Layout/Layout";
 import Instruction from "../Page/Instruction/Instruction";
 import Help from "../Page/Help/Help";
+import Journals from "../Page/Journals";
+import Products from "../Page/Products";
 
 function MainRoute() {
   return (
@@ -12,6 +14,8 @@ function MainRoute() {
         <Route path="/" element={<Home />} />
         <Route path="/instructions" element={<Instruction />} />
         <Route path="/help" element={<Help />} />
+        <Route path="/journals" element={<Journals />} />
+        <Route path="/products" element={<Products />} />
       </Route>
     </Routes>
   );
