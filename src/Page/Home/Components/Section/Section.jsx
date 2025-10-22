@@ -8,7 +8,7 @@ function Section({ section, onOpenSwiper, openSectionForm, type }) {
   const [isActive, setIsActive] = useState(false);
   const [isExpanded, setIsExpanded] = useState(true);
 
-  const { openSwiper, countActualTasks, countUnreadNews, setViewSection } =
+  const { openSwiper, countActualTasks, countUnreadNews } =
     useContext(AppStateContext);
 
   const toggleExpand = () => {
@@ -50,10 +50,6 @@ function Section({ section, onOpenSwiper, openSectionForm, type }) {
     if (!isSpecialBlock) {
       openSectionForm(type);
     }
-  };
-
-  const handleShowBlock = (section) => {
-    setViewSection(section);
   };
 
   if (section.View) {
@@ -210,18 +206,6 @@ function Section({ section, onOpenSwiper, openSectionForm, type }) {
       </div>
     );
   }
-
-  return (
-    <div className="section-hidden-block">
-      <button
-        className="show-block-button"
-        onClick={() => handleShowBlock(section)}
-      >
-        <span className="material-symbols-outlined">visibility</span>
-        Показать блок
-      </button>
-    </div>
-  );
 }
 
 export default Section;
