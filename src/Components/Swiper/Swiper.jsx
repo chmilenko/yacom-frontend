@@ -47,7 +47,7 @@ const Swiper = ({ children, header, closeSwiper }) => {
         window.removeEventListener("mouseup", handleMouseUp);
 
         setPosition((prevPosition) => {
-          if (prevPosition < window.innerHeight / 2) {
+          if (prevPosition < window.innerHeight / 7) {
             return 0;
           } else {
             closeSwiper();

@@ -1,4 +1,4 @@
-import React, { useState, useRef, useEffect } from "react";
+import { useState, useRef, useEffect, cloneElement } from "react";
 import "./Button.scss";
 
 function Button({ text, onClick, icon, className, type = "default" }) {
@@ -51,7 +51,7 @@ function Button({ text, onClick, icon, className, type = "default" }) {
       {text}
       {icon && (
         <span className="button_icon-wrapper">
-          {React.cloneElement(icon, {
+          {cloneElement(icon, {
             className: `${icon.props.className} button_icon`,
           })}
         </span>

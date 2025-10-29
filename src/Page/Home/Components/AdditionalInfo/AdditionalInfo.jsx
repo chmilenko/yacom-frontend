@@ -11,20 +11,17 @@ import React, {
 import "./AdditionalInfo.css";
 import ImageDecoder from "../../../../Utils/decodeBase";
 import clickTo1C from "../../../../Utils/clicker";
-import { createMarkup } from "../../../../Utils/createMarkup";
+import {
+  createMarkup,
+  createMarkupUniversal,
+} from "../../../../Utils/createMarkup";
 import Button from "../../../../Ui/Button/Button";
 import { AppStateContext } from "../../../../Core/Context/AppStateContext";
 import { ActionsContext } from "../../../../Core/Context/ActionsContext";
 
 function AdditionalInfo({ onTaskExecute, taskFulfill }) {
-  const {
-    additionalInfo,
-    listName,
-    ListData,
-    setListState,
-    developer,
-    loadingAdditionalInfo,
-  } = useContext(AppStateContext);
+  const { additionalInfo, listName, ListData, setListState, developer } =
+    useContext(AppStateContext);
 
   const { setActions } = useContext(ActionsContext);
 
@@ -130,7 +127,7 @@ function AdditionalInfo({ onTaskExecute, taskFulfill }) {
   const renderContent = () =>
     additionalInfo?.Content && (
       <div
-        dangerouslySetInnerHTML={createMarkup(additionalInfo.Content)}
+        dangerouslySetInnerHTML={createMarkupUniversal(additionalInfo.Content)}
         className="attachment_content_html"
       />
     );
@@ -182,6 +179,7 @@ function AdditionalInfo({ onTaskExecute, taskFulfill }) {
       </div>
     </div>
   );
+  console.log(additionalInfo);
 
   const renderActionButton = () => {
     if (!additionalInfo.ResultType) return null;
@@ -232,10 +230,6 @@ function AdditionalInfo({ onTaskExecute, taskFulfill }) {
       );
     }
   };
-
-  if (loadingAdditionalInfo) {
-    return null;
-  }
 
   return (
     <>

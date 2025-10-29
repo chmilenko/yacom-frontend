@@ -1,5 +1,5 @@
 /* eslint-disable eqeqeq */
-import React, { useContext, useState } from "react";
+import { useContext, useState } from "react";
 import "./Section.scss";
 import Checkbox from "../../../../Ui/Checkbox/Checkbox";
 import { AppStateContext } from "../../../../Core/Context/AppStateContext";
@@ -92,7 +92,7 @@ function Section({ section, onOpenSwiper, openSectionForm, type }) {
                   )}
                 </div>
                 <span
-                  class={`material-symbols-outlined  ${
+                  className={`material-symbols-outlined  ${
                     section.SectionKey === "Send_error_details" ? "red" : "blue"
                   }`}
                 >

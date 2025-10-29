@@ -33,7 +33,7 @@ export const AppStateProvider = ({ children }) => {
     actions: [],
     developer: process.env.REACT_APP_DEVELOPER === "true",
     page: "",
-    loadingAdditionalInfo: false,
+
     countActualTasks: 0,
     countUnreadNews: 0,
   });
@@ -109,23 +109,25 @@ export const AppStateProvider = ({ children }) => {
         setState((prev) => {
           const newState = {
             ...prev,
-            forState: res,
+            forState: res || [],
             menuItems: menuItems || [],
           };
 
           const tasksSection = res.find(
+            //Обновление счетчиков актуальных задач и непрочитанных новостей
             (section) =>
               section.SectionName === "Задачи" ||
               section.SectionName === "Tasks"
           );
-          const tasks =
-            tasksSection?.sectionData?.list?.filter((item) => !item.Done) || [];
 
           const newsSection = res.find(
             (section) =>
               section.SectionName === "Новости" ||
               section.SectionName === "News"
           );
+          const tasks =
+            tasksSection?.sectionData?.list?.filter((item) => !item.Done) || [];
+
           const unreadNews =
             newsSection?.sectionData?.list?.filter((item) => item.New) || [];
 
@@ -146,7 +148,7 @@ export const AppStateProvider = ({ children }) => {
         });
       }
     },
-    [addError, state.developer, data]
+    [addError, state.developer]
   );
 
   const setOpenSwiper = useCallback((swiperState) => {
@@ -375,12 +377,11 @@ export const AppStateProvider = ({ children }) => {
 
   const setAdditionalInfo = useCallback(
     (additional) => {
-      setState((prev) => ({ ...prev, loadingAdditionalInfo: true }));
+      setState((prev) => ({ ...prev }));
       try {
         setState((prev) => ({
           ...prev,
           additionalInfo: additional,
-          loadingAdditionalInfo: false,
         }));
       } catch (err) {
         const errorDescription = `Не удалось распарсить в setAdditionalInfo\nОшибка ${err.name}: ${err.message}\n${err.stack}`;
@@ -391,7 +392,7 @@ export const AppStateProvider = ({ children }) => {
           details: errorDescription,
           context: "setAdditionalInfo",
         });
-        setState((prev) => ({ ...prev, loadingAdditionalInfo: false }));
+        setState((prev) => ({ ...prev }));
       }
     },
     [addError]
@@ -412,17 +413,33 @@ export const AppStateProvider = ({ children }) => {
   const setListState = useCallback(
     (listName, ListData, updateRecords = true) => {
       try {
-        const res = !state.developer ? JSON.parse(ListData) : ListData;
+        let res;
 
-        //уточнить структуру данных приходящего из 1с
-        // const additionalInfoObject = res.reduce(
-        //   (acc, cur) => ({ ...acc, ...cur }),
-        //   {}
-        // );
+        if (state.developer) {
+          res = ListData;
+        } else {
+          res = JSON.parse(ListData);
+        }
+        let additionalInfoObject;
 
-        setState((prev) => ({ ...prev, additionalInfo: res }));
+        if (Array.isArray(res)) {
+          additionalInfoObject = res.reduce(
+            (acc, cur) => ({ ...acc, ...cur }),
+            {}
+          );
+        } else if (typeof res === "object" && res !== null) {
+          additionalInfoObject = res;
+        } else {
+          throw new Error(`Неожиданный формат данных: ${typeof res}`);
+        }
+
+        setState((prev) => ({ ...prev, additionalInfo: additionalInfoObject }));
       } catch (err) {
-        const errorDescription = `Не удалось распарсить в setListState\nОшибка ${err.name}: ${err.message}\n${err.stack}`;
+        const errorDescription = `Не удалось обработать данные в setListState\nОшибка ${
+          err.name
+        }: ${err.message}\nТип данных: ${typeof ListData}\nФормат: ${
+          Array.isArray("res") ? "array" : typeof res
+        }\n${err.stack}`;
         addError({
           type: "parsing",
           message: "Failed to parse list state",
@@ -432,7 +449,7 @@ export const AppStateProvider = ({ children }) => {
         });
       }
     },
-    [addError]
+    [addError, state.developer]
   );
 
   const setViewSection = useCallback((sectionToUpdate) => {
@@ -473,7 +490,7 @@ export const AppStateProvider = ({ children }) => {
 
   useEffect(() => {
     if (!isOnline) {
-      setState((prev) => ({ ...prev, loadingAdditionalInfo: false }));
+      setState((prev) => ({ ...prev }));
     }
   }, [isOnline]);
 

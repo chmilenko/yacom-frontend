@@ -13,8 +13,7 @@ document.addEventListener("DOMContentLoaded", function () {
     <React.StrictMode>
       <Router>
         <ErrorProvider>
-          <AppStateProvider
-          >
+          <AppStateProvider>
             <ActionsProvider>
               <App />
             </ActionsProvider>

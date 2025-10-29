@@ -177,8 +177,6 @@ function Instruction() {
   const renderInstructions = (items) =>
     items.map((item) => {
       const hasChildren = item.Строки.length > 0;
-      console.log(hasChildren);
-
       return (
         <InstructionItem
           key={item.id}

@@ -50,6 +50,7 @@ export const useHomeActions = () => {
 
   const handleOpenSwiper = (info, type) => {
     let id;
+    
     if (type === "Задачи" || type === "Tasks") {
       id = info.TaskID;
     } else if (type === "Сообщения" || type === "Messages" || type === 'Новости') {

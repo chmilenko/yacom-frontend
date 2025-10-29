@@ -58,7 +58,7 @@ function Home() {
   useEffect(() => {
     setAppState();
     setUser();
-  }, []);
+  }, [setAppState, setUser]);
 
   return (
     <div className="main">
@@ -67,9 +67,9 @@ function Home() {
           {openSwiper && <div className="overlay" onClick={closeSwiper} />}
 
           <div className={`content_wrapper ${openSwiper ? "blur" : ""}`}>
-            {forState.map((section) => (
+            {forState.map((section, i) => (
               <Section
-                key={section.TaskID || section.ObjectID}
+                key={section.TaskID || section.ObjectID || `section-${i}`}
                 section={section}
                 onOpenSwiper={handleOpenSwiper}
                 openSectionForm={openTasksOrNewsForm}

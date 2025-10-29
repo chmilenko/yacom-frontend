@@ -1,4 +1,4 @@
-import React, {
+import {
   createContext,
   useState,
   useCallback,
@@ -11,6 +11,7 @@ export const ErrorContext = createContext();
 
 export const ErrorProvider = ({ children }) => {
   const [errors, setErrors] = useState([]);
+  const [errorHistory, setErrorHistory] = useState([]);
   const [isOnline, setIsOnline] = useState(navigator.onLine);
 
   const addError = useCallback((error) => {
@@ -19,17 +20,37 @@ export const ErrorProvider = ({ children }) => {
       timestamp: new Date().toISOString(),
       ...error,
       type: error.type || "application",
+      page: window.location.pathname,
     };
 
-    setErrors((prev) => [...prev, errorWithId]);
-
-    setTimeout(() => {
-      removeError(errorWithId.id);
-    }, 30000);
+    setErrorHistory((prev) => {
+      const newHistory = [...prev, errorWithId];
+      localStorage.setItem(
+        "errorHistory",
+        JSON.stringify(newHistory.slice(-100))
+      );
+      return newHistory;
+    });
   }, []);
 
   const removeError = useCallback((errorId) => {
     setErrors((prev) => prev.filter((error) => error.id !== errorId));
+  }, []);
+
+  const removeErrorFromHistory = useCallback(
+    (errorId) => {
+      setErrorHistory((prev) => prev.filter((error) => error.id !== errorId));
+      const updatedHistory = errorHistory.filter(
+        (error) => error.id !== errorId
+      );
+      localStorage.setItem("errorHistory", JSON.stringify(updatedHistory));
+    },
+    [errorHistory]
+  );
+
+  const clearErrorHistory = useCallback(() => {
+    setErrorHistory([]);
+    localStorage.removeItem("errorHistory");
   }, []);
 
   const clearErrors = useCallback(() => {
@@ -41,6 +62,15 @@ export const ErrorProvider = ({ children }) => {
       return errors.filter((error) => error.type === type);
     },
     [errors]
+  );
+
+  const getErrorHistoryByType = useCallback(
+    (type) => {
+      return errorHistory.filter((error) =>
+        type ? error.type === type : true
+      );
+    },
+    [errorHistory]
   );
 
   const checkReactAvailability = useCallback(() => {
@@ -56,7 +86,18 @@ export const ErrorProvider = ({ children }) => {
     return true;
   }, [addError]);
 
-  React.useEffect(() => {
+  useEffect(() => {
+    const savedHistory = localStorage.getItem("errorHistory");
+    if (savedHistory) {
+      try {
+        setErrorHistory(JSON.parse(savedHistory));
+      } catch (e) {
+        console.error("Failed to load error history:", e);
+      }
+    }
+  }, []);
+
+  useEffect(() => {
     const handleOnline = () => setIsOnline(true);
     const handleOffline = () => {
       setIsOnline(false);
@@ -82,16 +123,22 @@ export const ErrorProvider = ({ children }) => {
   useEffect(() => {
     setPageComponent({
       errors,
+      errorHistory,
     });
-  }, [errors]);
+    console.log(window.pageComponent.errorHistory);
+  }, [errors, errorHistory]);
 
   const value = {
     errors,
+    errorHistory,
     isOnline,
     addError,
     removeError,
+    removeErrorFromHistory,
     clearErrors,
+    clearErrorHistory,
     getErrorsByType,
+    getErrorHistoryByType,
     checkReactAvailability,
   };
 

@@ -6,6 +6,7 @@ import Help from "../Page/Help/Help";
 import Journals from "../Page/Journals";
 import Products from "../Page/Products";
 import Instruction from "../Page/Instruction/Instruction";
+import Errors from "../Page/Errors/ErrorDisplay";
 
 function MainRoute() {
   return (
@@ -16,6 +17,7 @@ function MainRoute() {
         <Route path="/help" element={<Help />} />
         <Route path="/journals" element={<Journals />} />
         <Route path="/products" element={<Products />} />
+        <Route path="/errors" element={<Errors />} />
       </Route>
     </Routes>
   );
