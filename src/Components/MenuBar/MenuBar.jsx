@@ -1,16 +1,15 @@
-import React, { useContext } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
 import "./MenuBar.scss";
 import clickTo1C from "../../Utils/clicker";
-import { AppStateContext } from "../../Core/Context/AppStateContext";
-import { ActionsContext } from "../../Core/Context/ActionsContext";
+import { useAppStore } from "../../Core/Context/AppStateContext";
+import { useActionsStore } from "../../Core/Context/ActionsContext";
 import Button from "../../Ui/Button/Button";
 
 function MenuBar() {
   const location = useLocation();
   const navigate = useNavigate();
-  const { developer, menuItems } = useContext(AppStateContext);
-  const { setActions } = useContext(ActionsContext);
+  const { developer, menuItems } = useAppStore();
+  const { setActions } = useActionsStore();
 
   const handleNavigation = (item) => {
     navigate(item.path);

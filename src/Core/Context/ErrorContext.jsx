@@ -1,156 +1,111 @@
-import {
-  createContext,
-  useState,
-  useCallback,
-  useContext,
-  useEffect,
-} from "react";
-import { setPageComponent } from "../../Utils/pageComponentManager";
+// store/useErrorsStore.js
+import { create } from "zustand";
+import { persist } from "zustand/middleware";
 
-export const ErrorContext = createContext();
+export const useErrorsStore = create(
+  persist(
+    (set, get) => ({
+      // State
+      errors: [],
+      errorHistory: [],
+      isOnline: navigator.onLine,
 
-export const ErrorProvider = ({ children }) => {
-  const [errors, setErrors] = useState([]);
-  const [errorHistory, setErrorHistory] = useState([]);
-  const [isOnline, setIsOnline] = useState(navigator.onLine);
+      // Actions
+      addError: (error) => {
+        const errorWithId = {
+          id: Date.now(),
+          timestamp: new Date().toISOString(),
+          ...error,
+          type: error.type || "application",
+          page: window.location.pathname,
+        };
 
-  const addError = useCallback((error) => {
-    const errorWithId = {
-      id: Date.now(),
-      timestamp: new Date().toISOString(),
-      ...error,
-      type: error.type || "application",
-      page: window.location.pathname,
-    };
+        set((state) => {
+          const newHistory = [...state.errorHistory, errorWithId].slice(-100);
+          return {
+            errors: [...state.errors, errorWithId],
+            errorHistory: newHistory,
+          };
+        });
 
-    setErrorHistory((prev) => {
-      const newHistory = [...prev, errorWithId];
-      localStorage.setItem(
-        "errorHistory",
-        JSON.stringify(newHistory.slice(-100))
-      );
-      return newHistory;
-    });
-  }, []);
+        // Автоматически отправляем в 1С в production режиме
+        const { sendErrorTo1C } = get();
+        if (sendErrorTo1C && error.severity !== "warning") {
+          sendErrorTo1C(errorWithId);
+        }
+      },
 
-  const removeError = useCallback((errorId) => {
-    setErrors((prev) => prev.filter((error) => error.id !== errorId));
-  }, []);
+      removeError: (errorId) =>
+        set((state) => ({
+          errors: state.errors.filter((error) => error.id !== errorId),
+        })),
 
-  const removeErrorFromHistory = useCallback(
-    (errorId) => {
-      setErrorHistory((prev) => prev.filter((error) => error.id !== errorId));
-      const updatedHistory = errorHistory.filter(
-        (error) => error.id !== errorId
-      );
-      localStorage.setItem("errorHistory", JSON.stringify(updatedHistory));
-    },
-    [errorHistory]
-  );
+      removeErrorFromHistory: (errorId) =>
+        set((state) => {
+          const updatedHistory = state.errorHistory.filter(
+            (error) => error.id !== errorId
+          );
+          return { errorHistory: updatedHistory };
+        }),
 
-  const clearErrorHistory = useCallback(() => {
-    setErrorHistory([]);
-    localStorage.removeItem("errorHistory");
-  }, []);
+      clearErrorHistory: () => set({ errorHistory: [] }),
 
-  const clearErrors = useCallback(() => {
-    setErrors([]);
-  }, []);
+      clearErrors: () => set({ errors: [] }),
 
-  const getErrorsByType = useCallback(
-    (type) => {
-      return errors.filter((error) => error.type === type);
-    },
-    [errors]
-  );
+      getErrorsByType: (type) => {
+        const { errors } = get();
+        return errors.filter((error) => error.type === type);
+      },
 
-  const getErrorHistoryByType = useCallback(
-    (type) => {
-      return errorHistory.filter((error) =>
-        type ? error.type === type : true
-      );
-    },
-    [errorHistory]
-  );
+      getErrorHistoryByType: (type) => {
+        const { errorHistory } = get();
+        return errorHistory.filter((error) =>
+          type ? error.type === type : true
+        );
+      },
 
-  const checkReactAvailability = useCallback(() => {
-    if (!window.React) {
-      addError({
-        type: "library",
-        message: "React library not loaded - no internet connection",
-        severity: "critical",
-        details: "The React library from CDN failed to load",
-      });
-      return false;
+      checkReactAvailability: () => {
+        if (!window.React) {
+          get().addError({
+            type: "library",
+            message: "React library not loaded - no internet connection",
+            severity: "critical",
+            details: "The React library from CDN failed to load",
+          });
+          return false;
+        }
+        return true;
+      },
+
+      sendErrorTo1C: async (errorData) => {
+        try {
+          const { clickTo1c } = await import("../../Utils/clicker");
+          const { setActions } = await import("./ActionsContext").then(
+            (module) => module.useActionsStore.getState()
+          );
+
+          const actionData = {
+            actionName: "sendErrors",
+            active: true,
+            data: [errorData],
+          };
+
+          setActions(actionData);
+          clickTo1c();
+          console.log("Error sent to 1C:", errorData);
+        } catch (sendError) {
+          console.error("Failed to send error to 1C:", sendError);
+        }
+      },
+
+      // Сеттер для онлайн статуса
+      setIsOnline: (online) => set({ isOnline: online }),
+    }),
+    {
+      name: "errors-storage",
+      partialize: (state) => ({
+        errorHistory: state.errorHistory,
+      }),
     }
-    return true;
-  }, [addError]);
-
-  useEffect(() => {
-    const savedHistory = localStorage.getItem("errorHistory");
-    if (savedHistory) {
-      try {
-        setErrorHistory(JSON.parse(savedHistory));
-      } catch (e) {
-        console.error("Failed to load error history:", e);
-      }
-    }
-  }, []);
-
-  useEffect(() => {
-    const handleOnline = () => setIsOnline(true);
-    const handleOffline = () => {
-      setIsOnline(false);
-      addError({
-        type: "network",
-        message: "No internet connection",
-        severity: "warning",
-        details: "Please check your network connection",
-      });
-    };
-
-    window.addEventListener("online", handleOnline);
-    window.addEventListener("offline", handleOffline);
-
-    checkReactAvailability();
-
-    return () => {
-      window.removeEventListener("online", handleOnline);
-      window.removeEventListener("offline", handleOffline);
-    };
-  }, [addError, checkReactAvailability]);
-
-  useEffect(() => {
-    setPageComponent({
-      errors,
-      errorHistory,
-    });
-    console.log(window.pageComponent.errorHistory);
-  }, [errors, errorHistory]);
-
-  const value = {
-    errors,
-    errorHistory,
-    isOnline,
-    addError,
-    removeError,
-    removeErrorFromHistory,
-    clearErrors,
-    clearErrorHistory,
-    getErrorsByType,
-    getErrorHistoryByType,
-    checkReactAvailability,
-  };
-
-  return (
-    <ErrorContext.Provider value={value}>{children}</ErrorContext.Provider>
-  );
-};
-
-export const useError = () => {
-  const context = useContext(ErrorContext);
-  if (!context) {
-    throw new Error("useError must be used within an ErrorProvider");
-  }
-  return context;
-};
+  )
+);

@@ -1,12 +1,12 @@
-import React, { useContext, useEffect } from "react";
+import { useEffect } from "react";
 import ReactDOMServer from "react-dom/server";
 import PullToRefresh from "pulltorefreshjs";
 import { faSyncAlt } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { AppStateContext } from "../../Core/Context/AppStateContext";
+import { useAppStore } from "../../Core/Context/AppStateContext";
 
 function PullToRefreshComponent({ children, refreshFunk, contentRef }) {
-  const { openSwiper } = useContext(AppStateContext);
+  const { openSwiper } = useAppStore();
 
   useEffect(() => {
     const handlePullToRefresh = () => {

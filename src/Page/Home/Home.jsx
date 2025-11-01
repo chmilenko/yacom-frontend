@@ -1,12 +1,11 @@
-import React, { useContext, useEffect } from "react";
-import "./Home.scss";
+import { useEffect } from "react";
+import { useAppStore } from "../../Core/Context/AppStateContext";
+import { useHomeActions } from "./useActionsHome";
 import Section from "./Components/Section/Section";
 import Swiper from "../../Components/Swiper/Swiper";
 import AdditionalInfo from "./Components/AdditionalInfo/AdditionalInfo";
-
-import { AppStateContext } from "../../Core/Context/AppStateContext";
 import Button from "../../Ui/Button/Button";
-import { useHomeActions } from "./useActionsHome";
+import "./Home.scss";
 
 function Home() {
   const {
@@ -18,7 +17,7 @@ function Home() {
     openSwiper,
     setOpenSwiper,
     setListStateClear,
-  } = useContext(AppStateContext);
+  } = useAppStore();
 
   const {
     openTasksOrNewsForm,

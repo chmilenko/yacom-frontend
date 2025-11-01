@@ -1,29 +1,19 @@
 /* eslint-disable eqeqeq */
 /* eslint-disable jsx-a11y/img-redundant-alt */
-import React, {
-  useCallback,
-  useContext,
-  useEffect,
-  useMemo,
-  useRef,
-  useState,
-} from "react";
+import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import "./AdditionalInfo.css";
 import ImageDecoder from "../../../../Utils/decodeBase";
 import clickTo1C from "../../../../Utils/clicker";
-import {
-  createMarkup,
-  createMarkupUniversal,
-} from "../../../../Utils/createMarkup";
+import { createMarkupUniversal } from "../../../../Utils/createMarkup";
 import Button from "../../../../Ui/Button/Button";
-import { AppStateContext } from "../../../../Core/Context/AppStateContext";
-import { ActionsContext } from "../../../../Core/Context/ActionsContext";
+import { useAppStore } from "../../../../Core/Context/AppStateContext";
+import { useActionsStore } from "../../../../Core/Context/ActionsContext";
 
 function AdditionalInfo({ onTaskExecute, taskFulfill }) {
   const { additionalInfo, listName, ListData, setListState, developer } =
-    useContext(AppStateContext);
+    useAppStore();
 
-  const { setActions } = useContext(ActionsContext);
+  const { setActions } = useActionsStore();
 
   const [taskDone, setTaskDone] = useState(additionalInfo.Done);
   const [decodedImages, setDecodedImages] = useState([]);
@@ -179,7 +169,6 @@ function AdditionalInfo({ onTaskExecute, taskFulfill }) {
       </div>
     </div>
   );
-  console.log(additionalInfo);
 
   const renderActionButton = () => {
     if (!additionalInfo.ResultType) return null;

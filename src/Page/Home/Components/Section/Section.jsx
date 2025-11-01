@@ -1,26 +1,20 @@
 /* eslint-disable eqeqeq */
-import { useContext, useState } from "react";
+import { useState } from "react";
 import "./Section.scss";
 import Checkbox from "../../../../Ui/Checkbox/Checkbox";
-import { AppStateContext } from "../../../../Core/Context/AppStateContext";
+import { useAppStore } from "../../../../Core/Context/AppStateContext";
 
 function Section({ section, onOpenSwiper, openSectionForm, type }) {
   const [isActive, setIsActive] = useState(false);
   const [isExpanded, setIsExpanded] = useState(true);
 
-  const { openSwiper, countActualTasks, countUnreadNews } =
-    useContext(AppStateContext);
+  const { openSwiper, countActualTasks, countUnreadNews } = useAppStore();
 
   const toggleExpand = () => {
     if (!openSwiper) setIsExpanded((prev) => !prev);
   };
 
   const items = section.sectionData?.list || [];
-
-  const filteredItems =
-    type === "Задачи"
-      ? items.filter((item) => item)
-      : items.filter((item) => item);
 
   const showSectionCount = type === "Сигналы";
   const count = type === "Задачи" ? countActualTasks : countUnreadNews;
@@ -140,8 +134,8 @@ function Section({ section, onOpenSwiper, openSectionForm, type }) {
 
         {isExpanded && !isSpecialBlock && !showSectionCount && (
           <div className="section_content">
-            {filteredItems.length > 0
-              ? filteredItems.map((item) => (
+            {items.length > 0
+              ? items.map((item) => (
                   <div
                     key={item.TaskID || item.ObjectID}
                     className={`section_item ${
