@@ -7,16 +7,14 @@ import MenuBar from "../Components/MenuBar/MenuBar";
 import ScrollToTop from "../Components/ScrollToTop/ScrollToTop";
 import PullToRefreshComponent from "../Components/PullToRefresh/PullToRefresh";
 import clickTo1C from "../Utils/clicker";
-import { AppStateContext } from "../Core/Context/AppStateContext";
-import { ActionsContext } from "../Core/Context/ActionsContext";
-import { ErrorDisplay } from "../Page/Errors/ErrorDisplay";
+import { useAppStore } from "../Core/Context/AppStateContext";
+import { useActionsStore } from "../Core/Context/ActionsContext";
 
 function Layout() {
   const contentRef = useRef(null);
-  const { setAppState, page, setInstructionsState, developer } =
-    useContext(AppStateContext);
+  const { setAppState, page, setInstructionsState, developer } = useAppStore();
 
-  const { setActions } = useContext(ActionsContext);
+  const { setActions } = useActionsStore();
 
   const funcRefresh = (currentPage) => {
     switch (currentPage) {

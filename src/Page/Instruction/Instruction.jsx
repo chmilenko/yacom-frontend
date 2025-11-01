@@ -1,16 +1,21 @@
 /* eslint-disable no-loop-func */
 import React, { useContext, useEffect, useState } from "react";
 import "./Instructions.scss";
-import { AppStateContext } from "../../Core/Context/AppStateContext";
-import { ActionsContext } from "../../Core/Context/ActionsContext";
+import {
+  AppStateContext,
+  useAppStore,
+} from "../../Core/Context/AppStateContext";
+import {
+  ActionsContext,
+  useActionsStore,
+} from "../../Core/Context/ActionsContext";
 import Input from "../../Ui/Input/Input";
 import clickTo1C from "../../Utils/clicker";
 import InstructionItem from "./InstructionItem";
 
 function Instruction() {
-  const { instructions, setInstructionsState, developer } =
-    useContext(AppStateContext);
-  const { setActions } = useContext(ActionsContext);
+  const { instructions, setInstructionsState, developer } = useAppStore();
+  const { setActions } = useActionsStore();
 
   const [openIndexes, setOpenIndexes] = useState({});
   const [filterText, setFilterText] = useState("");

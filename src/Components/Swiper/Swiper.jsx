@@ -1,19 +1,13 @@
 /* eslint-disable jsx-a11y/img-redundant-alt */
-import React, {
-  useState,
-  useRef,
-  useCallback,
-  useEffect,
-  useContext,
-} from "react";
+import { useState, useRef, useCallback, useEffect } from "react";
 
 import { Swipe } from "react-swipe-component";
 
 import "./Swiper.scss";
-import { AppStateContext } from "../../Core/Context/AppStateContext";
+import { useAppStore } from "../../Core/Context/AppStateContext";
 
 const Swiper = ({ children, header, closeSwiper }) => {
-  const { openSwiper } = useContext(AppStateContext);
+  const { openSwiper } = useAppStore();
 
   const [position, setPosition] = useState(0);
   const swipeRef = useRef(null);
@@ -37,7 +31,7 @@ const Swiper = ({ children, header, closeSwiper }) => {
           const currentY = event.clientY;
           const deltaY = currentY - initialY.current;
           handleDrag(deltaY);
-          initialY.current = currentY; // Обновляем начальную позицию
+          initialY.current = currentY;
         }
       };
 

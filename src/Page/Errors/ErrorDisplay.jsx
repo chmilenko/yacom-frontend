@@ -1,6 +1,6 @@
 // Errors.js
 import { useState } from "react";
-import { useError } from "../../Core/Context/ErrorContext";
+import { useErrorsStore } from "../../Core/Context/ErrorContext";
 import "./Errors.scss";
 
 const Errors = () => {
@@ -9,7 +9,7 @@ const Errors = () => {
     clearErrorHistory,
     removeErrorFromHistory,
     getErrorHistoryByType,
-  } = useError();
+  } = useErrorsStore();
 
   const [selectedType, setSelectedType] = useState("");
   const [searchTerm, setSearchTerm] = useState("");

@@ -1,13 +1,12 @@
-import { useContext } from "react";
 import "./Home.scss";
 
 import clickTo1C from "../../Utils/clicker";
 
-import { AppStateContext } from "../../Core/Context/AppStateContext";
-import { ActionsContext } from "../../Core/Context/ActionsContext";
+import {  useAppStore } from "../../Core/Context/AppStateContext";
+import { useActionsStore } from "../../Core/Context/ActionsContext";
 
 export const useHomeActions = () => {
-  const { setActions } = useContext(ActionsContext);
+  const { setActions } = useActionsStore();
 
   const {
     forState,
@@ -23,7 +22,7 @@ export const useHomeActions = () => {
     setListState,
     ListData,
     listName,
-  } = useContext(AppStateContext);
+  } = useAppStore();
 
   const taskAction = (TypeResult) => {
     switch (TypeResult) {
