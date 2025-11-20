@@ -1,12 +1,11 @@
-import { useEffect } from 'react';
-import { useAppStore } from '../Core/Context/AppStateContext';
-import { useActionsStore } from '../Core/Context/ActionsContext';
+import { useEffect } from "react";
+import { useAppStore } from "../Core/Context/AppStateContext";
+import { useActionsStore } from "../Core/Context/ActionsContext";
 
-import { useErrorsStore } from '../Core/Context/ErrorContext';
+import { useErrorsStore } from "../Core/Context/ErrorContext";
 
 const PageComponentInitializer = () => {
   useEffect(() => {
-    // Получаем текущее состояние один раз при монтировании
     const appState = useAppStore.getState();
     const actionsState = useActionsStore.getState();
     const errorsState = useErrorsStore.getState();
@@ -25,6 +24,10 @@ const PageComponentInitializer = () => {
       setTaskDoneStatus: appState.setTaskDoneStatus,
       setListStateClear: appState.setListStateClear,
       additionalInfo: appState.additionalInfo,
+      getListState: appState.getListState,
+      tryJsonParse: appState.tryJsonParse,
+      getAppStateJsonErrors: appState.getAppStateJsonErrors,
+      getCurrentadditionalInfo: appState.getCurrentadditionalInfo,
       // Actions
       changeActionState: actionsState.changeActionState,
       getActiveActions: actionsState.getActiveActions,
@@ -34,10 +37,11 @@ const PageComponentInitializer = () => {
       // Errors
       errors: errorsState.errors,
       errorHistory: errorsState.errorHistory,
+      getErrorsJSON: errorsState.getErrorsJSON,
     };
 
-    console.log('✅ pageComponent initialized once');
-  }, []); // Пустой массив - только при монтировании
+    console.log("✅ pageComponent initialized once");
+  }, []);
 
   return null;
 };
