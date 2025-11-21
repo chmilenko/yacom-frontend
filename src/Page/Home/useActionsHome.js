@@ -57,10 +57,10 @@ export const useHomeActions = () => {
       setReadNews(id);
     }
 
-    const section = forState.find((s) => s.SectionName === type);
+    const section = forState?.find((s) => s?.SectionName === type);
     let dataToSend;
 
-    if (section && section.sectionData?.list) {
+    if (section && section?.sectionData?.list) {
       dataToSend = section.sectionData.list.find((item) => 
         item?.ObjectID === id || item?.TaskID === id
       );
@@ -74,9 +74,9 @@ export const useHomeActions = () => {
       objectType: info.ObjectType,
     });
 
-    developer && setAdditionalInfo(info);
+    // developer && setAdditionalInfo(info);
 
-    setListData(dataToSend);
+    setAdditionalInfo(dataToSend);
     setListName(type);
     setOpenSwiper(true);
 

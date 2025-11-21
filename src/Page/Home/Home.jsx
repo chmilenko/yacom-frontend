@@ -4,13 +4,10 @@ import { useHomeActions } from "./useActionsHome";
 import Section from "./Components/Section/Section";
 import Swiper from "../../Components/Swiper/Swiper";
 import AdditionalInfo from "./Components/AdditionalInfo/AdditionalInfo";
-import Button from "../../Ui/Button/Button";
 import "./Home.scss";
 
 function Home() {
   const {
-    setUser,
-    user,
     forState,
     additionalInfo,
     setAppState,
@@ -19,13 +16,8 @@ function Home() {
     setListStateClear,
   } = useAppStore();
 
-  const {
-    openTasksOrNewsForm,
-    handleOpenSwiper,
-    onTaskExecute,
-    taskFulfill,
-    openReport,
-  } = useHomeActions();
+  const { openTasksOrNewsForm, handleOpenSwiper, onTaskExecute, taskFulfill } =
+    useHomeActions();
 
   const closeSwiper = () => {
     openSwiper && setOpenSwiper(false);
@@ -33,31 +25,13 @@ function Home() {
   };
 
   const CustomHeader = ({ title }) => {
-    return (
-      <div className="custom_header">
-        <div className="swiper_header">{title}</div>
-
-        {additionalInfo &&
-          (additionalInfo.ResultType || additionalInfo.isReport) &&
-          user.isExpert && (
-            <div>
-              <Button
-                icon={
-                  <span className="material-symbols-outlined">chart_data</span>
-                }
-                onClick={openReport}
-                type="report"
-              />
-            </div>
-          )}
-      </div>
-    );
+    return <div className="swiper_header">{title}</div>;
   };
 
   useEffect(() => {
     setAppState();
-    setUser();
-  }, [setAppState, setUser]);
+    alert(JSON.stringify(forState, null, 2));
+  }, [setAppState]);
 
   return (
     <div className="main">

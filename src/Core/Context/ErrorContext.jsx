@@ -10,7 +10,6 @@ export const useErrorsStore = create(
       errorHistory: [],
       isOnline: navigator.onLine,
 
-      // Actions
       addError: (error) => {
         const errorWithId = {
           id: Date.now(),
@@ -27,8 +26,6 @@ export const useErrorsStore = create(
             errorHistory: newHistory,
           };
         });
-
-        // Автоматически отправляем в 1С в production режиме
         const { sendErrorTo1C } = get();
         if (sendErrorTo1C && error.severity !== "warning") {
           sendErrorTo1C(errorWithId);
@@ -76,7 +73,18 @@ export const useErrorsStore = create(
         }
         return true;
       },
+      getAppStateJsonErrors: () => {
+        let errorDescription = "";
+        try {
+          const { errors } = get();
+          return JSON.stringify(errors);
+        } catch (err) {
+          errorDescription = `Не удалось обработать данные в setListState Ошибка 
+                ${err.name}: ${err.message} ${err.stack}`;
+        }
 
+        return "getAppStateJsonErrors error: " + errorDescription;
+      },
       sendErrorTo1C: async (errorData) => {
         try {
           const { clickTo1c } = await import("../../Utils/clicker");
@@ -97,8 +105,10 @@ export const useErrorsStore = create(
           console.error("Failed to send error to 1C:", sendError);
         }
       },
-
-      // Сеттер для онлайн статуса
+      getErrorsJSON: () => {
+        const { errors } = get();
+        return JSON.stringify(errors);
+      },
       setIsOnline: (online) => set({ isOnline: online }),
     }),
     {

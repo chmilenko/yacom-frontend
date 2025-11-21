@@ -2,9 +2,8 @@
 import { create } from "zustand";
 import { persist } from "zustand/middleware";
 
-let userData, data, dataInstructions;
+let data, dataInstructions;
 if (process.env.REACT_APP_DEVELOPER === "true") {
-  userData = require("../../Core/Mock/mock").user;
   data = require("../../Core/Mock/mock").data;
   dataInstructions = require("../../Core/Mock/instructions").instructions;
 }
@@ -12,7 +11,6 @@ if (process.env.REACT_APP_DEVELOPER === "true") {
 export const useAppStore = create(
   persist(
     (set, get) => ({
-      user: null,
       menuItems: [],
       forState: [],
       instructions: [],
@@ -25,21 +23,6 @@ export const useAppStore = create(
       page: "",
       countActualTasks: 0,
       countUnreadNews: 0,
-
-      setUser: (appData) => {
-        try {
-          const { developer } = get();
-          const res = !developer ? JSON.parse(appData) : userData;
-          const userInfoObject = res.reduce(
-            (acc, cur) => ({ ...acc, ...cur }),
-            {}
-          );
-          set({ user: userInfoObject });
-        } catch (err) {
-          const errorDescription = `Не удалось распарсить в setUser\nОшибка ${err.name}: ${err.message}\n${err.stack}`;
-          console.error("setUser error:", errorDescription);
-        }
-      },
 
       setPage: (newPage) => set({ page: newPage }),
 
@@ -339,6 +322,37 @@ export const useAppStore = create(
       },
 
       updateState: (newState) => set((state) => ({ ...state, ...newState })),
+
+      getListState: (listName) => {
+        const { forState } = get();
+        return JSON.stringify(
+          forState.find((obj) => obj.SectionKey === listName)
+        );
+      },
+      tryJsonParse: (JSONData) => {
+        try {
+          let obj = JSON.parse(JSONData);
+          return "Удалось распарсить";
+          //console.log(obj);
+        } catch (err) {
+          return `Не удалось распарсить в tryJsonParse\nОшибка ${err.name}: ${err.message}\n${err.stack}`;
+        }
+      },
+      getCurrentadditionalInfo: () => {
+        try {
+          const { additionalInfo } = get();
+          return JSON.stringify(additionalInfo);
+        } catch (err) {
+          const errorDescription = `Ошибка в getCurrentadditionalInfo Ошибка 
+            ${err.name}: ${err.message} ${err.stack}`;
+
+          return "getAppStateJsonErrors error: " + errorDescription;
+        }
+      },
+      addErrorAppStore: (errorWithId) => {
+        const { errors } = get();
+        set({ errors: [errorWithId, ...errors] });
+      },
     }),
     {
       name: "app-storage",

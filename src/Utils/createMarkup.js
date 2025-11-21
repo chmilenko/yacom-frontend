@@ -30,19 +30,5 @@ function cleanHtmlContent(html) {
 
 export function createMarkupUniversal(par) {
   let content = par;
-
-  if (par.includes("<body") && par.includes("</body>")) {
-    const bodyMatch = par.match(/<body[^>]*>([\s\S]*?)<\/body>/i);
-    if (bodyMatch) {
-      content = bodyMatch[1];
-    }
-  }
-
-  content = content
-    .replace(/\\n/g, "\n")
-    .replace(/\\"/g, '"')
-    .replace(/\s+/g, " ")
-    .trim();
-
   return { __html: content };
 }
