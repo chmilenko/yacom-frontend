@@ -2,9 +2,8 @@
 import { create } from "zustand";
 import { persist } from "zustand/middleware";
 
-let userData, data, dataInstructions;
+let data, dataInstructions;
 if (process.env.REACT_APP_DEVELOPER === "true") {
-  userData = require("../../Core/Mock/mock").user;
   data = require("../../Core/Mock/mock").data;
   dataInstructions = require("../../Core/Mock/instructions").instructions;
 }

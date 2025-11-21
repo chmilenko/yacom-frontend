@@ -344,12 +344,3 @@ export const data = [
 }
 ]
 
-export const user = [
-  {
-    Name: "Z-------------zzz",
-    PersonID: "32ee970c-9968-46f6-8122-29185c0b4124",
-    Email: "",
-    Phone: "9724444444444",
-    isExpert: true,
-  },
-];

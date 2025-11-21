@@ -30,6 +30,7 @@ function Home() {
 
   useEffect(() => {
     setAppState();
+    alert(JSON.stringify(forState, null, 2));
   }, [setAppState]);
 
   return (
