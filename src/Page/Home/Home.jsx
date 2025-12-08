@@ -30,15 +30,13 @@ function Home() {
 
   useEffect(() => {
     setAppState();
-    alert(JSON.stringify(forState, null, 2));
-  }, [setAppState]);
+  }, []);
 
   return (
     <div className="main">
       {forState.length > 0 && (
         <>
           {openSwiper && <div className="overlay" onClick={closeSwiper} />}
-
           <div className={`content_wrapper ${openSwiper ? "blur" : ""}`}>
             {forState.map((section, i) => (
               <Section

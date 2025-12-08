@@ -4,14 +4,14 @@ import clickTo1C from "../../Utils/clicker";
 
 import {  useAppStore } from "../../Core/Context/AppStateContext";
 import { useActionsStore } from "../../Core/Context/ActionsContext";
+import { useEffect } from "react";
 
 export const useHomeActions = () => {
-  const { setActions } = useActionsStore();
+  const { setActions, actions } = useActionsStore();
 
   const {
     forState,
     additionalInfo,
-    setListData,
     setListName,
     setAdditionalInfo,
     developer,
@@ -22,6 +22,7 @@ export const useHomeActions = () => {
     setListState,
     ListData,
     listName,
+    errors
   } = useAppStore();
 
   const taskAction = (TypeResult) => {
@@ -48,40 +49,51 @@ export const useHomeActions = () => {
   };
 
   const handleOpenSwiper = (info, type) => {
-    let id;
-    
-    if (type === "Задачи" || type === "Tasks") {
-      id = info.TaskID;
-    } else if (type === "Сообщения" || type === "Messages" || type === 'Новости') {
-      id = info.ObjectID;
-      setReadNews(id);
+    let id;    
+    try{
+        if (type === "Задачи" || type === "Tasks") {
+        id = info.TaskID;
+        } else if (type === "Новости" || type === 'News') {
+        id = info.ObjectID;
+        setReadNews(id);
+        }
+        const section = forState?.find((s) => s?.SectionName === type);
+        let dataToSend;
+
+          
+        if (developer && section && section?.sectionData?.list) {
+        dataToSend = section.sectionData.list.find((item) => 
+            item?.ObjectID === id || item?.ObjectID === id
+        );
+        }
+
+        setActions({
+        actionName: "clickElement",
+        active: true,
+        objectId: id,
+        subSection: type,
+        objectType: info.ObjectType && info.ObjectType,
+        });
+
+        developer && setAdditionalInfo(dataToSend);
+        setListName(type);
+        setOpenSwiper(true);
+
+        !developer && clickTo1C();
+    } catch(err) {
+        const errorDescription = "Ошибка в handleOpenSwiper";
+        const errorWithId = {
+            id: Date.now(),
+            timestamp: new Date().toISOString(),
+            ...err,
+            type: err.type || "application",
+            page: window.location.pathname,
+            description: errorDescription
+        };
+        errors.push(errorWithId);
     }
-
-    const section = forState?.find((s) => s?.SectionName === type);
-    let dataToSend;
-
-    if (section && section?.sectionData?.list) {
-      dataToSend = section.sectionData.list.find((item) => 
-        item?.ObjectID === id || item?.TaskID === id
-      );
-    }
-
-    setActions({
-      actionName: "clickElement",
-      active: true,
-      objectId: id,
-      subSection: type,
-      objectType: info.ObjectType,
-    });
-
-    // developer && setAdditionalInfo(info);
-
-    setAdditionalInfo(dataToSend);
-    setListName(type);
-    setOpenSwiper(true);
-
-    !developer && clickTo1C();
   };
+
 
   const onTaskExecute = (id) => {
     if (!additionalInfo.Done) {
@@ -110,7 +122,7 @@ export const useHomeActions = () => {
       active: true,
     };
     if (id) {
-      setTaskDoneStatus(id);
+      setTaskDoneStatus(id);      
       setListState(listName, ListData);
     }
     setActions(obj);
@@ -145,23 +157,9 @@ export const useHomeActions = () => {
     } else return;
   };
 
-  const openReport = () => {
-    setTimeout(() => {
-      setActions({
-        actionName:
-          additionalInfo.ObjectType === "News"
-            ? "NewsReportClick"
-            : "TaskReportClick",
-        objectId: additionalInfo.ObjectID,
-        active: true,
-      });
-      !developer && clickTo1C();
-    }, 200); 
-  };
   return {
     openTasksOrNewsForm,
     handleOpenSwiper,
-    openReport,
     onTaskExecute,
     taskFulfill,
   };

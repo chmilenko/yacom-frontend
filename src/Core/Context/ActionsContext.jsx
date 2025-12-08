@@ -1,12 +1,9 @@
-// store/useActionsStore.js
 import { create } from "zustand";
 
 export const useActionsStore = create((set, get) => ({
-  // State
   actions: [],
   loadingAdditionalInfo: false,
 
-  // Actions
   setActions: (param) => {
     try {
       set((state) => {

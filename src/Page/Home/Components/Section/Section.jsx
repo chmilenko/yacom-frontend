@@ -143,7 +143,7 @@ function Section({ section, onOpenSwiper, openSectionForm, type }) {
                     }`}
                     onClick={() => onOpenSwiper(item, section.SectionName)}
                   >
-                    {type === "Заадчи" ? (
+                    {type === "Задачи" ? (
                       <>
                         <div className="section_item_checker">
                           {(item.ResultType == "3" ||

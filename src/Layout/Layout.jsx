@@ -1,4 +1,4 @@
-import React, { useContext, useRef } from "react";
+import { useRef } from "react";
 import { Outlet } from "react-router-dom";
 
 import "./Layout.scss";
