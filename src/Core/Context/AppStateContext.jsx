@@ -48,7 +48,6 @@ export const useAppStore = create(
                 acc = val.Tabs;
                 return acc;
               }, []);
-
           const tasksSection = res.find(
             (section) =>
               section.SectionName === "Задачи" ||
@@ -172,7 +171,7 @@ export const useAppStore = create(
           const updatedData = forState.map((section) => {
             if (!section.sectionData?.list) return section;
 
-            const updatedList = section.sectionData.list.map((item) =>
+            const updatedList = section?.sectionData?.list?.map((item) =>
               item.ObjectID === id && item.New ? { ...item, New: false } : item
             );
 
@@ -199,11 +198,8 @@ export const useAppStore = create(
             if (!section.sectionData?.list) return section;
 
             const updatedList = section.sectionData.list.map((item) =>
-              item.ObjectID === id && item.New && item.ObjectType === "News"
-                ? { ...item, New: false }
-                : item
+              item.ObjectID === id && item.New ? { ...item, New: false } : item
             );
-
             return {
               ...section,
               sectionData: { ...section.sectionData, list: updatedList },
@@ -237,35 +233,14 @@ export const useAppStore = create(
         set({ listName: type });
       },
 
-      setListData: (list) => {
-        set({ ListData: list });
-      },
-
-      setListState: (listName, ListData, updateRecords = true) => {
+      setListState: (ListData) => {
         try {
-          const { developer } = get();
-          let res;
+          const res = JSON.parse(ListData).reduce((acc, val) => {
+            acc = val;
+            return acc;
+          }, {});
 
-          if (developer) {
-            res = ListData;
-          } else {
-            res = JSON.parse(ListData);
-          }
-
-          let additionalInfoObject;
-
-          if (Array.isArray(res)) {
-            additionalInfoObject = res.reduce(
-              (acc, cur) => ({ ...acc, ...cur }),
-              {}
-            );
-          } else if (typeof res === "object" && res !== null) {
-            additionalInfoObject = res;
-          } else {
-            throw new Error(`Неожиданный формат данных: ${typeof res}`);
-          }
-
-          set({ additionalInfo: additionalInfoObject });
+          set({ additionalInfo: res });
         } catch (err) {
           const errorDescription = `Не удалось обработать данные в setListState\nОшибка ${
             err.name
@@ -323,6 +298,7 @@ export const useAppStore = create(
 
       updateState: (newState) => set((state) => ({ ...state, ...newState })),
 
+      /* { i.bezryadin / 2025.11.11 */
       getListState: (listName) => {
         const { forState } = get();
         return JSON.stringify(
@@ -333,10 +309,21 @@ export const useAppStore = create(
         try {
           let obj = JSON.parse(JSONData);
           return "Удалось распарсить";
-          //console.log(obj);
         } catch (err) {
           return `Не удалось распарсить в tryJsonParse\nОшибка ${err.name}: ${err.message}\n${err.stack}`;
         }
+      },
+      getAppStateJsonErrors: () => {
+        let errorDescription = "";
+        try {
+          const { errors } = get();
+          return JSON.stringify(errors);
+        } catch (err) {
+          errorDescription = `Не удалось обработать данные в setListState Ошибка 
+                ${err.name}: ${err.message} ${err.stack}`;
+        }
+
+        return "getAppStateJsonErrors error: " + errorDescription;
       },
       getCurrentadditionalInfo: () => {
         try {
@@ -353,15 +340,16 @@ export const useAppStore = create(
         const { errors } = get();
         set({ errors: [errorWithId, ...errors] });
       },
+      /* } i.bezryadin / 2025.11.11 */
     }),
     {
       name: "app-storage",
       partialize: (state) => ({
-        user: state.user,
-        menuItems: state.menuItems,
-        forState: state.forState,
-        instructions: state.instructions,
-        developer: state.developer,
+        // user: state.user,
+        // menuItems: state.menuItems,
+        // forState: state.forState,
+        // instructions: state.instructions,
+        // developer: state.developer,
       }),
     }
   )
