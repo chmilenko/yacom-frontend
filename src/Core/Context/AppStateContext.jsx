@@ -26,7 +26,7 @@ export const useAppStore = create(
 
       setPage: (newPage) => set({ page: newPage }),
 
-      setAppState: (appData) => {
+      setAppState: async (appData) => {
         try {
           const { developer } = get();
           const res = !developer
@@ -48,6 +48,7 @@ export const useAppStore = create(
                 acc = val.Tabs;
                 return acc;
               }, []);
+
           const tasksSection = res.find(
             (section) =>
               section.SectionName === "Задачи" ||
@@ -73,151 +74,222 @@ export const useAppStore = create(
             countUnreadNews: unreadNews.length,
           });
         } catch (err) {
-          const errorDescription = `Не удалось распарсить в setAppState\nОшибка ${err.name}: ${err.message}\n${err.stack}`;
-          console.error("setAppState error:", errorDescription);
+          const { addError } = (
+            await import("./ErrorContext")
+          ).useErrorsStore.getState();
+
+          addError({
+            type: "parsing",
+            message: "Ошибка парсинга данных приложения",
+            severity: "error",
+            context: "setAppState",
+            details: `Не удалось распарсить данные в setAppState\nОшибка ${
+              err.name
+            }: ${err.message}\nДанные: ${
+              typeof appData === "string"
+                ? appData.substring(0, 200) + "..."
+                : typeof appData
+            }\n${err.stack}`,
+            originalError: {
+              name: err.name,
+              message: err.message,
+              stack: err.stack,
+            },
+          });
+
+          console.error("setAppState error:", err);
         }
       },
 
       setOpenSwiper: (swiperState) => set({ openSwiper: swiperState }),
 
-      setTaskDoneStatus: (id) => {
-        const { forState } = get();
+      setTaskDoneStatus: async (id) => {
+        try {
+          const { forState } = get();
 
-        const updatedData = JSON.parse(JSON.stringify(forState));
-        let taskToMove = null;
+          const updatedData = JSON.parse(JSON.stringify(forState));
+          let taskToMove = null;
 
-        const updatedSections = updatedData.map((section) => {
-          if (!section.sectionData?.list) return section;
+          const updatedSections = updatedData.map((section) => {
+            if (!section.sectionData?.list) return section;
 
-          const updatedList = section.sectionData.list
-            .map((item) => {
-              if ((item.TaskID !== id && item.ObjectID !== id) || item.Done)
+            const updatedList = section.sectionData.list
+              .map((item) => {
+                if ((item.TaskID !== id && item.ObjectID !== id) || item.Done)
+                  return item;
+
+                if (item.ResultType != 8 && item.ObjectType === "Task") {
+                  return { ...item, Done: true };
+                }
+
+                if (item.ResultType == 8 && item.ObjectType === "News") {
+                  taskToMove = {
+                    ...item,
+                    isReport: true,
+                    Done: true,
+                    New: false,
+                  };
+                  delete taskToMove.ResultType;
+                  return null;
+                }
+
                 return item;
+              })
+              .filter(Boolean);
 
-              if (item.ResultType != 8 && item.ObjectType === "Task") {
-                return { ...item, Done: true };
-              }
-
-              if (item.ResultType == 8 && item.ObjectType === "News") {
-                taskToMove = {
-                  ...item,
-                  isReport: true,
-                  Done: true,
-                  New: false,
-                };
-                delete taskToMove.ResultType;
-                return null;
-              }
-
-              return item;
-            })
-            .filter(Boolean);
-
-          return {
-            ...section,
-            sectionData: { ...section.sectionData, list: updatedList },
-          };
-        });
-
-        if (taskToMove) {
-          let newsSection = updatedSections.find(
-            (s) => s.SectionName === "Новости" || s.SectionName === "News"
-          );
-
-          if (!newsSection) {
-            newsSection = {
-              SectionCounter: 0,
-              SectionName: "News",
-              Sort: 1,
-              SectionUpdate: "Обновлено недавно",
-              SectionNeedsUpdate: false,
-              sectionData: {
-                list: [],
-              },
+            return {
+              ...section,
+              sectionData: { ...section.sectionData, list: updatedList },
             };
-            updatedSections.push(newsSection);
+          });
+
+          if (taskToMove) {
+            let newsSection = updatedSections.find(
+              (s) => s.SectionName === "Новости" || s.SectionName === "News"
+            );
+
+            if (!newsSection) {
+              newsSection = {
+                SectionCounter: 0,
+                SectionName: "News",
+                Sort: 1,
+                SectionUpdate: "Обновлено недавно",
+                SectionNeedsUpdate: false,
+                sectionData: {
+                  list: [],
+                },
+              };
+              updatedSections.push(newsSection);
+            }
+
+            newsSection.sectionData = newsSection.sectionData || { list: [] };
+            newsSection.sectionData.list.unshift(taskToMove);
           }
 
-          newsSection.sectionData = newsSection.sectionData || { list: [] };
-          newsSection.sectionData.list.unshift(taskToMove);
+          // Обновление счетчиков
+          const tasksSection = updatedSections.find(
+            (section) =>
+              section.SectionName === "Задачи" ||
+              section.SectionName === "Tasks"
+          );
+          const tasks =
+            tasksSection?.sectionData?.list?.filter((item) => !item.Done) || [];
+
+          const newsSection = updatedSections.find(
+            (section) =>
+              section.SectionName === "Новости" ||
+              section.SectionName === "News"
+          );
+          const unreadNews =
+            newsSection?.sectionData?.list?.filter((item) => item.New) || [];
+
+          set({
+            forState: updatedSections,
+            countActualTasks: tasks.length,
+            countUnreadNews: unreadNews.length,
+          });
+        } catch (err) {
+          const { addError } = (
+            await import("./ErrorContext")
+          ).useErrorsStore.getState();
+
+          addError({
+            type: "application",
+            message: "Ошибка обновления статуса задачи",
+            severity: "error",
+            context: "setTaskDoneStatus",
+            details: `Не удалось обновить статус задачи ID: ${id}\nОшибка ${err.name}: ${err.message}\n${err.stack}`,
+            originalError: {
+              name: err.name,
+              message: err.message,
+              stack: err.stack,
+            },
+          });
+
+          console.error("setTaskDoneStatus error:", err);
         }
-
-        // Обновление счетчиков
-        const tasksSection = updatedSections.find(
-          (section) =>
-            section.SectionName === "Задачи" || section.SectionName === "Tasks"
-        );
-        const tasks =
-          tasksSection?.sectionData?.list?.filter((item) => !item.Done) || [];
-
-        const newsSection = updatedSections.find(
-          (section) =>
-            section.SectionName === "Новости" || section.SectionName === "News"
-        );
-        const unreadNews =
-          newsSection?.sectionData?.list?.filter((item) => item.New) || [];
-
-        set({
-          forState: updatedSections,
-          countActualTasks: tasks.length,
-          countUnreadNews: unreadNews.length,
-        });
       },
 
-      setReadNews: (id) => {
-        const { developer, forState } = get();
+      setReadNews: async (id) => {
+        try {
+          const { developer, forState } = get();
 
-        if (developer) {
-          const updatedData = forState.map((section) => {
-            if (!section.sectionData?.list) return section;
+          if (developer) {
+            const updatedData = forState.map((section) => {
+              if (!section.sectionData?.list) return section;
 
-            const updatedList = section?.sectionData?.list?.map((item) =>
-              item.ObjectID === id && item.New ? { ...item, New: false } : item
+              const updatedList = section?.sectionData?.list?.map((item) =>
+                item.ObjectID === id && item.New
+                  ? { ...item, New: false }
+                  : item
+              );
+
+              return {
+                ...section,
+                sectionData: { ...section.sectionData, list: updatedList },
+              };
+            });
+
+            const newsSection = updatedData.find(
+              (section) =>
+                section.SectionName === "Новости" ||
+                section.SectionName === "News"
             );
+            const unreadNews =
+              newsSection?.sectionData?.list?.filter((item) => item.New) || [];
 
-            return {
-              ...section,
-              sectionData: { ...section.sectionData, list: updatedList },
-            };
-          });
+            set({
+              forState: updatedData,
+              countUnreadNews: unreadNews.length,
+            });
+          } else {
+            const updatedData = forState.map((section) => {
+              if (!section.sectionData?.list) return section;
 
-          const newsSection = updatedData.find(
-            (section) =>
-              section.SectionName === "Новости" ||
-              section.SectionName === "News"
-          );
-          const unreadNews =
-            newsSection?.sectionData?.list?.filter((item) => item.New) || [];
+              const updatedList = section.sectionData.list.map((item) =>
+                item.ObjectID === id && item.New && item.ObjectType === "News"
+                  ? { ...item, New: false }
+                  : item
+              );
 
-          set({
-            forState: updatedData,
-            countUnreadNews: unreadNews.length,
-          });
-        } else {
-          const updatedData = forState.map((section) => {
-            if (!section.sectionData?.list) return section;
+              return {
+                ...section,
+                sectionData: { ...section.sectionData, list: updatedList },
+              };
+            });
 
-            const updatedList = section.sectionData.list.map((item) =>
-              item.ObjectID === id && item.New ? { ...item, New: false } : item
+            const newsSection = updatedData.find(
+              (section) =>
+                section.SectionName === "Новости" ||
+                section.SectionName === "News"
             );
-            return {
-              ...section,
-              sectionData: { ...section.sectionData, list: updatedList },
-            };
+            const unreadNews =
+              newsSection?.sectionData?.list?.filter((item) => item.New) || [];
+
+            set({
+              forState: updatedData,
+              countUnreadNews: unreadNews.length,
+            });
+          }
+        } catch (err) {
+          const { addError } = (
+            await import("./ErrorContext")
+          ).useErrorsStore.getState();
+
+          addError({
+            type: "application",
+            message: "Ошибка отметки новости как прочитанной",
+            severity: "error",
+            context: "setReadNews",
+            details: `Не удалось обновить статус новости ID: ${id}\nОшибка ${err.name}: ${err.message}\n${err.stack}`,
+            originalError: {
+              name: err.name,
+              message: err.message,
+              stack: err.stack,
+            },
           });
 
-          const newsSection = updatedData.find(
-            (section) =>
-              section.SectionName === "Новости" ||
-              section.SectionName === "News"
-          );
-          const unreadNews =
-            newsSection?.sectionData?.list?.filter((item) => item.New) || [];
-
-          set({
-            forState: updatedData,
-            countUnreadNews: unreadNews.length,
-          });
+          console.error("setReadNews error:", err);
         }
       },
 
@@ -229,11 +301,7 @@ export const useAppStore = create(
         set({ additionalInfo: {} });
       },
 
-      setListName: (type) => {
-        set({ listName: type });
-      },
-
-      setListState: (ListData) => {
+      setListState: async (ListData) => {
         try {
           const res = JSON.parse(ListData).reduce((acc, val) => {
             acc = val;
@@ -242,12 +310,28 @@ export const useAppStore = create(
 
           set({ additionalInfo: res });
         } catch (err) {
-          const errorDescription = `Не удалось обработать данные в setListState\nОшибка ${
-            err.name
-          }: ${err.message}\nТип данных: ${typeof ListData}\nФормат: ${
-            Array.isArray("res") ? "array" : typeof res
-          }\n${err.stack}`;
-          console.error("setListState error:", errorDescription);
+          const { addError } = (
+            await import("./ErrorContext")
+          ).useErrorsStore.getState();
+
+          addError({
+            type: "parsing",
+            message: "Ошибка обработки данных списка",
+            severity: "error",
+            context: "setListState",
+            details: `Не удалось обработать данные в setListState\nОшибка ${
+              err.name
+            }: ${err.message}\nТип данных: ${typeof ListData}\nФормат: ${
+              Array.isArray(ListData) ? "array" : typeof ListData
+            }\n${err.stack}`,
+            originalError: {
+              name: err.name,
+              message: err.message,
+              stack: err.stack,
+            },
+          });
+
+          console.error("setListState error:", err);
         }
       },
 
@@ -268,14 +352,30 @@ export const useAppStore = create(
         set({ forState: updatedForState });
       },
 
-      setInstructionsState: (appData) => {
+      setInstructionsState: async (appData) => {
         try {
           const { developer } = get();
           const res = !developer ? JSON.parse(appData) : dataInstructions;
           set({ instructions: res });
         } catch (err) {
-          const errorDescription = `Не удалось распарсить в setInstructionsState\nОшибка ${err.name}: ${err.message}\n${err.stack}`;
-          console.error("setInstructionsState error:", errorDescription);
+          const { addError } = (
+            await import("./ErrorContext")
+          ).useErrorsStore.getState();
+
+          addError({
+            type: "parsing",
+            message: "Ошибка парсинга инструкций",
+            severity: "error",
+            context: "setInstructionsState",
+            details: `Не удалось распарсить инструкции\nОшибка ${err.name}: ${err.message}\n${err.stack}`,
+            originalError: {
+              name: err.name,
+              message: err.message,
+              stack: err.stack,
+            },
+          });
+
+          console.error("setInstructionsState error:", err);
         }
       },
 
