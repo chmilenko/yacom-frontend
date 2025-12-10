@@ -3,10 +3,12 @@ import { useState } from "react";
 import "./Section.scss";
 import Checkbox from "../../../../Ui/Checkbox/Checkbox";
 import { useAppStore } from "../../../../Core/Context/AppStateContext";
+import { useNavigate } from "react-router-dom";
 
 function Section({ section, onOpenSwiper, openSectionForm, type }) {
   const [isActive, setIsActive] = useState(false);
   const [isExpanded, setIsExpanded] = useState(true);
+  const navigate = useNavigate();
 
   const { openSwiper, countActualTasks, countUnreadNews } = useAppStore();
 
@@ -32,6 +34,9 @@ function Section({ section, onOpenSwiper, openSectionForm, type }) {
   };
 
   const handleHeaderClick = (type, e) => {
+    if (type === "Задачи") {
+      navigate("/task/full");
+    }
     e.stopPropagation();
     setIsActive(!isActive);
     openSectionForm(type);
