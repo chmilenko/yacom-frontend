@@ -1,5 +1,4 @@
-import React from "react";
-import "./input.css";
+import "./input.scss";
 
 const SearchInput = ({ value, onChange, additionalFunc }) => {
   const handleClear = () => {
