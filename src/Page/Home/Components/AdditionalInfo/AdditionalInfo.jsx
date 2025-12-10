@@ -9,8 +9,7 @@ import { useAppStore } from "../../../../Core/Context/AppStateContext";
 import { useActionsStore } from "../../../../Core/Context/ActionsContext";
 
 function AdditionalInfo({ onTaskExecute, taskFulfill }) {
-  const { additionalInfo, listName, ListData, setListState, developer } =
-    useAppStore();
+  const { additionalInfo, setListState, developer } = useAppStore();
 
   const { setActions } = useActionsStore();
   const [taskDone, setTaskDone] = useState(additionalInfo?.Done);
@@ -58,7 +57,7 @@ function AdditionalInfo({ onTaskExecute, taskFulfill }) {
 
   useEffect(() => {
     setTaskDone(additionalInfo?.Done);
-  }, [additionalInfo.Done, additionalInfo.DoneDate]);
+  }, [additionalInfo?.Done, additionalInfo?.DoneDate]);
 
   const renderImages = () => {
     const images = normalizeImageData(additionalInfo?.images);
