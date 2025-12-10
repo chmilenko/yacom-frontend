@@ -3,11 +3,13 @@ import { useAppStore } from "../Core/Context/AppStateContext";
 import { useActionsStore } from "../Core/Context/ActionsContext";
 
 import { useErrorsStore } from "../Core/Context/ErrorContext";
+import { useCreateTaskNews } from "../Core/Context/CreateTaskNews";
 
 const PageComponentInitializer = () => {
   useEffect(() => {
     const appState = useAppStore.getState();
     const actionsState = useActionsStore.getState();
+    const useCreateTaskNewsState = useCreateTaskNews.getState();
     const errorsState = useErrorsStore.getState();
 
     window.pageComponent = {
@@ -28,11 +30,16 @@ const PageComponentInitializer = () => {
       tryJsonParse: appState.tryJsonParse,
       getAppStateJsonErrors: appState.getAppStateJsonErrors,
       getCurrentadditionalInfo: appState.getCurrentadditionalInfo,
+      
       // Actions
       changeActionState: actionsState.changeActionState,
       getActiveActions: actionsState.getActiveActions,
       getActiveActionsCount: actionsState.getActiveActionsCount,
       actions: actionsState.actions,
+
+      //CreateTaskNews
+      setChapters: useCreateTaskNewsState.setChapters,
+      setTaskTypes: useCreateTaskNewsState.setTaskTypes,
 
       // Errors
       errors: errorsState.errors,

@@ -217,3 +217,118 @@ export const data = [
     ],
   },
 ];
+
+export const chapters = [
+  {
+    id: 1,
+    name: "Возврат товаров",
+    value: "returns",
+  },
+  {
+    id: 2,
+    name: "Выкладка товаров",
+    value: "merchandising",
+  },
+  {
+    id: 3,
+    name: "Документы и данные",
+    value: "documents",
+  },
+  {
+    id: 4,
+    name: "Жалобы покупателей",
+    value: "complaints",
+  },
+  {
+    id: 5,
+    name: "Замечания в магазине",
+    value: "store_remarks",
+  },
+  {
+    id: 6,
+    name: "Качество товаров",
+    value: "quality",
+  },
+  {
+    id: 7,
+    name: "Курьеры",
+    value: "couriers",
+  },
+  {
+    id: 8,
+    name: "Логистика",
+    value: "logistics",
+  },
+  {
+    id: 9,
+    name: "Оборудование",
+    value: "equipment",
+  },
+  {
+    id: 10,
+    name: "Обсуждения и поддержка",
+    value: "support",
+  },
+  {
+    id: 11,
+    name: "Обучение сотрудников",
+    value: "training",
+  },
+  {
+    id: 12,
+    name: "Пройти опрос",
+    value: "survey",
+  },
+  {
+    id: 13,
+    name: "Промоакции",
+    value: "promotions",
+  },
+  {
+    id: 14,
+    name: "Сборка заказов",
+    value: "assembly",
+  },
+  {
+    id: 15,
+    name: "Сделать фотоотчет",
+    value: "photo_report",
+  },
+  {
+    id: 16,
+    name: "Товары и инвентаризация",
+    value: "inventory",
+  },
+  {
+    id: 17,
+    name: "Фото бумажных документов",
+    value: "document_photos",
+  },
+];
+
+export const tasksType = [
+  {
+    id: 1,
+    name: "Отметка о выполнении",
+  },
+  {
+    id: 2,
+    name: "Написать ответ",
+  },
+  {
+    id: 3,
+    name: "Сделать фото",
+  },
+  {
+    id: 4,
+    name: "Сделать несколько фото",
+  },
+  {
+    id: 5,
+    name: "Сделать фото и подписать",
+  },
+  {
+    id: 6,
+    name: "Ввести число",
+  },
+];
