@@ -4,15 +4,13 @@ import clickTo1C from "../../Utils/clicker";
 
 import {  useAppStore } from "../../Core/Context/AppStateContext";
 import { useActionsStore } from "../../Core/Context/ActionsContext";
-import { useEffect } from "react";
+
 
 export const useHomeActions = () => {
-  const { setActions, actions } = useActionsStore();
+  const { setActions } = useActionsStore();
 
   const {
-    forState,
     additionalInfo,
-    setListName,
     setAdditionalInfo,
     developer,
     setTaskDoneStatus,
@@ -57,15 +55,6 @@ export const useHomeActions = () => {
         id = info.ObjectID;
         setReadNews(id);
         }
-        const section = forState?.find((s) => s?.SectionName === type);
-        let dataToSend;
-
-          
-        if (developer && section && section?.sectionData?.list) {
-        dataToSend = section.sectionData.list.find((item) => 
-            item?.ObjectID === id || item?.ObjectID === id
-        );
-        }
 
         setActions({
         actionName: "clickElement",
@@ -74,9 +63,9 @@ export const useHomeActions = () => {
         subSection: type,
         objectType: info.ObjectType && info.ObjectType,
         });
-
-        developer && setAdditionalInfo(dataToSend);
-        setListName(type);
+        
+        //добавить моковые данные 
+        developer && setAdditionalInfo();
         setOpenSwiper(true);
 
         !developer && clickTo1C();
@@ -123,7 +112,7 @@ export const useHomeActions = () => {
     };
     if (id) {
       setTaskDoneStatus(id);      
-      setListState(listName, ListData);
+      setListState();
     }
     setActions(obj);
     !developer && clickTo1C();

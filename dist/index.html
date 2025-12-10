@@ -17721,24 +17721,21 @@
                     onTaskExecute: u,
                     taskFulfill: c,
                   } = (() => {
-                    const { setActions: e, actions: t } = (0,
-                      xe.useActionsStore)(),
+                    const { setActions: e } = (0, xe.useActionsStore)(),
                       {
-                        forState: n,
-                        additionalInfo: r,
-                        setListName: a,
-                        setAdditionalInfo: o,
-                        developer: i,
-                        setTaskDoneStatus: l,
-                        setReadNews: s,
-                        openSwiper: u,
-                        setOpenSwiper: c,
-                        setListState: f,
-                        ListData: d,
-                        listName: p,
-                        errors: m,
+                        additionalInfo: t,
+                        setAdditionalInfo: n,
+                        developer: r,
+                        setTaskDoneStatus: a,
+                        setReadNews: o,
+                        openSwiper: i,
+                        setOpenSwiper: l,
+                        setListState: s,
+                        ListData: u,
+                        listName: c,
+                        errors: f,
                       } = be(),
-                      h = (e) => {
+                      d = (e) => {
                         switch (e) {
                           case "1":
                             return "do";
@@ -17759,7 +17756,7 @@
                             return "empty";
                         }
                       },
-                      g = (e) => {
+                      p = (e) => {
                         switch (e) {
                           case "Проблема при отправке данных":
                             return "Проблема при отправке данных";
@@ -17777,40 +17774,31 @@
                       };
                     return {
                       openTasksOrNewsForm: (t) => {
-                        u ||
+                        i ||
                           (e({
                             actionName: "clickElement",
                             active: !0,
-                            currentForm: g(t),
+                            currentForm: p(t),
                           }),
-                          !i && (0, Me.A)());
+                          !r && (0, Me.A)());
                       },
-                      handleOpenSwiper: (t, r) => {
-                        let l;
+                      handleOpenSwiper: (t, a) => {
+                        let i;
                         try {
-                          "Задачи" === r || "Tasks" === r
-                            ? (l = t.TaskID)
-                            : ("Новости" !== r && "News" !== r) ||
-                              ((l = t.ObjectID), s(l));
-                          const u = n?.find((e) => e?.SectionName === r);
-                          let f;
-                          i &&
-                            u &&
-                            u?.sectionData?.list &&
-                            (f = u.sectionData.list.find(
-                              (e) => e?.ObjectID === l || e?.ObjectID === l
-                            )),
+                          "Задачи" === a || "Tasks" === a
+                            ? (i = t.TaskID)
+                            : ("Новости" !== a && "News" !== a) ||
+                              ((i = t.ObjectID), o(i)),
                             e({
                               actionName: "clickElement",
                               active: !0,
-                              objectId: l,
-                              subSection: r,
+                              objectId: i,
+                              subSection: a,
                               objectType: t.ObjectType && t.ObjectType,
                             }),
-                            i && o(f),
-                            a(r),
-                            c(!0),
-                            !i && (0, Me.A)();
+                            r && n(),
+                            l(!0),
+                            !r && (0, Me.A)();
                         } catch (e) {
                           const t = "Ошибка в handleOpenSwiper",
                             n = {
@@ -17821,34 +17809,34 @@
                               page: window.location.pathname,
                               description: t,
                             };
-                          m.push(n);
+                          f.push(n);
                         }
                       },
-                      onTaskExecute: (t) => {
-                        r.Done ||
+                      onTaskExecute: (n) => {
+                        t.Done ||
                           e({
                             actionName: "TaskExecute",
-                            objectType: r.ObjectType,
-                            taskCurrentAction: h(r.ResultType),
-                            objectId: r.TaskID,
-                            ClientID: r.ClientID,
-                            IsChecked: r.Done,
+                            objectType: t.ObjectType,
+                            taskCurrentAction: d(t.ResultType),
+                            objectId: t.TaskID,
+                            ClientID: t.ClientID,
+                            IsChecked: t.Done,
                             active: !0,
                           }),
-                          l(t),
-                          !i && (0, Me.A)();
+                          a(n),
+                          !r && (0, Me.A)();
                       },
-                      taskFulfill: (t) => {
-                        const n = {
+                      taskFulfill: (n) => {
+                        const o = {
                           actionName: "TaskFulfill",
-                          objectType: r.ObjectType,
-                          taskCurrentAction: h(r.ResultType),
-                          objectId: r.TaskID,
-                          ClientID: r.ClientID,
-                          IsChecked: r.Done,
+                          objectType: t.ObjectType,
+                          taskCurrentAction: d(t.ResultType),
+                          objectId: t.TaskID,
+                          ClientID: t.ClientID,
+                          IsChecked: t.Done,
                           active: !0,
                         };
-                        t && (l(t), f(p, d)), e(n), !i && (0, Me.A)();
+                        n && (a(n), s()), e(o), !r && (0, Me.A)();
                       },
                     };
                   })(),
