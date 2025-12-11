@@ -2,10 +2,12 @@
 import { create } from "zustand";
 import { persist } from "zustand/middleware";
 
-let data, dataInstructions;
+let data, dataInstructions, additionalMock;
+
 if (process.env.REACT_APP_DEVELOPER === "true") {
   data = require("../../Core/Mock/mock").data;
   dataInstructions = require("../../Core/Mock/instructions").instructions;
+  additionalMock = require("../../Core/Mock/mock").additionalData;
 }
 
 export const useAppStore = create(
@@ -293,8 +295,28 @@ export const useAppStore = create(
         }
       },
 
-      setAdditionalInfo: (additional) => {
-        set({ additionalInfo: additional });
+      setAdditionalInfo: (id, type) => {
+        try {
+          let findAdditionalInfo;
+
+          if (type === "Task" || type === "Задачи") {
+            findAdditionalInfo = additionalMock.find(
+              (info) => info.TaskID === id
+            );
+          } else {
+            findAdditionalInfo = additionalMock.find(
+              (info) => info.ObjectID === id
+            );
+          }
+
+          if (!findAdditionalInfo) {
+            console.warn(`Данные не найдены для ID: ${id}, тип: ${type}`);
+          }
+
+          set({ additionalInfo: findAdditionalInfo || {} });
+        } catch (err) {
+          console.error("setAdditionalInfo error:", err);
+        }
       },
 
       setListStateClear: () => {

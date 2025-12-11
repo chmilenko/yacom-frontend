@@ -63,7 +63,7 @@ export const useHomeActions = () => {
         });
         
         //добавить моковые данные 
-        developer && setAdditionalInfo();
+        developer && setAdditionalInfo(id, type);
         setOpenSwiper(true);
 
         !developer && clickTo1C();
