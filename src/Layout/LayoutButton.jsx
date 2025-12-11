@@ -11,7 +11,11 @@ function LayoutButtons() {
   if (isCreatePage) {
     return (
       <>
-        <Button onClick={() => navigate(-1)} type="secondary" text="Отмена" />
+        <Button
+          onClick={() => navigate("/task/full")}
+          type="secondary"
+          text="Отмена"
+        />
         <Button
           onClick={() => console.log("Создать задачу")}
           type="primary"
@@ -24,7 +28,7 @@ function LayoutButtons() {
   if (isFullPage) {
     return (
       <>
-        <Button onClick={() => navigate(-1)} type="navigation" text="Назад" />
+        <Button onClick={() => navigate("/")} type="navigation" text="Назад" />
         <Button
           onClick={() => navigate("/task/create")}
           type="navigation"
