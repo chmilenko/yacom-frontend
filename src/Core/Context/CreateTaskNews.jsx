@@ -2,14 +2,16 @@
 import { create } from "zustand";
 import { persist } from "zustand/middleware";
 
-let chaptersMock, tasksResultTypes;
+let chaptersMock, tasksResultTypes, fullTasksMock;
 if (process.env.REACT_APP_DEVELOPER === "true") {
   chaptersMock = require("../../Core/Mock/mock").chapters;
   tasksResultTypes = require("../../Core/Mock/mock").resultTypes;
+  fullTasksMock = require("../../Core/Mock/fullTasks").fullTasks;
 }
 
 export const useCreateTaskNews = create(
   persist((set, get) => ({
+    fullTasks: [],
     chapters: [],
     resultTypes: [],
     taskFormData: {
@@ -22,6 +24,20 @@ export const useCreateTaskNews = create(
     },
     isCreatingTask: false,
     createTaskError: null,
+
+    setFullTask: (tasks) => {
+      try {
+        const isDev =
+          process.env.REACT_APP_DEVELOPER === "true" ||
+          window.location.hostname === "localhost";
+        const res = !isDev ? JSON.parse(tasks) : fullTasksMock;
+        set({
+          fullTasks: res || [],
+        });
+      } catch (err) {
+        console.error(err);
+      }
+    },
 
     setChapters: (chapters) => {
       try {
@@ -119,6 +135,10 @@ export const useCreateTaskNews = create(
       } finally {
         set({ isCreatingTask: false });
       }
+    },
+
+    clearErrors: () => {
+      set({ createTaskError: null });
     },
   }))
 );

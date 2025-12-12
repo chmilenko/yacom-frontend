@@ -11,12 +11,15 @@ function CreateTask() {
     taskFormData,
     updateTaskFormData,
     createTaskError,
+    clearErrors,
   } = useCreateTaskNews();
 
   useEffect(() => {
     setChapters();
     setResultTypes();
-  }, [setChapters, setResultTypes]);
+
+    return () => clearErrors();
+  }, [clearErrors, setChapters, setResultTypes]);
 
   const handleChange = (e) => {
     const { name, value } = e.target;

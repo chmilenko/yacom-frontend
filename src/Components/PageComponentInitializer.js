@@ -30,7 +30,7 @@ const PageComponentInitializer = () => {
       tryJsonParse: appState.tryJsonParse,
       getAppStateJsonErrors: appState.getAppStateJsonErrors,
       getCurrentadditionalInfo: appState.getCurrentadditionalInfo,
-      
+
       // Actions
       changeActionState: actionsState.changeActionState,
       getActiveActions: actionsState.getActiveActions,
@@ -40,7 +40,7 @@ const PageComponentInitializer = () => {
       //CreateTaskNews
       setChapters: useCreateTaskNewsState.setChapters,
       setResultTypes: useCreateTaskNewsState.setResultTypes,
-
+      setFullTask: useCreateTaskNewsState.setFullTask,
       // Errors
       errors: errorsState.errors,
       errorHistory: errorsState.errorHistory,
