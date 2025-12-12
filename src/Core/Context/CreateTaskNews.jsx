@@ -2,86 +2,122 @@
 import { create } from "zustand";
 import { persist } from "zustand/middleware";
 
-let chaptersMock, tasksTypeMock;
+let chaptersMock, tasksResultTypes;
 if (process.env.REACT_APP_DEVELOPER === "true") {
   chaptersMock = require("../../Core/Mock/mock").chapters;
-  tasksTypeMock = require("../../Core/Mock/instructions").tasksType;
+  tasksResultTypes = require("../../Core/Mock/mock").resultTypes;
 }
 
 export const useCreateTaskNews = create(
   persist((set, get) => ({
     chapters: [],
-    tasksType: [],
+    resultTypes: [],
+    taskFormData: {
+      chapter: "",
+      subdivision: "Т054 Томск, Тверская 81",
+      resultType: "",
+      title: "",
+      deadline: "",
+      content: "",
+    },
+    isCreatingTask: false,
+    createTaskError: null,
 
-    setChapters: async (chapters) => {
+    setChapters: (chapters) => {
       try {
-        const { developer } = get();
-        const res = !developer ? JSON.parse(chapters) : chaptersMock;
-
+        const isDev =
+          process.env.REACT_APP_DEVELOPER === "true" ||
+          window.location.hostname === "localhost";
+        const res = !isDev ? JSON.parse(chapters) : chaptersMock;
         set({
           chapters: res || [],
         });
       } catch (err) {
-        const { addError } = (
-          await import("./ErrorContext")
-        ).useErrorsStore.getState();
-
-        addError({
-          type: "parsing",
-          message: "Ошибка парсинга данных приложения",
-          severity: "error",
-          context: "setChapters",
-          details: `Не удалось распарсить данные в setChapters\nОшибка ${
-            err.name
-          }: ${err.message}\nДанные: ${
-            typeof chapters === "string"
-              ? chapters.substring(0, 200) + "..."
-              : typeof chapters
-          }\n${err.stack}`,
-          originalError: {
-            name: err.name,
-            message: err.message,
-            stack: err.stack,
-          },
-        });
-
-        console.error("setChapters error:", err);
+        console.error(err);
       }
     },
 
-    setTaskTypes: async (types) => {
+    setResultTypes: (types) => {
       try {
-        const { developer } = get();
-        const res = !developer ? JSON.parse(types) : tasksTypeMock;
-
+        const isDev =
+          process.env.REACT_APP_DEVELOPER === "true" ||
+          window.location.hostname === "localhost";
+        const res = !isDev ? JSON.parse(types) : tasksResultTypes;
         set({
-          tasksType: res || [],
+          resultTypes: res || [],
         });
       } catch (err) {
-        const { addError } = (
-          await import("./ErrorContext")
-        ).useErrorsStore.getState();
+        console.error(err);
+      }
+    },
 
-        addError({
-          type: "parsing",
-          message: "Ошибка парсинга данных приложения",
-          severity: "error",
-          context: "setTaskTypes",
-          details: `Не удалось распарсить данные в setTaskTypes\nОшибка ${
-            err.name
-          }: ${err.message}\nДанные: ${
-            typeof types === "string"
-              ? types.substring(0, 200) + "..."
-              : typeof types
-          }\n${err.stack}`,
-          originalError: {
-            name: err.name,
-            message: err.message,
-            stack: err.stack,
+    updateTaskFormData: (field, value) => {
+      set((state) => ({
+        taskFormData: {
+          ...state.taskFormData,
+          [field]: value,
+        },
+        createTaskError: state.createTaskError
+          ? { ...state.createTaskError, [field]: null }
+          : null,
+      }));
+    },
+
+    resetTaskForm: () => {
+      set({
+        taskFormData: {
+          chapter: "",
+          subdivision: "Т054 Томск, Тверская 81",
+          resultType: "",
+          title: "",
+          deadline: "",
+          content: "",
+        },
+        createTaskError: null,
+      });
+    },
+
+    postTask: async () => {
+      const { taskFormData } = get();
+
+      const errors = {};
+      if (!taskFormData.chapter) errors.chapter = "Выберите раздел";
+      if (!taskFormData.resultType)
+        errors.resultType = "Выберите тип результата";
+      if (!taskFormData.title || !taskFormData.title.trim())
+        errors.title = "Введите заголовок";
+      if (!taskFormData.deadline) errors.deadline = "Выберите дату выполнения";
+      if (!taskFormData.content || !taskFormData.content.trim())
+        errors.content = "Введите содержание";
+
+      if (Object.keys(errors).length > 0) {
+        set({ createTaskError: errors });
+        throw new Error("Ошибка валидации формы");
+      }
+
+      set({ isCreatingTask: true, createTaskError: null });
+
+      try {
+        console.log("Отправка задачи на сервер:", taskFormData);
+
+        await new Promise((resolve) => setTimeout(resolve, 1000));
+
+        const result = {
+          success: true,
+          data: {
+            ...taskFormData,
           },
-        });
+        };
 
-        console.error("setChapters error:", err);
+        get().resetTaskForm();
+
+        return result;
+      } catch (error) {
+        console.error("Ошибка при создании задачи:", error);
+        set({ createTaskError: { general: error.message } });
+        throw error;
+      } finally {
+        set({ isCreatingTask: false });
       }
     },
   }))

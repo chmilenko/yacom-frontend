@@ -1,12 +1,40 @@
 import { useLocation, useNavigate } from "react-router-dom";
 import Button from "../Ui/Button/Button";
+import { useCreateTaskNews } from "../Core/Context/CreateTaskNews";
+import { useActionsStore } from "../Core/Context/ActionsContext";
+import { useAppStore } from "../Core/Context/AppStateContext";
+import clickTo1C from "../Utils/clicker";
 
 function LayoutButtons() {
   const navigate = useNavigate();
   const location = useLocation();
 
+  const { setActions } = useActionsStore();
+  const { developer } = useAppStore();
+  const { postTask, isCreatingTask, createTaskError } = useCreateTaskNews();
+
   const isCreatePage = location.pathname === "/task/create";
   const isFullPage = location.pathname === "/task/full";
+
+  const handleCreateTask = async () => {
+    try {
+      const result = await postTask();
+
+      if (result.success) {
+        setActions({
+          actionName: "postTask",
+          active: true,
+          data: result.data,
+        });
+
+        if (!developer) {
+          clickTo1C();
+        }
+      }
+    } catch (error) {
+      console.error("Ошибка создания задачи:", error);
+    }
+  };
 
   if (isCreatePage) {
     return (
@@ -15,12 +43,22 @@ function LayoutButtons() {
           onClick={() => navigate("/task/full")}
           type="secondary"
           text="Отмена"
+          disabled={isCreatingTask}
         />
         <Button
-          onClick={() => console.log("Создать задачу")}
+          onClick={handleCreateTask}
           type="primary"
-          text="Создать задачу"
+          text={isCreatingTask ? "Создание..." : "Создать задачу"}
+          disabled={isCreatingTask}
         />
+        {createTaskError?.general && (
+          <div
+            className="error-message"
+            style={{ color: "red", marginTop: "10px" }}
+          >
+            {createTaskError.general}
+          </div>
+        )}
       </>
     );
   }
