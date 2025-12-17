@@ -466,13 +466,7 @@ export const useAppStore = create(
     }),
     {
       name: "app-storage",
-      partialize: (state) => ({
-        // user: state.user,
-        // menuItems: state.menuItems,
-        // forState: state.forState,
-        // instructions: state.instructions,
-        // developer: state.developer,
-      }),
+      partialize: (state) => ({}),
     }
   )
 );

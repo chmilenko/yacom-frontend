@@ -1,15 +1,19 @@
 import React from "react";
 import { Route, Routes } from "react-router-dom";
+import Layout from "../Layout/Main/Layout";
+import CreateTaskLayout from "../Layout/DetailtTaskNews/LayoutCreateTask";
+
 import Home from "../Page/Home/Home";
-import Layout from "../Layout/Layout/Layout";
 import Help from "../Page/Help/Help";
 import Journals from "../Page/Journals";
 import Products from "../Page/Products";
 import Instruction from "../Page/Instruction/Instruction";
 import Errors from "../Page/Errors/ErrorDisplay";
-import CreateTask from "../Page/CreateTaskNews/CreateTask";
-import CreateTaskLayout from "../Layout/LayoutCreateTask";
-import FullTask from "../Page/CreateTaskNews/FullTask";
+
+import DetailedTask from "../Page/DetailedTaskNews/Task/Detailed/DetailedTask";
+import CreateTask from "../Page/DetailedTaskNews/Task/Create/CreateTask";
+import DetailedNews from "../Page/DetailedTaskNews/News/DetailedNews";
+import DetailedFullTask from "../Page/DetailedTaskNews/Task/DetailedFull/DetailedFullTask";
 
 function MainRoute() {
   return (
@@ -22,9 +26,11 @@ function MainRoute() {
         <Route path="/products" element={<Products />} />
         <Route path="/errors" element={<Errors />} />
       </Route>
-      <Route path="/task" element={<CreateTaskLayout />}>
-        <Route path="full" element={<FullTask />} />
-        <Route path="create" element={<CreateTask />} />
+      <Route path="/" element={<CreateTaskLayout />}>
+        <Route path="/task/full" element={<DetailedTask />} />
+        <Route path="/task/full/:id" element={<DetailedFullTask />} />
+        <Route path="/task/create" element={<CreateTask />} />
+        <Route path="/news/full" element={<DetailedNews />} />
       </Route>
     </Routes>
   );

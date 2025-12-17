@@ -62,7 +62,6 @@ export const useHomeActions = () => {
         objectType: info.ObjectType && info.ObjectType,
         });
         
-        //добавить моковые данные 
         developer && setAdditionalInfo(id, type);
         setOpenSwiper(true);
 
@@ -132,6 +131,7 @@ export const useHomeActions = () => {
         return "empty";
     }
   };
+
 
   const openTasksOrNewsForm = (block) => {
     if (!openSwiper) {

@@ -2,7 +2,7 @@ import { useRef } from "react";
 import { Outlet } from "react-router-dom";
 import "./CreateTaskLayout.scss";
 
-import ScrollToTop from "../Components/ScrollToTop/ScrollToTop";
+import ScrollToTop from "../../Components/ScrollToTop/ScrollToTop";
 import LayoutButtons from "./LayoutButton";
 
 function CreateTaskLayout() {

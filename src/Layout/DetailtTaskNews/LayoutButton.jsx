@@ -1,9 +1,9 @@
 import { useLocation, useNavigate } from "react-router-dom";
-import Button from "../Ui/Button/Button";
-import { useCreateTaskNews } from "../Core/Context/CreateTaskNews";
-import { useActionsStore } from "../Core/Context/ActionsContext";
-import { useAppStore } from "../Core/Context/AppStateContext";
-import clickTo1C from "../Utils/clicker";
+import Button from "../../Ui/Button/Button";
+import { useCreateTaskNews } from "../../Core/Context/CreateTaskNews";
+import { useActionsStore } from "../../Core/Context/ActionsContext";
+import { useAppStore } from "../../Core/Context/AppStateContext";
+import clickTo1C from "../../Utils/clicker";
 
 function LayoutButtons() {
   const navigate = useNavigate();
@@ -15,6 +15,7 @@ function LayoutButtons() {
 
   const isCreatePage = location.pathname === "/task/create";
   const isFullPage = location.pathname === "/task/full";
+  const isNewsPage = location.pathname === "/news/full";
 
   const handleCreateTask = async () => {
     try {
@@ -76,6 +77,18 @@ function LayoutButtons() {
           onClick={() => console.log("Перейти к отчету")}
           type="navigation"
           text="Отчет"
+        />
+      </>
+    );
+  }
+  if (isNewsPage) {
+    return (
+      <>
+        <Button onClick={() => navigate("/")} type="navigation" text="Назад" />
+        <Button
+          onClick={() => console.log("Перейти к отбору")}
+          type="navigation"
+          text="Отбор"
         />
       </>
     );

@@ -1,35 +1,58 @@
 import React, { useEffect } from "react";
-import { useCreateTaskNews } from "../../Core/Context/CreateTaskNews";
-import "./FullTask.scss";
-import Button from "../../Ui/Button/Button";
-function FullTask() {
-  const { setFullTask, fullTasks } = useCreateTaskNews();
+import { useCreateTaskNews } from "../../../../Core/Context/CreateTaskNews";
+import "./DetailedTask.scss";
+import Button from "../../../../Ui/Button/Button";
+import { useNavigate } from "react-router-dom";
+import { useAppStore } from "../../../../Core/Context/AppStateContext";
+import { useActionsStore } from "../../../../Core/Context/ActionsContext";
+import clickTo1C from "../../../../Utils/clicker";
+
+function DetailedTask() {
+  const { setFullTasks, fullTasks, getFullTaskDeveloper } = useCreateTaskNews();
+  const { setAction } = useActionsStore();
+  const { developer } = useAppStore();
+  const navigate = useNavigate();
 
   useEffect(() => {
-    setFullTask();
+    setFullTasks();
   }, []);
 
-  if (!fullTasks.length) {
-    return (
-      <div className="task_list_empty">
-        <div className="empty_icon">📋</div>
-        <p className="empty_text">Нет активных задач</p>
-        <p className="empty_hint">Создайте первую задачу</p>
-      </div>
-    );
-  }
+  const handleClickCard = (id) => {
+    if (developer) {
+      getFullTaskDeveloper(id);
+      navigate(`/task/full/${id}`);
+    } else if (!developer) {
+      setAction({
+        actionName: "getFullTask",
+        active: true,
+        TaskId: id,
+      });
+      !developer && clickTo1C();
+      navigate(`/task/full/${id}`);
+    }
+  };
 
   return (
     <div>
       <div className="task_list_container">
         {fullTasks.map((task) => (
-          <div key={task.id} className="task_card">
+          <div
+            key={task.TaskId}
+            className="task_card"
+            onClick={() => handleClickCard(task.TaskId)}
+          >
             <div className="task_header">
-              <img
-                src={task.mainTag}
-                alt="Метка задачи"
-                className="main_tag_icon"
-              />
+              <div>
+                <img
+                  src={task.mainTag}
+                  alt="Метка задачи"
+                  className="main_tag_icon"
+                  style={{
+                    width: "28px",
+                    height: "28px",
+                  }}
+                />
+              </div>
               <div className="task_tag_title">
                 <span className="tag_badge">{task.tagTitle}</span>
               </div>
@@ -76,4 +99,4 @@ function FullTask() {
   );
 }
 
-export default FullTask;
+export default DetailedTask;

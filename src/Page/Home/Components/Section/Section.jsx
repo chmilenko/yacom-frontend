@@ -36,6 +36,8 @@ function Section({ section, onOpenSwiper, openSectionForm, type }) {
   const handleHeaderClick = (type, e) => {
     if (type === "Задачи") {
       navigate("/task/full");
+    } else if (type === "Новости") {
+      navigate("/news/full");
     }
     e.stopPropagation();
     setIsActive(!isActive);

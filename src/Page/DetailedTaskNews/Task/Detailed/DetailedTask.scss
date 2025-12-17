@@ -1,4 +1,4 @@
-@import "../../Styles/variables.scss";
+@import "../../../../Styles/variables.scss";
 
 .task_list_container {
   display: flex;
@@ -12,7 +12,7 @@
 .task_card {
   background: white;
   border-radius: 16px;
-  padding: 24px;
+  padding: 20px;
   box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
   transition: all 0.3s ease;
   position: relative;
@@ -86,8 +86,8 @@
   align-items: center;
 
   .main_tag_icon {
-    width: 32px;
-    height: 32px;
+    // width: 32px !important;
+    // height: 32px !important;
     object-fit: contain;
     border-radius: 8px;
     border: 2px solid #f0f0f0;
@@ -237,30 +237,6 @@
   }
 }
 
-// Пустое состояние
-.task_list_empty {
-  text-align: center;
-  padding: 60px 20px;
-
-  .empty_icon {
-    font-size: 64px;
-    margin-bottom: 20px;
-    opacity: 0.3;
-  }
-
-  .empty_text {
-    font-size: 20px;
-    color: #666;
-    margin-bottom: 8px;
-    font-weight: 500;
-  }
-
-  .empty_hint {
-    font-size: 14px;
-    color: #999;
-  }
-}
-
 .task_list_action {
   display: flex;
   justify-content: center;
@@ -275,11 +251,7 @@
   }
 
   .task_card {
-    padding: 20px;
-  }
-
-  .task_header {
-    gap: 12px;
+    padding: 16px;
   }
 
   .task_date,
@@ -317,6 +289,23 @@
   .task_creator {
     width: 100%;
     justify-content: center;
+  }
+}
+
+@media (max-width: 396px) {
+  // .main_tag_icon {
+  //   width: 28px !important;
+  //   height: 28px !important;
+  // }
+  .tag_badge {
+    font-size: 12px !important;
+    padding: 3px 12px !important;
+  }
+  .date_icon {
+    font-size: 15px;
+  }
+  .date_text {
+    font-size: 12px;
   }
 }
 

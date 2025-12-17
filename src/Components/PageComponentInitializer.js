@@ -40,7 +40,8 @@ const PageComponentInitializer = () => {
       //CreateTaskNews
       setChapters: useCreateTaskNewsState.setChapters,
       setResultTypes: useCreateTaskNewsState.setResultTypes,
-      setFullTask: useCreateTaskNewsState.setFullTask,
+      setFullTasks: useCreateTaskNewsState.setFullTasks,
+      getFullTask: useCreateTaskNewsState.getFullTask,
       // Errors
       errors: errorsState.errors,
       errorHistory: errorsState.errorHistory,

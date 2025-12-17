@@ -1,5 +1,5 @@
 import React, { useEffect } from "react";
-import { useCreateTaskNews } from "../../Core/Context/CreateTaskNews";
+import { useCreateTaskNews } from "../../../../Core/Context/CreateTaskNews";
 import "./CreateTask.scss";
 
 function CreateTask() {
@@ -43,10 +43,10 @@ function CreateTask() {
             value={getValue(taskFormData.chapter)}
             onChange={handleChange}
             className={`form_select ${createTaskError?.chapter ? "error" : ""}`}
-            disabled={!chapters.length}
+            disabled={!chapters?.length}
           >
             <option value="">Выберите раздел</option>
-            {chapters.map((chapter) => (
+            {chapters?.map((chapter) => (
               <option key={chapter.id} value={chapter.id}>
                 {chapter.name}
               </option>
@@ -82,10 +82,10 @@ function CreateTask() {
             className={`form_select ${
               createTaskError?.resultType ? "error" : ""
             }`}
-            disabled={!tasksType.length}
+            disabled={!tasksType?.length}
           >
             <option value="">Выберите тип результата</option>
-            {tasksType.map((type) => (
+            {tasksType?.map((type) => (
               <option key={type.id} value={type.id}>
                 {type.name}
               </option>
@@ -112,7 +112,7 @@ function CreateTask() {
           />
           <div className="under_text">
             <div className="char_counter">
-              {String(taskFormData.title || "").length}/100 символов
+              {String(taskFormData.title || "")?.length}/100 символов
             </div>
             {createTaskError?.title && (
               <span className="error_text">{createTaskError.title}</span>

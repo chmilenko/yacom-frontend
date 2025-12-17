@@ -31,6 +31,7 @@ function Home() {
   useEffect(() => {
     setAppState();
   }, []);
+  console.log(window.pageComponent);
 
   return (
     <div className="main">
