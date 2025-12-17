@@ -12,6 +12,7 @@ function CreateTask() {
     updateTaskFormData,
     createTaskError,
     clearErrors,
+    resultTypes,
   } = useCreateTaskNews();
 
   useEffect(() => {
@@ -19,7 +20,8 @@ function CreateTask() {
     setResultTypes();
 
     return () => clearErrors();
-  }, [clearErrors, setChapters, setResultTypes]);
+  }, []);
+  console.log();
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -82,10 +84,10 @@ function CreateTask() {
             className={`form_select ${
               createTaskError?.resultType ? "error" : ""
             }`}
-            disabled={!tasksType?.length}
+            disabled={!resultTypes?.length}
           >
             <option value="">Выберите тип результата</option>
-            {tasksType?.map((type) => (
+            {resultTypes?.map((type) => (
               <option key={type.id} value={type.id}>
                 {type.name}
               </option>

@@ -20611,7 +20611,15 @@
                         text: "Назад",
                       }),
                       React.createElement(Be, {
-                        onClick: () => e("/task/create"),
+                        onClick: () => (
+                          n({
+                            actionName: "clickElement",
+                            active: !0,
+                            currentForm: "createTask",
+                          }),
+                          e("/task/create"),
+                          void (!r && (0, je.A)())
+                        ),
                         type: "navigation",
                         text: "Создать",
                       }),
@@ -22388,13 +22396,15 @@
                   updateTaskFormData: l,
                   createTaskError: i,
                   clearErrors: s,
+                  resultTypes: c,
                 } = ke();
-                (0, t.useEffect)(() => (e(), n(), () => s()), [s, e, n]);
-                const c = (e) => {
+                (0, t.useEffect)(() => (e(), n(), () => s()), []),
+                  console.log();
+                const u = (e) => {
                     const { name: t, value: n } = e.target;
                     l(t, n);
                   },
-                  u = (e) => (null === e ? "" : e);
+                  f = (e) => (null === e ? "" : e);
                 return t.createElement(
                   "div",
                   { className: "tasks_container" },
@@ -22415,8 +22425,8 @@
                         {
                           id: "chapter",
                           name: "chapter",
-                          value: u(o.chapter),
-                          onChange: c,
+                          value: f(o.chapter),
+                          onChange: u,
                           className:
                             "form_select " + (i?.chapter ? "error" : ""),
                           disabled: !r?.length,
@@ -22477,18 +22487,18 @@
                         {
                           id: "resultType",
                           name: "resultType",
-                          value: u(o.resultType),
-                          onChange: c,
+                          value: f(o.resultType),
+                          onChange: u,
                           className:
                             "form_select " + (i?.resultType ? "error" : ""),
-                          disabled: !a?.length,
+                          disabled: !c?.length,
                         },
                         t.createElement(
                           "option",
                           { value: "" },
                           "Выберите тип результата"
                         ),
-                        a?.map((e) =>
+                        c?.map((e) =>
                           t.createElement(
                             "option",
                             { key: e.id, value: e.id },
@@ -22516,8 +22526,8 @@
                         type: "text",
                         id: "title",
                         name: "title",
-                        value: u(o.title),
-                        onChange: c,
+                        value: f(o.title),
+                        onChange: u,
                         placeholder: "Введите заголовок задачи",
                         className: "form_input " + (i?.title ? "error" : ""),
                         maxLength: 100,
@@ -22554,8 +22564,8 @@
                         id: "deadline",
                         className:
                           "form_select " + (i?.deadline ? "error" : ""),
-                        value: u(o.deadline),
-                        onChange: c,
+                        value: f(o.deadline),
+                        onChange: u,
                       }),
                       i?.deadline &&
                         t.createElement(
@@ -22576,8 +22586,8 @@
                       t.createElement("textarea", {
                         id: "content",
                         name: "content",
-                        value: u(o.content),
-                        onChange: c,
+                        value: f(o.content),
+                        onChange: u,
                         placeholder: "Опишите подробности задачи...",
                         className:
                           "form_textarea " + (i?.content ? "error" : ""),

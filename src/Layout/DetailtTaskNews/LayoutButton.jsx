@@ -17,6 +17,16 @@ function LayoutButtons() {
   const isFullPage = location.pathname === "/task/full";
   const isNewsPage = location.pathname === "/news/full";
 
+  const handleNavigateCreateTask = () => {
+    setActions({
+      actionName: "clickElement",
+      active: true,
+      currentForm: "createTask",
+    });
+    navigate("/task/create");
+    !developer && clickTo1C();
+  };
+
   const handleCreateTask = async () => {
     try {
       const result = await postTask();
@@ -69,7 +79,7 @@ function LayoutButtons() {
       <>
         <Button onClick={() => navigate("/")} type="navigation" text="Назад" />
         <Button
-          onClick={() => navigate("/task/create")}
+          onClick={() => handleNavigateCreateTask()}
           type="navigation"
           text="Создать"
         />
