@@ -1,0 +1,187 @@
+// src/components/UI/CustomSelect/CustomSelect.scss
+@import "../../Styles/variables.scss";
+
+.custom-select-container {
+  width: 100%;
+  margin-bottom: 16px;
+}
+
+.custom-select-label {
+  display: block;
+  margin-bottom: 8px;
+  font-weight: 500;
+  color: #444;
+  font-size: 14px;
+
+  .required {
+    color: #ff4757;
+    margin-left: 4px;
+  }
+}
+
+.custom-select-wrapper {
+  position: relative;
+  width: 100%;
+
+  &.error {
+    .custom-select {
+      border-color: #ff4757;
+    }
+  }
+}
+
+.custom-select {
+  width: 100%;
+  padding: 12px 15px;
+  border: 1px solid #ddd;
+  border-radius: 8px;
+  font-size: 16px;
+  background: white;
+  cursor: pointer;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  transition: all 0.3s ease;
+  box-sizing: border-box;
+
+  &:hover:not(.disabled) {
+    border-color: #bbb;
+  }
+
+  &:focus {
+    outline: none;
+    border-color: $primary;
+    box-shadow: 0 0 0 2px rgba(52, 152, 219, 0.2);
+  }
+
+  &.open {
+    border-color: $primary;
+    border-bottom-left-radius: 0;
+    border-bottom-right-radius: 0;
+  }
+
+  &.disabled {
+    background-color: #f5f5f5;
+    cursor: not-allowed;
+    color: #999;
+  }
+}
+
+.custom-select__selected {
+  flex: 1;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+
+  &:empty::after {
+    content: attr(data-placeholder);
+    color: #999;
+  }
+}
+
+.custom-select__arrow {
+  margin-left: 10px;
+  font-size: 12px;
+  transition: transform 0.3s;
+
+  .open & {
+    transform: rotate(180deg);
+  }
+}
+
+.custom-select__dropdown {
+  position: absolute;
+  top: 100%;
+  left: 0;
+  right: 0;
+  background: white;
+  border: 1px solid #ddd;
+  border-top: none;
+  border-radius: 0 0 8px 8px;
+  z-index: 1000;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+}
+
+.custom-select__search {
+  padding: 8px;
+  border-bottom: 1px solid #eee;
+}
+
+.custom-select__search-input {
+  width: 100%;
+  padding: 8px 12px;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+  font-size: 14px;
+  box-sizing: border-box;
+
+  &:focus {
+    outline: none;
+    border-color: $primary;
+  }
+}
+
+.custom-select__options {
+  max-height: 200px;
+  overflow-y: auto;
+}
+
+.custom-select__option {
+  padding: 12px 15px;
+  cursor: pointer;
+  transition: background-color 0.2s;
+  font-size: 14px;
+
+  &:hover {
+    background-color: #f5f5f5;
+  }
+
+  &.selected {
+    background-color: #e3f2fd;
+    color: $primary;
+    font-weight: 500;
+  }
+
+  &:not(:last-child) {
+    border-bottom: 1px solid #f0f0f0;
+  }
+}
+
+.custom-select__no-results {
+  padding: 12px 15px;
+  text-align: center;
+  color: #999;
+  font-size: 14px;
+}
+
+.custom-select-error {
+  display: block;
+  color: #ff4757;
+  font-size: 12px;
+  margin-top: 5px;
+}
+
+/* Стили для скроллбара */
+.custom-select__options::-webkit-scrollbar {
+  width: 6px;
+}
+
+.custom-select__options::-webkit-scrollbar-track {
+  background: #f1f1f1;
+}
+
+.custom-select__options::-webkit-scrollbar-thumb {
+  background: #c1c1c1;
+  border-radius: 3px;
+}
+
+.custom-select__options::-webkit-scrollbar-thumb:hover {
+  background: #a8a8a8;
+}
+
+/* Адаптивность */
+@media (max-width: 768px) {
+  .custom-select__options {
+    max-height: 150px;
+  }
+}

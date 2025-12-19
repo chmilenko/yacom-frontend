@@ -9,8 +9,8 @@ function LayoutButtons() {
   const navigate = useNavigate();
   const location = useLocation();
 
-  const { setActions } = useActionsStore();
-  const { developer } = useAppStore();
+  const { setActions, actions } = useActionsStore();
+  const { developer, user } = useAppStore();
   const { postTask, isCreatingTask, createTaskError } = useCreateTaskNews();
 
   const isCreatePage = location.pathname === "/task/create";
@@ -26,21 +26,23 @@ function LayoutButtons() {
     navigate("/task/create");
     !developer && clickTo1C();
   };
+  console.log(user);
 
   const handleCreateTask = async () => {
     try {
       const result = await postTask();
-
       if (result.success) {
         setActions({
           actionName: "postTask",
           active: true,
-          data: result.data,
+          data: {
+            ...result.data,
+            userGuid: user.userGuid,
+            subdivisionGuid: user.subdivisionGuid,
+          },
         });
-
-        if (!developer) {
-          clickTo1C();
-        }
+        !developer && clickTo1C();
+        console.log(actions);
       }
     } catch (error) {
       console.error("Ошибка создания задачи:", error);

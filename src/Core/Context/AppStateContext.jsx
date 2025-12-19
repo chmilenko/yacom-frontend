@@ -2,9 +2,10 @@
 import { create } from "zustand";
 import { persist } from "zustand/middleware";
 
-let data, dataInstructions, additionalMock;
+let userMock, data, dataInstructions, additionalMock;
 
 if (process.env.REACT_APP_DEVELOPER === "true") {
+  userMock = require("../../Core/Mock/mock").user;
   data = require("../../Core/Mock/mock").data;
   dataInstructions = require("../../Core/Mock/instructions").instructions;
   additionalMock = require("../../Core/Mock/mock").additionalData;
@@ -13,6 +14,7 @@ if (process.env.REACT_APP_DEVELOPER === "true") {
 export const useAppStore = create(
   persist(
     (set, get) => ({
+      user: {},
       menuItems: [],
       forState: [],
       instructions: [],
@@ -25,6 +27,16 @@ export const useAppStore = create(
       page: "",
       countActualTasks: 0,
       countUnreadNews: 0,
+
+      setUser: (user) => {
+        try {
+          const { developer } = get();
+          const res = !developer ? JSON.parse(user) : userMock;
+          set({ user: res });
+        } catch (err) {
+          console.error(err);
+        }
+      },
 
       setPage: (newPage) => set({ page: newPage }),
 

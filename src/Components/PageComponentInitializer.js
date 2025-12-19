@@ -14,6 +14,7 @@ const PageComponentInitializer = () => {
 
     window.pageComponent = {
       // App State
+      setUser: appState.setUser,
       menuItems: appState.menuItems,
       setUser: appState.setUser,
       page: appState.page,

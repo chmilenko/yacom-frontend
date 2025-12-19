@@ -1,27 +1,33 @@
+// src/components/CreateTask/CreateTask.jsx
 import React, { useEffect } from "react";
 import { useCreateTaskNews } from "../../../../Core/Context/CreateTaskNews";
+
 import "./CreateTask.scss";
+import CustomSelect from "../../../../Ui/CustomSelect/CustomSelect";
+import { useAppStore } from "../../../../Core/Context/AppStateContext";
 
 function CreateTask() {
   const {
     setChapters,
     setResultTypes,
     chapters,
-    tasksType,
     taskFormData,
     updateTaskFormData,
     createTaskError,
     clearErrors,
     resultTypes,
   } = useCreateTaskNews();
+  const { user } = useAppStore();
 
   useEffect(() => {
     setChapters();
     setResultTypes();
-
     return () => clearErrors();
   }, []);
-  console.log();
+
+  const handleSelectChange = (name, value) => {
+    updateTaskFormData(name, value);
+  };
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -35,29 +41,20 @@ function CreateTask() {
   return (
     <div className="tasks_container">
       <div className="create_task_form">
-        <div className="form_group">
-          <label htmlFor="chapter">
-            Раздел <span className="required">*</span>
-          </label>
-          <select
-            id="chapter"
-            name="chapter"
-            value={getValue(taskFormData.chapter)}
-            onChange={handleChange}
-            className={`form_select ${createTaskError?.chapter ? "error" : ""}`}
-            disabled={!chapters?.length}
-          >
-            <option value="">Выберите раздел</option>
-            {chapters?.map((chapter) => (
-              <option key={chapter.id} value={chapter.id}>
-                {chapter.name}
-              </option>
-            ))}
-          </select>
-          {createTaskError?.chapter && (
-            <span className="error_text">{createTaskError.chapter}</span>
-          )}
-        </div>
+        <CustomSelect
+          id="chapter"
+          name="chapter"
+          label="Раздел"
+          value={taskFormData?.chapter}
+          onChange={handleSelectChange}
+          options={chapters || []}
+          placeholder="Выберите раздел"
+          required={true}
+          disabled={!chapters?.length}
+          error={createTaskError?.chapter}
+          optionLabel="name"
+          optionValue="id"
+        />
 
         <div className="form_group">
           <label htmlFor="subdivision">Подразделение</label>
@@ -65,38 +62,27 @@ function CreateTask() {
             type="text"
             id="subdivision"
             name="subdivision"
-            value={taskFormData.subdivision || "Т054 Томск, Тверская 81"}
+            value={user?.subdivisionName || ""}
             readOnly
             className="form_input readonly"
           />
           <div className="hint">Заполняется автоматически</div>
         </div>
 
-        <div className="form_group">
-          <label htmlFor="resultType">
-            Тип результата <span className="required">*</span>
-          </label>
-          <select
-            id="resultType"
-            name="resultType"
-            value={getValue(taskFormData.resultType)}
-            onChange={handleChange}
-            className={`form_select ${
-              createTaskError?.resultType ? "error" : ""
-            }`}
-            disabled={!resultTypes?.length}
-          >
-            <option value="">Выберите тип результата</option>
-            {resultTypes?.map((type) => (
-              <option key={type.id} value={type.id}>
-                {type.name}
-              </option>
-            ))}
-          </select>
-          {createTaskError?.resultType && (
-            <span className="error_text">{createTaskError.resultType}</span>
-          )}
-        </div>
+        <CustomSelect
+          id="resultType"
+          name="resultType"
+          label="Тип результата"
+          value={taskFormData?.resultType}
+          onChange={handleSelectChange}
+          options={resultTypes || []}
+          placeholder="Выберите тип результата"
+          required={true}
+          disabled={!resultTypes?.length}
+          error={createTaskError?.resultType}
+          optionLabel="name"
+          optionValue="id"
+        />
 
         <div className="form_group">
           <label htmlFor="title">
@@ -106,7 +92,7 @@ function CreateTask() {
             type="text"
             id="title"
             name="title"
-            value={getValue(taskFormData.title)}
+            value={getValue(taskFormData?.title)}
             onChange={handleChange}
             placeholder="Введите заголовок задачи"
             className={`form_input ${createTaskError?.title ? "error" : ""}`}
@@ -114,7 +100,7 @@ function CreateTask() {
           />
           <div className="under_text">
             <div className="char_counter">
-              {String(taskFormData.title || "")?.length}/100 символов
+              {String(taskFormData?.title || "")?.length}/100 символов
             </div>
             {createTaskError?.title && (
               <span className="error_text">{createTaskError.title}</span>
@@ -133,7 +119,7 @@ function CreateTask() {
             className={`form_select ${
               createTaskError?.deadline ? "error" : ""
             }`}
-            value={getValue(taskFormData.deadline)}
+            value={getValue(taskFormData?.deadline)}
             onChange={handleChange}
           />
           {createTaskError?.deadline && (
@@ -148,7 +134,7 @@ function CreateTask() {
           <textarea
             id="content"
             name="content"
-            value={getValue(taskFormData.content)}
+            value={getValue(taskFormData?.content)}
             onChange={handleChange}
             placeholder="Опишите подробности задачи..."
             className={`form_textarea ${
@@ -159,7 +145,7 @@ function CreateTask() {
           />
           <div className="under_text">
             <div className="char_counter">
-              {String(taskFormData.content || "").length}/1000 символов
+              {String(taskFormData?.content || "").length}/1000 символов
             </div>
             {createTaskError?.content && (
               <span className="error_text">{createTaskError.content}</span>

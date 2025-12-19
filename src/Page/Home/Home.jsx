@@ -14,6 +14,7 @@ function Home() {
     openSwiper,
     setOpenSwiper,
     setListStateClear,
+    setUser,
   } = useAppStore();
 
   const { openTasksOrNewsForm, handleOpenSwiper, onTaskExecute, taskFulfill } =
@@ -30,6 +31,7 @@ function Home() {
 
   useEffect(() => {
     setAppState();
+    setUser();
   }, []);
   console.log(window.pageComponent);
 

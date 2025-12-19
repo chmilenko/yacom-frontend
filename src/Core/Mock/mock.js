@@ -1,3 +1,9 @@
+export const user = {
+  userGuid: 228,
+  subdivisionGuid: 1488,
+  subdivisionName: "Т054 Томск, Тверская 81"
+};
+
 export const data = [
   {
     Tabs: [
@@ -97,7 +103,7 @@ export const data = [
               TaskID: "b48742bc-1cd5-c824-a9a7-40c205ee325f",
               ResultType: "1",
               Key: "b48742bc-1cd5-c824-a9a7-40c205ee325f",
-              ObjectType: "Task",
+              ObjectType: "Poll",
             },
             {
               Done: false,
@@ -228,7 +234,7 @@ export const additionalData = [
     DoneCount: 1,
     QuestionCount: 1,
     ResultType: "7",
-    ObjectType: "Task",
+    ObjectType: "Poll",
     LongHeader: false,
     ListImage: "",
     ListImageID: "",
@@ -746,28 +752,28 @@ export const chapters = [
 ];
 
 export const resultTypes = [
-  {
-    id: 1,
-    name: "Отметка о выполнении",
-  },
-  {
-    id: 2,
-    name: "Написать ответ",
-  },
-  {
-    id: 3,
-    name: "Сделать фото",
-  },
-  {
-    id: 4,
-    name: "Сделать несколько фото",
-  },
-  {
-    id: 5,
-    name: "Сделать фото и подписать",
-  },
-  {
-    id: 6,
-    name: "Ввести число",
-  },
-];
+{
+  id: 1,
+  name: "Отметка о выполнении",
+},
+{
+  id: 2,
+  name: "Написать ответ",
+},
+{
+  id: 3,
+  name: "Сделать фото",
+},
+{
+  id: 4,
+  name: "Сделать несколько фото",
+},
+{
+  id: 5,
+  name: "Сделать фото и подписать",
+},
+{
+  id: 6,
+  name: "Ввести число",
+},
+]
