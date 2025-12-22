@@ -97,7 +97,7 @@ export const data = [
               TaskID: "b48742bc-1cd5-c824-a9a7-40c205ee325f",
               ResultType: "1",
               Key: "b48742bc-1cd5-c824-a9a7-40c205ee325f",
-              ObjectType: "Task",
+              ObjectType: "Poll",
             },
             {
               Done: false,
@@ -426,7 +426,7 @@ export const additionalData = [
     DoneCount: 1,
     QuestionCount: 1,
     ResultType: "1",
-    ObjectType: "Task",
+    ObjectType: "Poll",
     LongHeader: false,
     ListImage: "",
     ListImageID: "",

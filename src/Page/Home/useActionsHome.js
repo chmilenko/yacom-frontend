@@ -2,9 +2,8 @@ import "./Home.scss";
 
 import clickTo1C from "../../Utils/clicker";
 
-import {  useAppStore } from "../../Core/Context/AppStateContext";
+import { useAppStore } from "../../Core/Context/AppStateContext";
 import { useActionsStore } from "../../Core/Context/ActionsContext";
-
 
 export const useHomeActions = () => {
   const { setActions } = useActionsStore();
@@ -18,7 +17,7 @@ export const useHomeActions = () => {
     openSwiper,
     setOpenSwiper,
     setListState,
-    errors
+    errors,
   } = useAppStore();
 
   const taskAction = (TypeResult) => {
@@ -45,42 +44,42 @@ export const useHomeActions = () => {
   };
 
   const handleOpenSwiper = (info, type) => {
-    let id;    
-    try{
-        if (type === "Задачи" || type === "Tasks") {
+    let id;
+    try {
+      if (type === "Задачи" || type === "Tasks") {
         id = info.TaskID;
-        } else if (type === "Новости" || type === 'News') {
+      } else if (type === "Новости" || type === "News") {
         id = info.ObjectID;
         setReadNews(id);
-        }
+      }
 
-        setActions({
+      setActions({
         actionName: "clickElement",
         active: true,
         objectId: id,
         subSection: type,
         objectType: info.ObjectType && info.ObjectType,
-        });
-        
-        //добавить моковые данные 
-        developer && setAdditionalInfo(id, type);
-        setOpenSwiper(true);
+      });
 
-        !developer && clickTo1C();
-    } catch(err) {
-        const errorDescription = "Ошибка в handleOpenSwiper";
-        const errorWithId = {
-            id: Date.now(),
-            timestamp: new Date().toISOString(),
-            ...err,
-            type: err.type || "application",
-            page: window.location.pathname,
-            description: errorDescription
-        };
-        errors.push(errorWithId);
+      developer && setAdditionalInfo(id, type);
+      if (info.ObjectType && info.ObjectType === "Poll") {
+        setOpenSwiper(false);
+      } else setOpenSwiper(true);
+
+      !developer && clickTo1C();
+    } catch (err) {
+      const errorDescription = "Ошибка в handleOpenSwiper";
+      const errorWithId = {
+        id: Date.now(),
+        timestamp: new Date().toISOString(),
+        ...err,
+        type: err.type || "application",
+        page: window.location.pathname,
+        description: errorDescription,
+      };
+      errors.push(errorWithId);
     }
   };
-
 
   const onTaskExecute = (id) => {
     if (!additionalInfo.Done) {
@@ -109,14 +108,14 @@ export const useHomeActions = () => {
       active: true,
     };
     if (id) {
-      setTaskDoneStatus(id);      
+      setTaskDoneStatus(id);
       setListState();
     }
     setActions(obj);
     !developer && clickTo1C();
   };
 
-    const sectionAction = (Section) => {
+  const sectionAction = (Section) => {
     switch (Section) {
       case "Проблема при отправке данных":
         return "Проблема при отправке данных";
@@ -138,7 +137,7 @@ export const useHomeActions = () => {
       setActions({
         actionName: "clickElement",
         active: true,
-        currentForm: sectionAction(block)
+        currentForm: sectionAction(block),
       });
       !developer && clickTo1C();
     } else return;
