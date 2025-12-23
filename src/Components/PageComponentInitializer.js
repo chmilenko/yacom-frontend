@@ -43,6 +43,7 @@ const PageComponentInitializer = () => {
       setResultTypes: useCreateTaskNewsState.setResultTypes,
       setFullTasks: useCreateTaskNewsState.setFullTasks,
       getFullTask: useCreateTaskNewsState.getFullTask,
+      getOneTask: useCreateTaskNewsState.getOneTask,
       // Errors
       errors: errorsState.errors,
       errorHistory: errorsState.errorHistory,

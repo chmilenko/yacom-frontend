@@ -1,4 +1,4 @@
-import { useLocation, useNavigate } from "react-router-dom";
+import { useLocation, useNavigate, useParams } from "react-router-dom";
 import Button from "../../Ui/Button/Button";
 import { useCreateTaskNews } from "../../Core/Context/CreateTaskNews";
 import { useActionsStore } from "../../Core/Context/ActionsContext";
@@ -8,14 +8,21 @@ import clickTo1C from "../../Utils/clicker";
 function LayoutButtons() {
   const navigate = useNavigate();
   const location = useLocation();
+  const params = useParams();
 
-  const { setActions, actions } = useActionsStore();
+  const { setActions } = useActionsStore();
   const { developer, user } = useAppStore();
   const { postTask, isCreatingTask, createTaskError } = useCreateTaskNews();
 
   const isCreatePage = location.pathname === "/task/create";
-  const isFullPage = location.pathname === "/task/full";
+  const isFullPage = location.pathname.startsWith("/task/full");
   const isNewsPage = location.pathname === "/news/full";
+
+  const taskId =
+    params.id || location.pathname.split("/").filter(Boolean)[2] || null;
+
+  const isTaskListPage = location.pathname === "/task/full";
+  const isSingleTaskPage = isFullPage && taskId;
 
   const handleNavigateCreateTask = () => {
     setActions({
@@ -26,7 +33,6 @@ function LayoutButtons() {
     navigate("/task/create");
     !developer && clickTo1C();
   };
-  console.log(user);
 
   const handleCreateTask = async () => {
     try {
@@ -42,10 +48,15 @@ function LayoutButtons() {
           },
         });
         !developer && clickTo1C();
-        console.log(actions);
       }
     } catch (error) {
       console.error("Ошибка создания задачи:", error);
+    }
+  };
+
+  const handleCompleteTask = () => {
+    if (taskId) {
+      console.log("Выполняем задачу с ID:", taskId);
     }
   };
 
@@ -76,12 +87,30 @@ function LayoutButtons() {
     );
   }
 
-  if (isFullPage) {
+  if (isSingleTaskPage) {
+    return (
+      <>
+        <Button
+          onClick={() => navigate("task/full")}
+          type="navigation"
+          text="Назад"
+        />
+        <Button
+          onClick={handleCompleteTask}
+          type="primary"
+          text="Выполнить задачу"
+          style={{ backgroundColor: "#4CAF50", color: "white" }}
+        />
+      </>
+    );
+  }
+
+  if (isTaskListPage) {
     return (
       <>
         <Button onClick={() => navigate("/")} type="navigation" text="Назад" />
         <Button
-          onClick={() => handleNavigateCreateTask()}
+          onClick={handleNavigateCreateTask}
           type="navigation"
           text="Создать"
         />
@@ -93,6 +122,7 @@ function LayoutButtons() {
       </>
     );
   }
+
   if (isNewsPage) {
     return (
       <>

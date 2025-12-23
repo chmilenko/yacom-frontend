@@ -115,8 +115,6 @@ export const useCreateTaskNews = create(
         set({ isCreatingTask: true, createTaskError: null });
 
         try {
-          console.log("Отправка задачи на сервер:", taskFormData);
-
           await new Promise((resolve) => setTimeout(resolve, 1000));
 
           const result = {
@@ -149,9 +147,20 @@ export const useCreateTaskNews = create(
         }
       },
 
+      getOneTask: async (oneTask) => {
+        try {
+          const res = JSON.parse(oneTask);
+          set({
+            oneTask: res || {},
+          });
+        } catch (err) {
+          console.error(err);
+        }
+      },
+
       getFullTaskDeveloper: (id) => {
         try {
-          const res = mockOneTask.find((task) => task.TaskId === id);
+          const res = mockOneTask.find((task) => task.TaskID === id);
           set({
             oneTask: res || [],
           });

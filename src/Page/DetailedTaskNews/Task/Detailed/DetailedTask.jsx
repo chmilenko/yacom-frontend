@@ -3,14 +3,13 @@ import { useCreateTaskNews } from "../../../../Core/Context/CreateTaskNews";
 import "./DetailedTask.scss";
 import Button from "../../../../Ui/Button/Button";
 import { useNavigate } from "react-router-dom";
-import { useAppStore } from "../../../../Core/Context/AppStateContext";
 import { useActionsStore } from "../../../../Core/Context/ActionsContext";
 import clickTo1C from "../../../../Utils/clicker";
 
 function DetailedTask() {
-  const { setFullTasks, fullTasks, getFullTaskDeveloper } = useCreateTaskNews();
-  const { setAction } = useActionsStore();
-  const { developer } = useAppStore();
+  const { setFullTasks, fullTasks, developer } = useCreateTaskNews();
+  const { setActions } = useActionsStore();
+
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -19,11 +18,11 @@ function DetailedTask() {
 
   const handleClickCard = (id) => {
     if (developer) {
-      getFullTaskDeveloper(id);
       navigate(`/task/full/${id}`);
-    } else if (!developer) {
-      setAction({
-        actionName: "getFullTask",
+    } else {
+      setActions({
+        actionName: "clickElement",
+        page: "oneTask",
         active: true,
         TaskId: id,
       });
@@ -37,9 +36,9 @@ function DetailedTask() {
       <div className="task_list_container">
         {fullTasks.map((task) => (
           <div
-            key={task.TaskId}
+            key={task.TaskID}
             className="task_card"
-            onClick={() => handleClickCard(task.TaskId)}
+            onClick={() => handleClickCard(task.TaskID)}
           >
             <div className="task_header">
               <div>

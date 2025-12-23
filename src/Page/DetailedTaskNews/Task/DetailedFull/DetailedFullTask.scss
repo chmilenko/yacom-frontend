@@ -1,0 +1,248 @@
+.detailed-task {
+  padding: 16px;
+  background-color: #fff;
+  min-height: 100vh;
+
+  .task-not-found {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 200px;
+    color: #666;
+    font-size: 18px;
+  }
+
+  .task-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    margin-bottom: 16px;
+
+    .task-title {
+      font-size: 24px;
+      font-weight: 600;
+      color: #333;
+      line-height: 1.3;
+      max-width: 80%;
+    }
+
+    .expand-button {
+      background: none;
+      border: none;
+      cursor: pointer;
+      padding: 8px;
+      border-radius: 50%;
+      transition: all 0.2s ease;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+
+      &:hover {
+        background-color: #f5f5f5;
+      }
+
+      svg {
+        transition: transform 0.3s ease;
+        color: #666;
+      }
+
+      &.expanded {
+        svg {
+          transform: rotate(180deg);
+        }
+      }
+    }
+  }
+
+  .divider {
+    border: none;
+    height: 1px;
+    background-color: #e0e0e0;
+    margin: 16px 0;
+  }
+
+  .task-content {
+    margin-bottom: 24px;
+
+    .attachment_content_html {
+      font-size: 16px;
+      line-height: 1.6;
+      color: #333;
+
+      p {
+        margin-bottom: 12px;
+      }
+
+      ul,
+      ol {
+        padding-left: 20px;
+        margin-bottom: 12px;
+      }
+
+      li {
+        margin-bottom: 4px;
+      }
+
+      strong {
+        font-weight: 600;
+      }
+
+      em {
+        font-style: italic;
+      }
+    }
+  }
+
+  .attachments-section {
+    margin-bottom: 24px;
+
+    .attachments-title {
+      font-size: 18px;
+      font-weight: 600;
+      color: #333;
+      margin-bottom: 12px;
+    }
+
+    .attachments-list {
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+    }
+
+    .attachment-item {
+      padding: 12px;
+      border: 1px solid #e0e0e0;
+      border-radius: 8px;
+      background-color: #fafafa;
+
+      .attachment-name {
+        font-size: 16px;
+        font-weight: 500;
+        color: #333;
+        margin-bottom: 8px;
+        word-break: break-word;
+      }
+
+      .attachment-meta {
+        display: flex;
+        gap: 12px;
+        font-size: 14px;
+
+        .print-badge {
+          padding: 4px 8px;
+          border-radius: 4px;
+          font-size: 12px;
+          font-weight: 500;
+
+          &.available {
+            background-color: #e8f5e9;
+            color: #2e7d32;
+          }
+
+          &.unavailable {
+            background-color: #ffebee;
+            color: #c62828;
+          }
+        }
+
+        .attachment-type {
+          color: #666;
+          padding: 4px 8px;
+          background-color: #f5f5f5;
+          border-radius: 4px;
+        }
+      }
+    }
+  }
+
+  .image-container {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 12px;
+    margin-top: 24px;
+
+    .swipe_content_info_image {
+      width: 100%;
+      max-width: 300px;
+      height: auto;
+      border-radius: 8px;
+      cursor: pointer;
+      transition: transform 0.2s ease;
+
+      &:hover {
+        transform: scale(1.02);
+      }
+    }
+  }
+
+  .additional-info {
+    background-color: #f9f9f9;
+    border-radius: 12px;
+    padding: 20px;
+    margin-top: 16px;
+
+    .info-grid {
+      display: grid;
+      grid-template-columns: 1fr;
+      gap: 16px;
+
+      @media (min-width: 768px) {
+        grid-template-columns: repeat(2, 1fr);
+      }
+    }
+
+    .info-row {
+      display: flex;
+      flex-direction: row;
+
+      @media (min-width: 768px) {
+        flex-direction: row;
+        align-items: flex-start;
+      }
+    }
+
+    .info-label {
+      font-size: 14px;
+      color: #666;
+      font-weight: 500;
+      margin-bottom: 4px;
+      min-width: 160px;
+
+      @media (min-width: 768px) {
+        margin-bottom: 0;
+        margin-right: 12px;
+      }
+    }
+
+    .info-value {
+      font-size: 16px;
+      color: #333;
+      font-weight: 400;
+      word-break: break-word;
+
+      &.deadline {
+        color: #d32f2f;
+        font-weight: 500;
+      }
+    }
+  }
+}
+
+// Анимация появления/скрытия
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(-10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.task-content,
+.attachments-section,
+.image-container,
+.additional-info {
+  animation: fadeIn 0.3s ease;
+}
