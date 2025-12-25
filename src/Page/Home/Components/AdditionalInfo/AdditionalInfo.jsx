@@ -5,8 +5,8 @@ import "./AdditionalInfo.css";
 import clickTo1C from "../../../../Utils/clicker";
 import { createMarkupUniversal } from "../../../../Utils/createMarkup";
 import Button from "../../../../Ui/Button/Button";
-import { useAppStore } from "../../../../Core/Context/AppStateContext";
-import { useActionsStore } from "../../../../Core/Context/ActionsContext";
+import { useAppStore } from "../../../../Core/Store/AppStateStore";
+import { useActionsStore } from "../../../../Core/Store/ActionsStore";
 
 function AdditionalInfo({ onTaskExecute, taskFulfill }) {
   const { additionalInfo, setListState, developer } = useAppStore();

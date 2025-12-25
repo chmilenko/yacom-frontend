@@ -2,7 +2,7 @@
 import { useState } from "react";
 import "./Section.scss";
 import Checkbox from "../../../../Ui/Checkbox/Checkbox";
-import { useAppStore } from "../../../../Core/Context/AppStateContext";
+import { useAppStore } from "../../../../Core/Store/AppStateStore";
 
 function Section({ section, onOpenSwiper, openSectionForm, type }) {
   const [isActive, setIsActive] = useState(false);

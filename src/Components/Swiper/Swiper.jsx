@@ -4,7 +4,7 @@ import { useState, useRef, useCallback, useEffect } from "react";
 import { Swipe } from "react-swipe-component";
 
 import "./Swiper.scss";
-import { useAppStore } from "../../Core/Context/AppStateContext";
+import { useAppStore } from "../../Core/Store/AppStateStore";
 
 const Swiper = ({ children, header, closeSwiper }) => {
   const { openSwiper } = useAppStore();
