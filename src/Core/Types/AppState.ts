@@ -2,7 +2,7 @@ export interface AppState {
   menuItems: ITab[];
   forState: ISection[];
   instructions: IInstructions[];
-  additionalInfo: IAdditionalInfo | object;
+  additionalInfo: IAdditionalInfo | null;
   openSwiper: boolean;
   developer: boolean;
   page: string;
@@ -24,6 +24,8 @@ export interface IAppData {
 export interface ISection {
   SectionName: string;
   SectionCode?: string;
+  SectionKey: string;
+
   sectionData?: {
     list?: Array<{
       Id: string | number;

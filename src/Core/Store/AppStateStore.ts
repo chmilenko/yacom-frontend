@@ -331,7 +331,7 @@ export const useAppStore = create<AppStore>()((set, get) => ({
   },
 
   setListStateClear: () => {
-    set({ additionalInfo: [] });
+    set({ additionalInfo: null });
   },
 
   setListState: async (ListData) => {
