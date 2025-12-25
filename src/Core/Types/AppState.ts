@@ -1,9 +1,8 @@
 export interface AppState {
-  // Данные
   menuItems: ITab[];
   forState: ISection[];
   instructions: IInstructions[];
-  additionalInfo: IAdditionalInfo[];
+  additionalInfo: IAdditionalInfo | null;
   openSwiper: boolean;
   developer: boolean;
   page: string;
@@ -25,13 +24,15 @@ export interface IAppData {
 export interface ISection {
   SectionName: string;
   SectionCode?: string;
+  SectionKey: string;
+
   sectionData?: {
     list?: Array<{
       Id: string | number;
       Title: string;
       Done?: boolean;
       New?: boolean;
-      [key: string]: any; // Для дополнительных полей из 1С
+      [key: string]: any;
     }>;
     [key: string]: any;
   };
