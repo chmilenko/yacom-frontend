@@ -309,15 +309,12 @@ export const useAppStore = create<AppStore>()((set, get) => ({
       let findAdditionalInfo: IAdditionalInfo;
 
       if (type === "Task" || type === "Задачи") {
-        findAdditionalInfo = additionalMock?.find(
-          (info) => info.TaskID === id.toString()
-        );
+        findAdditionalInfo = additionalMock?.find((info) => info.TaskID === id);
       } else {
         findAdditionalInfo = additionalMock?.find(
-          (info) => info.ObjectID === id.toString()
+          (info) => info.ObjectID === id
         );
       }
-
       if (!findAdditionalInfo) {
         console.warn(`Данные не найдены для ID: ${id}, тип: ${type}`);
         set({ additionalInfo: null });

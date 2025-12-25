@@ -7,9 +7,10 @@ import { createMarkupUniversal } from "../../../../Utils/createMarkup";
 import Button from "../../../../Ui/Button/Button";
 import { useAppStore } from "../../../../Core/Store/AppStateStore";
 import { useActionsStore } from "../../../../Core/Store/ActionsStore";
+import { IAttachment } from "../../../../Core/Types/AppState";
 
 function AdditionalInfo({ onTaskExecute, taskFulfill }) {
-  const { additionalInfo, setListState, developer } = useAppStore();
+  const { additionalInfo, developer } = useAppStore();
 
   const { setActions } = useActionsStore();
   const [taskDone, setTaskDone] = useState(additionalInfo?.Done);
@@ -36,7 +37,7 @@ function AdditionalInfo({ onTaskExecute, taskFulfill }) {
     !developer && clickTo1C();
   }
 
-  function clickLink(attachment, send, print) {
+  function clickLink(attachment: IAttachment, send, print) {
     const actionName =
       (send && "SendEmail") || (print && "print") || "openFile";
     setActions({
@@ -50,10 +51,6 @@ function AdditionalInfo({ onTaskExecute, taskFulfill }) {
     });
     !developer && clickTo1C();
   }
-
-  useEffect(() => {
-    !developer && setListState();
-  }, []);
 
   useEffect(() => {
     setTaskDone(additionalInfo?.Done);
@@ -92,7 +89,7 @@ function AdditionalInfo({ onTaskExecute, taskFulfill }) {
         <div className="attachment_child" key={index}>
           <div
             className="attachment_child_text"
-            onClick={() => clickLink(attachment)}
+            onClick={() => clickLink(attachment, "", "")}
           >
             {attachment.ObjectName}
           </div>
@@ -108,7 +105,7 @@ function AdditionalInfo({ onTaskExecute, taskFulfill }) {
               <Button
                 type="report"
                 icon={<span className="material-symbols-outlined">drafts</span>}
-                onClick={() => clickLink(attachment, true)}
+                onClick={() => clickLink(attachment, true, "")}
               />
             )}
           </div>

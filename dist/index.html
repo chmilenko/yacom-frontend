@@ -17116,6 +17116,7 @@
                                                           readonly: !0,
                                                           className:
                                                             c && "dark",
+                                                          id: e.TaskID,
                                                         })
                                                       : (0, Me.jsx)("span", {
                                                           className:
@@ -17481,62 +17482,67 @@
                   text: n,
                   onClick: r,
                   icon: a,
-                  className: o,
+                  className: o = "",
                   type: i = "default",
+                  children: l,
                 } = e;
-                const [l, s] = (0, t.useState)(!1),
-                  u = (0, t.useRef)(null),
-                  c = (0, t.useRef)(!1),
-                  f = () => {
-                    s(!0), (c.current = !0);
+                const [s, u] = (0, t.useState)(!1),
+                  c = (0, t.useRef)(null),
+                  f = (0, t.useRef)(!1),
+                  d = () => {
+                    u(!0), (f.current = !0);
                   },
-                  d = (e) => {
-                    c.current &&
-                      (clearTimeout(u.current),
+                  p = (e) => {
+                    f.current &&
+                      (c.current && clearTimeout(c.current),
                       r && setTimeout(() => r(e), 50),
-                      (u.current = setTimeout(() => {
-                        s(!1), (c.current = !1);
+                      (c.current = setTimeout(() => {
+                        u(!1), (f.current = !1);
                       }, 200)));
                   },
-                  p = () => {
-                    s(!1), (c.current = !1);
+                  h = () => {
+                    u(!1), (f.current = !1);
                   };
-                return (
-                  (0, t.useEffect)(() => () => clearTimeout(u.current), []),
-                  (0, Me.jsxs)("button", {
-                    onTouchStart: f,
-                    onTouchEnd: d,
-                    onTouchCancel: p,
-                    onMouseDown: f,
-                    onMouseUp: d,
-                    onMouseLeave: p,
-                    className: `button_base ${i}_button ${o || ""} ${
-                      l ? "active" : ""
-                    }`,
-                    onTouchMove: (e) => e.preventDefault(),
-                    children: [
-                      n,
-                      a &&
-                        (0, Me.jsx)("span", {
-                          className: "button_icon-wrapper",
-                          children: (0, t.cloneElement)(a, {
-                            className: `${a.props.className} button_icon`,
-                          }),
-                        }),
-                    ],
-                  })
+                (0, t.useEffect)(
+                  () => () => {
+                    c.current && clearTimeout(c.current);
+                  },
+                  []
                 );
+                const m = l || n;
+                return (0, Me.jsxs)("button", {
+                  onTouchStart: d,
+                  onTouchEnd: p,
+                  onTouchCancel: h,
+                  onMouseDown: d,
+                  onMouseUp: p,
+                  onMouseLeave: h,
+                  className: `button_base ${i}_button ${o} ${
+                    s ? "active" : ""
+                  }`.trim(),
+                  onTouchMove: (e) => e.preventDefault(),
+                  type: "button",
+                  children: [
+                    m,
+                    a &&
+                      (0, Me.jsx)("span", {
+                        className: "button_icon-wrapper",
+                        children: (0, Me.jsx)(a.type, {
+                          ...a.props,
+                          className: `${
+                            a.props.className || ""
+                          } button_icon`.trim(),
+                        }),
+                      }),
+                  ],
+                });
               },
               et = function (e) {
                 let { onTaskExecute: n, taskFulfill: r } = e;
-                const {
-                    additionalInfo: a,
-                    setListState: o,
-                    developer: i,
-                  } = me(),
-                  { setActions: l } = (0, ge.useActionsStore)(),
-                  [s, u] = (0, t.useState)(a?.Done),
-                  c = (0, t.useCallback)(
+                const { additionalInfo: a, developer: o } = me(),
+                  { setActions: i } = (0, ge.useActionsStore)(),
+                  [l, s] = (0, t.useState)(a?.Done),
+                  u = (0, t.useCallback)(
                     (e) =>
                       e
                         ? Array.isArray(e)
@@ -17547,8 +17553,8 @@
                         : [],
                     []
                   );
-                function f(e, t, n) {
-                  l({
+                function c(e, t, n) {
+                  i({
                     actionName: (t ? "SendEmail" : n && "print") || "openFile",
                     printAvailable: e.PrintAvailable,
                     attachmentId: e.ObjectID,
@@ -17557,14 +17563,11 @@
                     objectType: a?.ObjectType,
                     active: !0,
                   }),
-                    !i && (0, Ae.A)();
+                    !o && (0, Ae.A)();
                 }
                 return (
                   (0, t.useEffect)(() => {
-                    !i && o();
-                  }, []),
-                  (0, t.useEffect)(() => {
-                    u(a?.Done);
+                    s(a?.Done);
                   }, [a?.Done, a?.DoneDate]),
                   (0, Me.jsxs)(Me.Fragment, {
                     children: [
@@ -17572,7 +17575,7 @@
                         className: "swipe_content_info",
                         children: [
                           (() => {
-                            const e = c(a?.images);
+                            const e = u(a?.images);
                             return (
                               e.length > 0 &&
                               (0, Me.jsx)("div", {
@@ -17587,7 +17590,7 @@
                                       onClick: () => {
                                         return (
                                           (t = e?.ImageID),
-                                          l({
+                                          i({
                                             ImageID: t,
                                             actionName: "imgClicked",
                                             objectId: a?.ObjectID,
@@ -17602,7 +17605,7 @@
                                                 : [],
                                             active: !0,
                                           }),
-                                          void (!i && (0, Ae.A)())
+                                          void (!o && (0, Ae.A)())
                                         );
                                         var t;
                                       },
@@ -17616,7 +17619,7 @@
                           a?.Content &&
                             (0, Me.jsx)("div", {
                               dangerouslySetInnerHTML:
-                                ((d = a.Content), { __html: d }),
+                                ((f = a.Content), { __html: f }),
                               className: "attachment_content_html",
                             }),
                           (0, Me.jsx)("div", {
@@ -17629,7 +17632,7 @@
                                   children: [
                                     (0, Me.jsx)("div", {
                                       className: "attachment_child_text",
-                                      onClick: () => f(e),
+                                      onClick: () => c(e, "", ""),
                                       children: e.ObjectName,
                                     }),
                                     (0, Me.jsxs)("div", {
@@ -17643,7 +17646,7 @@
                                                 "material-symbols-outlined",
                                               children: "print",
                                             }),
-                                            onClick: () => f(e, !1, !0),
+                                            onClick: () => c(e, !1, !0),
                                           }),
                                         e.IsFile &&
                                           (0, Me.jsx)(Ze, {
@@ -17653,7 +17656,7 @@
                                                 "material-symbols-outlined",
                                               children: "drafts",
                                             }),
-                                            onClick: () => f(e, !0),
+                                            onClick: () => c(e, !0, ""),
                                           }),
                                       ],
                                     }),
@@ -17664,7 +17667,7 @@
                             ),
                           }),
                           (() => {
-                            const e = c(a?.tags);
+                            const e = u(a?.tags);
                             return (0, Me.jsxs)("div", {
                               className: "tag_container",
                               children: [
@@ -17712,7 +17715,7 @@
                             ),
                             t = ["2", "7", 2, 7].includes(a?.ResultType),
                             o = "8" == a?.ResultType;
-                          return (e && s) || (t && s)
+                          return (e && l) || (t && l)
                             ? (0, Me.jsx)(Ze, {
                                 text: "Результат выполнения",
                                 onClick: r,
@@ -17726,7 +17729,7 @@
                                 }),
                                 onClick: r,
                               })
-                            : o && s
+                            : o && l
                             ? (0, Me.jsx)(Ze, {
                                 text: `Ознакомлен ${a?.DoneDate}`,
                               })
@@ -17735,7 +17738,7 @@
                                 text: "Ознакомиться",
                                 onClick: () => n(a?.TaskID),
                               })
-                            : s && "1" == a?.ResultType
+                            : l && "1" == a?.ResultType
                             ? (0, Me.jsx)(Ze, {
                                 text: `Done ${a?.DoneDate}`,
                                 icon: (0, Me.jsx)("span", {
@@ -17753,22 +17756,23 @@
                     ],
                   })
                 );
-                var d;
+                var f;
               },
               tt = function () {
                 const {
-                    forState: e,
-                    additionalInfo: t,
-                    setAppState: n,
-                    openSwiper: r,
-                    setOpenSwiper: a,
-                    setListStateClear: o,
+                    setAppState: e,
+                    developer: n,
+                    forState: r,
+                    additionalInfo: a,
+                    openSwiper: o,
+                    setOpenSwiper: i,
+                    setListStateClear: l,
                   } = me(),
                   {
-                    openTasksOrNewsForm: i,
-                    handleOpenSwiper: l,
-                    onTaskExecute: s,
-                    taskFulfill: u,
+                    openTasksOrNewsForm: s,
+                    handleOpenSwiper: u,
+                    onTaskExecute: c,
+                    taskFulfill: f,
                   } = (() => {
                     const { setActions: e } = (0, ge.useActionsStore)(),
                       {
@@ -17779,10 +17783,9 @@
                         setReadNews: o,
                         openSwiper: i,
                         setOpenSwiper: l,
-                        setListState: s,
-                        errors: u,
                       } = me(),
-                      c = (e) => {
+                      { errors: s } = (0, ve.useErrorsStore)(),
+                      u = (e) => {
                         switch (e) {
                           case "1":
                             return "do";
@@ -17803,7 +17806,7 @@
                             return "empty";
                         }
                       },
-                      f = (e) => {
+                      c = (e) => {
                         switch (e) {
                           case "Проблема при отправке данных":
                             return "Проблема при отправке данных";
@@ -17825,7 +17828,7 @@
                           (e({
                             actionName: "clickElement",
                             active: !0,
-                            currentForm: f(t),
+                            currentForm: c(t),
                           }),
                           !r && (0, Ae.A)());
                       },
@@ -17858,7 +17861,7 @@
                               page: window.location.pathname,
                               description: t,
                             };
-                          u.push(n);
+                          s.push(n);
                         }
                       },
                       onTaskExecute: (n) => {
@@ -17866,7 +17869,7 @@
                           e({
                             actionName: "TaskExecute",
                             objectType: t.ObjectType,
-                            taskCurrentAction: c(t.ResultType),
+                            taskCurrentAction: u(t.ResultType),
                             objectId: t.TaskID,
                             ClientID: t.ClientID,
                             IsChecked: t.Done,
@@ -17879,67 +17882,72 @@
                         const o = {
                           actionName: "TaskFulfill",
                           objectType: t.ObjectType,
-                          taskCurrentAction: c(t.ResultType),
+                          taskCurrentAction: u(t.ResultType),
                           objectId: t.TaskID,
                           ClientID: t.ClientID,
                           IsChecked: t.Done,
                           active: !0,
                         };
-                        n && (a(n), s()), e(o), !r && (0, Ae.A)();
+                        n && a(n), e(o), !r && (0, Ae.A)();
                       },
                     };
                   })(),
-                  c = () => {
-                    r && a(!1), o();
+                  d = () => {
+                    o && i(!1), l();
                   },
-                  f = (e) => {
+                  p = (e) => {
                     let { title: t } = e;
                     return (0, Me.jsx)("div", {
                       className: "swiper_header",
                       children: t,
                     });
                   };
-                return (0, Me.jsxs)("div", {
-                  className: "main",
-                  children: [
-                    e.length > 0 &&
-                      (0, Me.jsxs)(Me.Fragment, {
-                        children: [
-                          r &&
+                return (
+                  (0, t.useEffect)(() => {
+                    n && e("");
+                  }, []),
+                  (0, Me.jsxs)("div", {
+                    className: "main",
+                    children: [
+                      r.length > 0 &&
+                        (0, Me.jsxs)(Me.Fragment, {
+                          children: [
+                            o &&
+                              (0, Me.jsx)("div", {
+                                className: "overlay",
+                                onClick: d,
+                              }),
                             (0, Me.jsx)("div", {
-                              className: "overlay",
-                              onClick: c,
+                              className: "content_wrapper " + (o ? "blur" : ""),
+                              children: r.map((e, t) =>
+                                (0, Me.jsx)(
+                                  $e,
+                                  {
+                                    section: e,
+                                    onOpenSwiper: u,
+                                    openSectionForm: s,
+                                    type: e.SectionName,
+                                  },
+                                  e.SectionKey || `section-${t}`
+                                )
+                              ),
                             }),
-                          (0, Me.jsx)("div", {
-                            className: "content_wrapper " + (r ? "blur" : ""),
-                            children: e.map((e, t) =>
-                              (0, Me.jsx)(
-                                $e,
-                                {
-                                  section: e,
-                                  onOpenSwiper: l,
-                                  openSectionForm: i,
-                                  type: e.SectionName,
-                                },
-                                e.SectionKey || `section-${t}`
-                              )
-                            ),
+                          ],
+                        }),
+                      o &&
+                        (0, Me.jsx)(Qe, {
+                          closeSwiper: d,
+                          header: (0, Me.jsx)(p, {
+                            title: a?.Header || a?.Title,
                           }),
-                        ],
-                      }),
-                    r &&
-                      (0, Me.jsx)(Qe, {
-                        closeSwiper: c,
-                        header: (0, Me.jsx)(f, {
-                          title: t?.Header || t?.Title,
+                          children: (0, Me.jsx)(et, {
+                            onTaskExecute: c,
+                            taskFulfill: f,
+                          }),
                         }),
-                        children: (0, Me.jsx)(et, {
-                          onTaskExecute: s,
-                          taskFulfill: u,
-                        }),
-                      }),
-                  ],
-                });
+                    ],
+                  })
+                );
               };
             var nt = a(183),
               rt = {};
