@@ -1,6 +1,5 @@
 // store/useAppStore.js
 import { create } from "zustand";
-import { persist } from "zustand/middleware";
 import {
   ITab,
   ISection,
@@ -9,15 +8,29 @@ import {
   AppState,
 } from "@core/Types/AppState";
 
-let forStateMock, dataInstructions, additionalMock;
-
-if (process.env.REACT_APP_DEVELOPER === "true") {
-  forStateMock = require("../../Core/Mock/mock").data;
-  dataInstructions = require("../../Core/Mock/instructions").instructions;
-  additionalMock = require("../../Core/Mock/mock").additionalData;
+interface I1CData {
+  Sections: ISection[];
+  Tabs: ITab[];
 }
 
-// Расширяем AppState методами store
+let forStateMock: I1CData[] | undefined;
+let dataInstructions: IInstructions[] | undefined;
+let additionalMock: IAdditionalInfo[] | undefined;
+
+if (process.env.REACT_APP_DEVELOPER === "true") {
+  const mockModule = require("../Mock/mock") as {
+    data: I1CData[];
+    additionalData: IAdditionalInfo[];
+  };
+  const instructionsModule = require("../Mock/instructions") as {
+    instructions: IInstructions[];
+  };
+
+  forStateMock = mockModule.data;
+  additionalMock = mockModule.additionalData;
+  dataInstructions = instructionsModule.instructions;
+}
+
 interface AppStore extends AppState {
   setAppState: (appData: string) => Promise<void>;
   // setUser: (user: any) => void;
@@ -31,368 +44,354 @@ interface AppStore extends AppState {
   setReadNews: (id: string | number) => Promise<void>;
 }
 
-export const useAppStore = create<AppStore>()(
-  persist(
-    (set, get) => ({
-      menuItems: [] as ITab[],
-      forState: [] as ISection[],
-      instructions: [] as IInstructions[],
-      additionalInfo: [] as IAdditionalInfo[],
-      openSwiper: false,
-      developer: process.env.REACT_APP_DEVELOPER === "true",
-      page: "",
-      countActualTasks: 0,
-      countUnreadNews: 0,
+export const useAppStore = create<AppStore>()((set, get) => ({
+  menuItems: [] as ITab[],
+  forState: [] as ISection[],
+  instructions: [] as IInstructions[],
+  additionalInfo: null as IAdditionalInfo | null,
+  openSwiper: false,
+  developer: process.env.REACT_APP_DEVELOPER === "true",
+  page: "",
+  countActualTasks: 0,
+  countUnreadNews: 0,
 
-      setPage: (newPage) => set({ page: newPage }),
+  setPage: (newPage) => set({ page: newPage }),
 
-      setAppState: async (appData: string) => {
-        try {
-          const { developer } = get();
-          const res = !developer
-            ? JSON.parse(appData)[0].Sections
-            : forStateMock[0].Sections;
+  setAppState: async (appData: string) => {
+    try {
+      const { developer } = get();
+      const res = !developer
+        ? JSON.parse(appData)[0].Sections
+        : forStateMock[0].Sections;
 
-          const menuItems = !developer
-            ? JSON.parse(appData)[0].Tabs
-            : forStateMock[0].Tabs;
+      const menuItems = !developer
+        ? JSON.parse(appData)[0].Tabs
+        : forStateMock[0].Tabs;
 
-          const tasksSection = res.find(
-            (section) =>
-              section.SectionName === "Задачи" ||
-              section.SectionName === "Tasks"
-          );
+      const tasksSection = res.find(
+        (section) =>
+          section.SectionName === "Задачи" || section.SectionName === "Tasks"
+      );
 
-          const newsSection = res.find(
-            (section) =>
-              section.SectionName === "Новости" ||
-              section.SectionName === "News"
-          );
+      const newsSection = res.find(
+        (section: ISection) =>
+          section.SectionName === "Новости" || section.SectionName === "News"
+      );
 
-          const tasks =
-            tasksSection?.sectionData?.list?.filter((item) => !item.Done) || [];
+      const tasks =
+        tasksSection?.sectionData?.list?.filter((item) => !item.Done) || [];
 
-          const unreadNews =
-            newsSection?.sectionData?.list?.filter((item) => item.New) || [];
+      const unreadNews =
+        newsSection?.sectionData?.list?.filter((item) => item.New) || [];
 
-          set({
-            forState: res || [],
-            menuItems: menuItems || [],
-            countActualTasks: tasks.length,
-            countUnreadNews: unreadNews.length,
-          });
-        } catch (err) {
-          const { addError } = (
-            await import("./ErrorsStore")
-          ).useErrorsStore.getState();
+      set({
+        forState: res || [],
+        menuItems: menuItems || [],
+        countActualTasks: tasks.length,
+        countUnreadNews: unreadNews.length,
+      });
+    } catch (err) {
+      const { addError } = (
+        await import("./ErrorsStore")
+      ).useErrorsStore.getState();
 
-          addError({
-            type: "parsing",
-            message: "Ошибка парсинга данных приложения",
-            severity: "error",
-            context: "setAppState",
-            details: `Не удалось распарсить данные в setAppState\nОшибка ${
-              err.name
-            }: ${err.message}\nДанные: ${
-              typeof appData === "string"
-                ? appData.substring(0, 200) + "..."
-                : typeof appData
-            }\n${err.stack}`,
-            originalError: {
-              name: err.name,
-              message: err.message,
-              stack: err.stack,
-            },
-          });
+      addError({
+        type: "parsing",
+        message: "Ошибка парсинга данных приложения",
+        severity: "error",
+        context: "setAppState",
+        details: `Не удалось распарсить данные в setAppState\nОшибка ${
+          err.name
+        }: ${err.message}\nДанные: ${
+          typeof appData === "string"
+            ? appData.substring(0, 200) + "..."
+            : typeof appData
+        }\n${err.stack}`,
+        originalError: {
+          name: err.name,
+          message: err.message,
+          stack: err.stack,
+        },
+      });
 
-          console.error("setAppState error:", err);
-        }
-      },
+      console.error("setAppState error:", err);
+    }
+  },
 
-      setOpenSwiper: (swiperState) => set({ openSwiper: swiperState }),
+  setOpenSwiper: (swiperState) => set({ openSwiper: swiperState }),
 
-      setTaskDoneStatus: async (id: number | string) => {
-        try {
-          const { forState } = get();
+  setTaskDoneStatus: async (id: number | string) => {
+    try {
+      const { forState } = get();
 
-          const updatedData = JSON.parse(JSON.stringify(forState));
-          let taskToMove = null;
+      const updatedData = JSON.parse(JSON.stringify(forState));
+      let taskToMove = null;
 
-          const updatedSections = updatedData.map((section) => {
-            if (!section.sectionData?.list) return section;
+      const updatedSections = updatedData.map((section) => {
+        if (!section.sectionData?.list) return section;
 
-            const updatedList = section.sectionData.list
-              .map((item) => {
-                if ((item.TaskID !== id && item.ObjectID !== id) || item.Done)
-                  return item;
+        const updatedList = section.sectionData.list
+          .map((item) => {
+            if ((item.TaskID !== id && item.ObjectID !== id) || item.Done)
+              return item;
 
-                if (item.ResultType != 8 && item.ObjectType === "Task") {
-                  return { ...item, Done: true };
-                }
-
-                if (item.ResultType == 8 && item.ObjectType === "News") {
-                  taskToMove = {
-                    ...item,
-                    isReport: true,
-                    Done: true,
-                    New: false,
-                  };
-                  delete taskToMove.ResultType;
-                  return null;
-                }
-
-                return item;
-              })
-              .filter(Boolean);
-
-            return {
-              ...section,
-              sectionData: { ...section.sectionData, list: updatedList },
-            };
-          });
-
-          if (taskToMove) {
-            let newsSection = updatedSections.find(
-              (s) => s.SectionName === "Новости" || s.SectionName === "News"
-            );
-
-            if (!newsSection) {
-              newsSection = {
-                SectionCounter: 0,
-                SectionName: "News",
-                Sort: 1,
-                SectionUpdate: "Обновлено недавно",
-                SectionNeedsUpdate: false,
-                sectionData: {
-                  list: [],
-                },
-              };
-              updatedSections.push(newsSection);
+            if (item.ResultType != 8 && item.ObjectType === "Task") {
+              return { ...item, Done: true };
             }
 
-            newsSection.sectionData = newsSection.sectionData || { list: [] };
-            newsSection.sectionData.list.unshift(taskToMove);
-          }
-
-          // Обновление счетчиков
-          const tasksSection = updatedSections.find(
-            (section) =>
-              section.SectionName === "Задачи" ||
-              section.SectionName === "Tasks"
-          );
-          const tasks =
-            tasksSection?.sectionData?.list?.filter((item) => !item.Done) || [];
-
-          const newsSection = updatedSections.find(
-            (section) =>
-              section.SectionName === "Новости" ||
-              section.SectionName === "News"
-          );
-          const unreadNews =
-            newsSection?.sectionData?.list?.filter((item) => item.New) || [];
-
-          set({
-            forState: updatedSections,
-            countActualTasks: tasks.length,
-            countUnreadNews: unreadNews.length,
-          });
-        } catch (err) {
-          const { addError } = (
-            await import("./ErrorsStore")
-          ).useErrorsStore.getState();
-
-          addError({
-            type: "application",
-            message: "Ошибка обновления статуса задачи",
-            severity: "error",
-            context: "setTaskDoneStatus",
-            details: `Не удалось обновить статус задачи ID: ${id}\nОшибка ${err.name}: ${err.message}\n${err.stack}`,
-            originalError: {
-              name: err.name,
-              message: err.message,
-              stack: err.stack,
-            },
-          });
-
-          console.error("setTaskDoneStatus error:", err);
-        }
-      },
-
-      setReadNews: async (id: number | string) => {
-        try {
-          const { developer, forState } = get();
-
-          if (developer) {
-            const updatedData = forState.map((section) => {
-              if (!section.sectionData?.list) return section;
-
-              const updatedList = section?.sectionData?.list?.map((item) =>
-                item.ObjectID === id && item.New
-                  ? { ...item, New: false }
-                  : item
-              );
-
-              return {
-                ...section,
-                sectionData: { ...section.sectionData, list: updatedList },
+            if (item.ResultType == 8 && item.ObjectType === "News") {
+              taskToMove = {
+                ...item,
+                isReport: true,
+                Done: true,
+                New: false,
               };
-            });
+              delete taskToMove.ResultType;
+              return null;
+            }
 
-            const newsSection = updatedData.find(
-              (section) =>
-                section.SectionName === "Новости" ||
-                section.SectionName === "News"
-            );
-            const unreadNews =
-              newsSection?.sectionData?.list?.filter((item) => item.New) || [];
+            return item;
+          })
+          .filter(Boolean);
 
-            set({
-              forState: updatedData,
-              countUnreadNews: unreadNews.length,
-            });
-          } else {
-            const updatedData = forState.map((section) => {
-              if (!section.sectionData?.list) return section;
+        return {
+          ...section,
+          sectionData: { ...section.sectionData, list: updatedList },
+        };
+      });
 
-              const updatedList = section.sectionData.list.map((item) =>
-                item.ObjectID === id && item.New && item.ObjectType === "News"
-                  ? { ...item, New: false }
-                  : item
-              );
+      if (taskToMove) {
+        let newsSection = updatedSections.find(
+          (s: ISection) =>
+            s.SectionName === "Новости" || s.SectionName === "News"
+        );
 
-              return {
-                ...section,
-                sectionData: { ...section.sectionData, list: updatedList },
-              };
-            });
-
-            const newsSection = updatedData.find(
-              (section) =>
-                section.SectionName === "Новости" ||
-                section.SectionName === "News"
-            );
-            const unreadNews =
-              newsSection?.sectionData?.list?.filter((item) => item.New) || [];
-
-            set({
-              forState: updatedData,
-              countUnreadNews: unreadNews.length,
-            });
-          }
-        } catch (err) {
-          const { addError } = (
-            await import("./ErrorsStore")
-          ).useErrorsStore.getState();
-
-          addError({
-            type: "application",
-            message: "Ошибка отметки новости как прочитанной",
-            severity: "error",
-            context: "setReadNews",
-            details: `Не удалось обновить статус новости ID: ${id}\nОшибка ${err.name}: ${err.message}\n${err.stack}`,
-            originalError: {
-              name: err.name,
-              message: err.message,
-              stack: err.stack,
+        if (!newsSection) {
+          newsSection = {
+            SectionCounter: 0,
+            SectionName: "News",
+            Sort: 1,
+            SectionUpdate: "Обновлено недавно",
+            SectionNeedsUpdate: false,
+            sectionData: {
+              list: [],
             },
-          });
-
-          console.error("setReadNews error:", err);
+          };
+          updatedSections.push(newsSection);
         }
-      },
 
-      setAdditionalInfo: (id: number | string, type: string) => {
-        try {
-          let findAdditionalInfo;
+        newsSection.sectionData = newsSection.sectionData || { list: [] };
+        newsSection.sectionData.list.unshift(taskToMove);
+      }
 
-          if (type === "Task" || type === "Задачи") {
-            findAdditionalInfo = additionalMock.find(
-              (info) => info.TaskID === id
-            );
-          } else {
-            findAdditionalInfo = additionalMock.find(
-              (info) => info.ObjectID === id
-            );
-          }
+      const tasksSection = updatedSections.find(
+        (section: ISection) =>
+          section.SectionName === "Задачи" || section.SectionName === "Tasks"
+      );
+      const tasks =
+        tasksSection?.sectionData?.list?.filter((item) => !item.Done) || [];
 
-          if (!findAdditionalInfo) {
-            console.warn(`Данные не найдены для ID: ${id}, тип: ${type}`);
-          }
+      const newsSection = updatedSections.find(
+        (section: ISection) =>
+          section.SectionName === "Новости" || section.SectionName === "News"
+      );
+      const unreadNews =
+        newsSection?.sectionData?.list?.filter((item) => item.New) || [];
 
-          set({ additionalInfo: findAdditionalInfo || {} });
-        } catch (err) {
-          console.error("setAdditionalInfo error:", err);
-        }
-      },
+      set({
+        forState: updatedSections,
+        countActualTasks: tasks.length,
+        countUnreadNews: unreadNews.length,
+      });
+    } catch (err) {
+      const { addError } = (
+        await import("./ErrorsStore")
+      ).useErrorsStore.getState();
 
-      setListStateClear: () => {
-        set({ additionalInfo: [] });
-      },
+      addError({
+        type: "application",
+        message: "Ошибка обновления статуса задачи",
+        severity: "error",
+        context: "setTaskDoneStatus",
+        details: `Не удалось обновить статус задачи ID: ${id}\nОшибка ${err.name}: ${err.message}\n${err.stack}`,
+        originalError: {
+          name: err.name,
+          message: err.message,
+          stack: err.stack,
+        },
+      });
 
-      setListState: async (ListData) => {
-        try {
-          const res = JSON.parse(ListData).reduce((acc, val) => {
-            acc = val;
-            return acc;
-          }, {});
-
-          set({ additionalInfo: res });
-        } catch (err) {
-          const { addError } = (
-            await import("./ErrorsStore")
-          ).useErrorsStore.getState();
-
-          addError({
-            type: "parsing",
-            message: "Ошибка обработки данных списка",
-            severity: "error",
-            context: "setListState",
-            details: `Не удалось обработать данные в setListState\nОшибка ${
-              err.name
-            }: ${err.message}\nТип данных: ${typeof ListData}\nФормат: ${
-              Array.isArray(ListData) ? "array" : typeof ListData
-            }\n${err.stack}`,
-            originalError: {
-              name: err.name,
-              message: err.message,
-              stack: err.stack,
-            },
-          });
-
-          console.error("setListState error:", err);
-        }
-      },
-
-      setInstructionsState: async (appData) => {
-        try {
-          const { developer } = get();
-          const res = !developer ? JSON.parse(appData) : dataInstructions;
-          set({ instructions: res });
-        } catch (err) {
-          const { addError } = (
-            await import("./ErrorsStore")
-          ).useErrorsStore.getState();
-
-          addError({
-            type: "parsing",
-            message: "Ошибка парсинга инструкций",
-            severity: "error",
-            context: "setInstructionsState",
-            details: `Не удалось распарсить инструкции\nОшибка ${err.name}: ${err.message}\n${err.stack}`,
-            originalError: {
-              name: err.name,
-              message: err.message,
-              stack: err.stack,
-            },
-          });
-
-          console.error("setInstructionsState error:", err);
-        }
-      },
-    }),
-    {
-      name: "app-storage",
-      partialize: (state) => ({}),
+      console.error("setTaskDoneStatus error:", err);
     }
-  )
-);
+  },
+
+  setReadNews: async (id: number | string) => {
+    try {
+      const { developer, forState } = get();
+
+      if (developer) {
+        const updatedData = forState.map((section) => {
+          if (!section.sectionData?.list) return section;
+
+          const updatedList = section?.sectionData?.list?.map((item) =>
+            item.ObjectID === id && item.New ? { ...item, New: false } : item
+          );
+
+          return {
+            ...section,
+            sectionData: { ...section.sectionData, list: updatedList },
+          };
+        });
+
+        const newsSection = updatedData.find(
+          (section) =>
+            section.SectionName === "Новости" || section.SectionName === "News"
+        );
+        const unreadNews =
+          newsSection?.sectionData?.list?.filter((item) => item.New) || [];
+
+        set({
+          forState: updatedData,
+          countUnreadNews: unreadNews.length,
+        });
+      } else {
+        const updatedData = forState.map((section) => {
+          if (!section.sectionData?.list) return section;
+
+          const updatedList = section.sectionData.list.map((item) =>
+            item.ObjectID === id && item.New && item.ObjectType === "News"
+              ? { ...item, New: false }
+              : item
+          );
+
+          return {
+            ...section,
+            sectionData: { ...section.sectionData, list: updatedList },
+          };
+        });
+
+        const newsSection = updatedData.find(
+          (section) =>
+            section.SectionName === "Новости" || section.SectionName === "News"
+        );
+        const unreadNews =
+          newsSection?.sectionData?.list?.filter((item) => item.New) || [];
+
+        set({
+          forState: updatedData,
+          countUnreadNews: unreadNews.length,
+        });
+      }
+    } catch (err) {
+      const { addError } = (
+        await import("./ErrorsStore")
+      ).useErrorsStore.getState();
+
+      addError({
+        type: "application",
+        message: "Ошибка отметки новости как прочитанной",
+        severity: "error",
+        context: "setReadNews",
+        details: `Не удалось обновить статус новости ID: ${id}\nОшибка ${err.name}: ${err.message}\n${err.stack}`,
+        originalError: {
+          name: err.name,
+          message: err.message,
+          stack: err.stack,
+        },
+      });
+
+      console.error("setReadNews error:", err);
+    }
+  },
+
+  setAdditionalInfo: (id: number | string, type: string) => {
+    try {
+      let findAdditionalInfo: IAdditionalInfo;
+
+      if (type === "Task" || type === "Задачи") {
+        findAdditionalInfo = additionalMock?.find(
+          (info) => info.TaskID === id.toString()
+        );
+      } else {
+        findAdditionalInfo = additionalMock?.find(
+          (info) => info.ObjectID === id.toString()
+        );
+      }
+
+      if (!findAdditionalInfo) {
+        console.warn(`Данные не найдены для ID: ${id}, тип: ${type}`);
+        set({ additionalInfo: null });
+      } else {
+        set({ additionalInfo: findAdditionalInfo });
+      }
+    } catch (err) {
+      console.error("setAdditionalInfo error:", err);
+      set({ additionalInfo: null });
+    }
+  },
+
+  setListStateClear: () => {
+    set({ additionalInfo: [] });
+  },
+
+  setListState: async (ListData) => {
+    try {
+      const res = JSON.parse(ListData).reduce((acc, val) => {
+        acc = val;
+        return acc;
+      }, {});
+
+      set({ additionalInfo: res });
+    } catch (err) {
+      const { addError } = (
+        await import("./ErrorsStore")
+      ).useErrorsStore.getState();
+
+      addError({
+        type: "parsing",
+        message: "Ошибка обработки данных списка",
+        severity: "error",
+        context: "setListState",
+        details: `Не удалось обработать данные в setListState\nОшибка ${
+          err.name
+        }: ${err.message}\nТип данных: ${typeof ListData}\nФормат: ${
+          Array.isArray(ListData) ? "array" : typeof ListData
+        }\n${err.stack}`,
+        originalError: {
+          name: err.name,
+          message: err.message,
+          stack: err.stack,
+        },
+      });
+
+      console.error("setListState error:", err);
+    }
+  },
+
+  setInstructionsState: async (appData) => {
+    try {
+      const { developer } = get();
+      const res = !developer ? JSON.parse(appData) : dataInstructions;
+      set({ instructions: res });
+    } catch (err) {
+      const { addError } = (
+        await import("./ErrorsStore")
+      ).useErrorsStore.getState();
+
+      addError({
+        type: "parsing",
+        message: "Ошибка парсинга инструкций",
+        severity: "error",
+        context: "setInstructionsState",
+        details: `Не удалось распарсить инструкции\nОшибка ${err.name}: ${err.message}\n${err.stack}`,
+        originalError: {
+          name: err.name,
+          message: err.message,
+          stack: err.stack,
+        },
+      });
+
+      console.error("setInstructionsState error:", err);
+    }
+  },
+}));

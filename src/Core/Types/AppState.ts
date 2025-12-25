@@ -1,9 +1,8 @@
 export interface AppState {
-  // Данные
   menuItems: ITab[];
   forState: ISection[];
   instructions: IInstructions[];
-  additionalInfo: IAdditionalInfo[];
+  additionalInfo: IAdditionalInfo | object;
   openSwiper: boolean;
   developer: boolean;
   page: string;
@@ -31,7 +30,7 @@ export interface ISection {
       Title: string;
       Done?: boolean;
       New?: boolean;
-      [key: string]: any; // Для дополнительных полей из 1С
+      [key: string]: any;
     }>;
     [key: string]: any;
   };
