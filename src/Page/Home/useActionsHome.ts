@@ -4,6 +4,8 @@ import clickTo1C from "../../Utils/clicker";
 
 import { useAppStore } from "../../Core/Store/AppStateStore";
 import { useActionsStore } from "../../Core/Store/ActionsStore";
+import { useErrorsStore } from "../../Core/Store/ErrorsStore";
+import { IAdditionalInfo } from "../../Core/Types/AppState";
 
 export const useHomeActions = () => {
   const { setActions } = useActionsStore();
@@ -16,9 +18,10 @@ export const useHomeActions = () => {
     setReadNews,
     openSwiper,
     setOpenSwiper,
-    setListState,
-    errors,
+    // setListState,
   } = useAppStore();
+
+  const { errors } = useErrorsStore();
 
   const taskAction = (TypeResult) => {
     switch (TypeResult) {
@@ -43,8 +46,8 @@ export const useHomeActions = () => {
     }
   };
 
-  const handleOpenSwiper = (info, type) => {
-    let id;
+  const handleOpenSwiper = (info: IAdditionalInfo, type: string) => {
+    let id: number | string;
     try {
       if (type === "Задачи" || type === "Tasks") {
         id = info.TaskID;
@@ -109,7 +112,8 @@ export const useHomeActions = () => {
     };
     if (id) {
       setTaskDoneStatus(id);
-      setListState();
+      //проверить состояние списка после выполнение action
+      // setListState();
     }
     setActions(obj);
     !developer && clickTo1C();

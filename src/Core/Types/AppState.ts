@@ -20,20 +20,20 @@ export interface IAppData {
   Sections: ISection[];
   Tabs: ITab[];
 }
-
+export interface Task {
+  Id: string | number;
+  Title: string;
+  Done?: boolean;
+  New?: boolean;
+  [key: string]: any;
+}
 export interface ISection {
   SectionName: string;
   SectionCode?: string;
   SectionKey: string;
 
   sectionData?: {
-    list?: Array<{
-      Id: string | number;
-      Title: string;
-      Done?: boolean;
-      New?: boolean;
-      [key: string]: any;
-    }>;
+    list?: Array<Task>;
     [key: string]: any;
   };
 }

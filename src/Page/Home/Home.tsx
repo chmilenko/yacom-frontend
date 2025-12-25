@@ -4,9 +4,12 @@ import Section from "./Components/Section/Section";
 import Swiper from "../../Components/Swiper/Swiper";
 import AdditionalInfo from "./Components/AdditionalInfo/AdditionalInfo";
 import "./Home.scss";
+import { useEffect } from "react";
 
 function Home() {
   const {
+    setAppState,
+    developer,
     forState,
     additionalInfo,
     openSwiper,
@@ -25,6 +28,10 @@ function Home() {
   const CustomHeader = ({ title }) => {
     return <div className="swiper_header">{title}</div>;
   };
+
+  useEffect(() => {
+    developer && setAppState("");
+  }, []);
 
   return (
     <div className="main">

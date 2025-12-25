@@ -3,6 +3,7 @@ import { useState } from "react";
 import "./Section.scss";
 import Checkbox from "../../../../Ui/Checkbox/Checkbox";
 import { useAppStore } from "../../../../Core/Store/AppStateStore";
+import { Task } from "../../../../Core/Types/AppState";
 
 function Section({ section, onOpenSwiper, openSectionForm, type }) {
   const [isActive, setIsActive] = useState(false);
@@ -135,7 +136,7 @@ function Section({ section, onOpenSwiper, openSectionForm, type }) {
         {isExpanded && !isSpecialBlock && !showSectionCount && (
           <div className="section_content">
             {items.length > 0
-              ? items.map((item) => (
+              ? items.map((item: Task) => (
                   <div
                     key={item.TaskID || item.ObjectID}
                     className={`section_item ${
@@ -158,6 +159,7 @@ function Section({ section, onOpenSwiper, openSectionForm, type }) {
                               checked={item.Done}
                               readonly={true}
                               className={openSwiper && "dark"}
+                              id={item.TaskID}
                             />
                           )}
                         </div>
