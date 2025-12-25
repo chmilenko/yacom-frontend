@@ -21,6 +21,7 @@ function Layout() {
       case "":
         setActions({
           actionName: "pullToRefresh",
+          page: "main",
           active: true,
         });
         !developer && clickTo1C();
@@ -28,6 +29,7 @@ function Layout() {
       case "instructions":
         setActions({
           actionName: "pullToRefresh",
+          page: "instructions",
           active: true,
         });
         !developer && clickTo1C();

@@ -1,11 +1,9 @@
-// store/useErrorsStore.js
 import { create } from "zustand";
 import { persist } from "zustand/middleware";
 
 export const useErrorsStore = create(
   persist(
     (set, get) => ({
-      // State
       errors: [],
       errorHistory: [],
       isOnline: navigator.onLine,

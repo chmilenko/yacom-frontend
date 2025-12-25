@@ -1,4 +1,3 @@
-// store/useAppStore.js
 import { create } from "zustand";
 import { persist } from "zustand/middleware";
 
@@ -32,29 +31,16 @@ export const useAppStore = create(
         try {
           const { developer } = get();
           const res = !developer
-            ? JSON.parse(appData).reduce((acc, val) => {
-                acc = val.Sections;
-                return acc;
-              }, {})
-            : data.reduce((acc, val) => {
-                acc = val.Sections;
-                return acc;
-              }, {});
+            ? JSON.parse(appData)[0].Sections
+            : data[0].Sections;
 
           const menuItems = !developer
-            ? JSON.parse(appData).reduce((acc, val) => {
-                acc = val.Tabs;
-                return acc;
-              }, [])
-            : data.reduce((acc, val) => {
-                acc = val.Tabs;
-                return acc;
-              }, []);
+            ? JSON.parse(appData)[0].Tabs
+            : data[0].Tabs;
 
           const tasksSection = res.find(
             (section) =>
-              section.SectionName === "Задачи" ||
-              section.SectionName === "Tasks"
+              section.SectionName === "Задачи" || section.SectionNam === "Tasks"
           );
 
           const newsSection = res.find(
@@ -325,11 +311,7 @@ export const useAppStore = create(
 
       setListState: async (ListData) => {
         try {
-          const res = JSON.parse(ListData).reduce((acc, val) => {
-            acc = val;
-            return acc;
-          }, {});
-
+          const res = JSON.parse(ListData)[0];
           set({ additionalInfo: res });
         } catch (err) {
           const { addError } = (
@@ -466,13 +448,7 @@ export const useAppStore = create(
     }),
     {
       name: "app-storage",
-      partialize: (state) => ({
-        // user: state.user,
-        // menuItems: state.menuItems,
-        // forState: state.forState,
-        // instructions: state.instructions,
-        // developer: state.developer,
-      }),
+      partialize: (state) => ({}),
     }
   )
 );
