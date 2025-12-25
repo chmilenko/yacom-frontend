@@ -7,8 +7,8 @@ import MenuBar from "../Components/MenuBar/MenuBar";
 import ScrollToTop from "../Components/ScrollToTop/ScrollToTop";
 import PullToRefreshComponent from "../Components/PullToRefresh/PullToRefresh";
 import clickTo1C from "../Utils/clicker";
-import { useAppStore } from "../Core/Context/AppStateContext";
-import { useActionsStore } from "../Core/Context/ActionsContext";
+import { useAppStore } from "../Core/Store/AppStateStore";
+import { useActionsStore } from "../Core/Store/ActionsStore";
 
 function Layout() {
   const contentRef = useRef(null);

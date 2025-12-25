@@ -1,8 +1,8 @@
 import { useEffect } from "react";
-import { useAppStore } from "../Core/Context/AppStateContext";
-import { useActionsStore } from "../Core/Context/ActionsContext";
+import { useAppStore } from "../Core/Store/AppStateStore";
+import { useActionsStore } from "../Core/Store/ActionsStore";
 
-import { useErrorsStore } from "../Core/Context/ErrorContext";
+import { useErrorsStore } from "../Core/Store/ErrorsStore";
 
 const PageComponentInitializer = () => {
   useEffect(() => {

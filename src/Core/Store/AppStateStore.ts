@@ -1,25 +1,43 @@
 import { create } from "zustand";
 import { persist } from "zustand/middleware";
+import {
+  ITab,
+  ISection,
+  IInstructions,
+  IAdditionalInfo,
+  AppState,
+} from "@core/Types/AppState";
 
-let data, dataInstructions, additionalMock;
+let forStateMock, dataInstructions, additionalMock;
 
 if (process.env.REACT_APP_DEVELOPER === "true") {
-  data = require("../../Core/Mock/mock").data;
+  forStateMock = require("../../Core/Mock/mock").data;
   dataInstructions = require("../../Core/Mock/instructions").instructions;
   additionalMock = require("../../Core/Mock/mock").additionalData;
 }
 
-export const useAppStore = create(
+// Расширяем AppState методами store
+interface AppStore extends AppState {
+  setAppState: (appData: string) => Promise<void>;
+  // setUser: (user: any) => void;
+  setPage: (page: string) => void;
+  setInstructionsState: (appData: string) => Promise<void>;
+  setOpenSwiper: (open: boolean) => void;
+  setAdditionalInfo: (id: string | number, type: string) => void;
+  setListStateClear: () => void;
+  setListState: (ListData: string) => Promise<void>;
+  setTaskDoneStatus: (id: string | number) => Promise<void>;
+  setReadNews: (id: string | number) => Promise<void>;
+}
+
+export const useAppStore = create<AppStore>()(
   persist(
     (set, get) => ({
-      menuItems: [],
-      forState: [],
-      instructions: [],
-      additionalInfo: [],
+      menuItems: [] as ITab[],
+      forState: [] as ISection[],
+      instructions: [] as IInstructions[],
+      additionalInfo: [] as IAdditionalInfo[],
       openSwiper: false,
-      listName: null,
-      ListData: null,
-      actions: [],
       developer: process.env.REACT_APP_DEVELOPER === "true",
       page: "",
       countActualTasks: 0,
@@ -27,16 +45,16 @@ export const useAppStore = create(
 
       setPage: (newPage) => set({ page: newPage }),
 
-      setAppState: async (appData) => {
+      setAppState: async (appData: string) => {
         try {
           const { developer } = get();
           const res = !developer
             ? JSON.parse(appData)[0].Sections
-            : data[0].Sections;
+            : forStateMock[0].Sections;
 
           const menuItems = !developer
             ? JSON.parse(appData)[0].Tabs
-            : data[0].Tabs;
+            : forStateMock[0].Tabs;
 
           const tasksSection = res.find(
             (section) =>
@@ -63,7 +81,7 @@ export const useAppStore = create(
           });
         } catch (err) {
           const { addError } = (
-            await import("./ErrorContext")
+            await import("./ErrorsStore")
           ).useErrorsStore.getState();
 
           addError({
@@ -91,7 +109,7 @@ export const useAppStore = create(
 
       setOpenSwiper: (swiperState) => set({ openSwiper: swiperState }),
 
-      setTaskDoneStatus: async (id) => {
+      setTaskDoneStatus: async (id: number | string) => {
         try {
           const { forState } = get();
 
@@ -178,7 +196,7 @@ export const useAppStore = create(
           });
         } catch (err) {
           const { addError } = (
-            await import("./ErrorContext")
+            await import("./ErrorsStore")
           ).useErrorsStore.getState();
 
           addError({
@@ -198,7 +216,7 @@ export const useAppStore = create(
         }
       },
 
-      setReadNews: async (id) => {
+      setReadNews: async (id: number | string) => {
         try {
           const { developer, forState } = get();
 
@@ -261,7 +279,7 @@ export const useAppStore = create(
           }
         } catch (err) {
           const { addError } = (
-            await import("./ErrorContext")
+            await import("./ErrorsStore")
           ).useErrorsStore.getState();
 
           addError({
@@ -281,7 +299,7 @@ export const useAppStore = create(
         }
       },
 
-      setAdditionalInfo: (id, type) => {
+      setAdditionalInfo: (id: number | string, type: string) => {
         try {
           let findAdditionalInfo;
 
@@ -306,7 +324,7 @@ export const useAppStore = create(
       },
 
       setListStateClear: () => {
-        set({ additionalInfo: {} });
+        set({ additionalInfo: [] });
       },
 
       setListState: async (ListData) => {
@@ -315,7 +333,7 @@ export const useAppStore = create(
           set({ additionalInfo: res });
         } catch (err) {
           const { addError } = (
-            await import("./ErrorContext")
+            await import("./ErrorsStore")
           ).useErrorsStore.getState();
 
           addError({
@@ -339,23 +357,6 @@ export const useAppStore = create(
         }
       },
 
-      setViewSection: (sectionToUpdate) => {
-        const { forState } = get();
-
-        const updatedForState = forState.map((section) => {
-          if (section.SectionName === sectionToUpdate.SectionName) {
-            const newView = !section.View;
-            return {
-              ...section,
-              View: newView,
-            };
-          }
-          return section;
-        });
-
-        set({ forState: updatedForState });
-      },
-
       setInstructionsState: async (appData) => {
         try {
           const { developer } = get();
@@ -363,7 +364,7 @@ export const useAppStore = create(
           set({ instructions: res });
         } catch (err) {
           const { addError } = (
-            await import("./ErrorContext")
+            await import("./ErrorsStore")
           ).useErrorsStore.getState();
 
           addError({
@@ -382,69 +383,6 @@ export const useAppStore = create(
           console.error("setInstructionsState error:", err);
         }
       },
-
-      // Вспомогательные методы для счетчиков
-      updateNewsCount: () => {
-        const { forState } = get();
-        const unreadNews = forState
-          .flatMap((section) => section.sectionData?.list || [])
-          .filter((news) => news.New);
-        set({ countUnreadNews: unreadNews.length });
-      },
-
-      updateTaskCount: () => {
-        const { forState } = get();
-        const tasks = forState
-          .flatMap((section) => section.sectionData?.list || [])
-          .filter((item) => !item.Done);
-        set({ countActualTasks: tasks.length });
-      },
-
-      updateState: (newState) => set((state) => ({ ...state, ...newState })),
-
-      /* { i.bezryadin / 2025.11.11 */
-      getListState: (listName) => {
-        const { forState } = get();
-        return JSON.stringify(
-          forState.find((obj) => obj.SectionKey === listName)
-        );
-      },
-      tryJsonParse: (JSONData) => {
-        try {
-          let obj = JSON.parse(JSONData);
-          return "Удалось распарсить";
-        } catch (err) {
-          return `Не удалось распарсить в tryJsonParse\nОшибка ${err.name}: ${err.message}\n${err.stack}`;
-        }
-      },
-      getAppStateJsonErrors: () => {
-        let errorDescription = "";
-        try {
-          const { errors } = get();
-          return JSON.stringify(errors);
-        } catch (err) {
-          errorDescription = `Не удалось обработать данные в setListState Ошибка 
-                ${err.name}: ${err.message} ${err.stack}`;
-        }
-
-        return "getAppStateJsonErrors error: " + errorDescription;
-      },
-      getCurrentadditionalInfo: () => {
-        try {
-          const { additionalInfo } = get();
-          return JSON.stringify(additionalInfo);
-        } catch (err) {
-          const errorDescription = `Ошибка в getCurrentadditionalInfo Ошибка 
-            ${err.name}: ${err.message} ${err.stack}`;
-
-          return "getAppStateJsonErrors error: " + errorDescription;
-        }
-      },
-      addErrorAppStore: (errorWithId) => {
-        const { errors } = get();
-        set({ errors: [errorWithId, ...errors] });
-      },
-      /* } i.bezryadin / 2025.11.11 */
     }),
     {
       name: "app-storage",

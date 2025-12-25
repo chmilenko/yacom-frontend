@@ -1,0 +1,53 @@
+{
+  "compilerOptions": {
+    // === Основные настройки ===
+    "target": "es2015",
+    "lib": ["dom", "dom.iterable", "esnext"],
+    "jsx": "react-jsx",
+
+    // === Модули и разрешение путей ===
+    "module": "esnext",
+    "moduleResolution": "node",
+    "baseUrl": "src",
+    "paths": {
+      // Алиасы для удобных импортов
+      "@core/*": ["Core/*"],
+      "@components/*": ["Components/*"],
+      "@pages/*": ["Pages/*"],
+      "@utils/*": ["Utils/*"],
+      "@styles/*": ["Styles/*"]
+    },
+
+    // === Совместимость с JS ===
+    "allowJs": true,
+    "skipLibCheck": true,
+    "esModuleInterop": true,
+    "allowSyntheticDefaultImports": true,
+    "resolveJsonModule": true,
+
+    // === Строгость (начинаем с мягкого режима) ===
+    "strict": false,
+    "noImplicitAny": false,
+    "strictNullChecks": false,
+
+    // === Качество кода ===
+    "forceConsistentCasingInFileNames": true,
+    "noFallthroughCasesInSwitch": true,
+
+    // === Выходные файлы ===
+    "outDir": "./dist",
+    "noEmit": true, // Только проверка типов, не генерируем JS
+    "isolatedModules": true,
+
+    // === Дополнительно для разработки ===
+    "sourceMap": true,
+    "declaration": false,
+    "downlevelIteration": true
+  },
+
+  // === Включить все файлы в src ===
+  "include": ["src/**/*.ts", "src/**/*.tsx", "src/**/*.js", "src/**/*.jsx"],
+
+  // === Исключить ===
+  "exclude": ["node_modules", "dist", "build", "**/*.test.ts", "**/*.test.tsx"]
+}
