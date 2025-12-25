@@ -3,7 +3,7 @@ import ReactDOMServer from "react-dom/server";
 import PullToRefresh from "pulltorefreshjs";
 import { faSyncAlt } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { useAppStore } from "../../Core/Context/AppStateContext";
+import { useAppStore } from "../../Core/Store/AppStateStore";
 
 function PullToRefreshComponent({ children, refreshFunk, contentRef }) {
   const { openSwiper } = useAppStore();

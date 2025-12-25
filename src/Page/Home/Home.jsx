@@ -1,5 +1,5 @@
 import { useEffect } from "react";
-import { useAppStore } from "../../Core/Context/AppStateContext";
+import { useAppStore } from "../../Core/Store/AppStateStore";
 import { useHomeActions } from "./useActionsHome";
 import Section from "./Components/Section/Section";
 import Swiper from "../../Components/Swiper/Swiper";

@@ -88,8 +88,8 @@ export const useErrorsStore = create(
       sendErrorTo1C: async (errorData) => {
         try {
           const { clickTo1c } = await import("../../Utils/clicker");
-          const { setActions } = await import("./ActionsContext").then(
-            (module) => module.useActionsStore.getState()
+          const { setActions } = await import("./ActionsStore").then((module) =>
+            module.useActionsStore.getState()
           );
 
           const actionData = {
