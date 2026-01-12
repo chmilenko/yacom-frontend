@@ -1,7 +1,7 @@
 import { useLocation, useNavigate } from "react-router-dom";
 import "./MenuBar.scss";
 import clickTo1C from "../../Utils/clicker";
-import { useAppStore } from "../../Core/Store/AppStateStore";
+import { useAppStore } from "../../Core/Store/AppStore";
 import { useActionsStore } from "../../Core/Store/ActionsStore";
 import Button from "../../Ui/Button/Button";
 

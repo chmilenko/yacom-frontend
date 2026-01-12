@@ -2,7 +2,7 @@
 import { useState } from "react";
 import "./Section.scss";
 import Checkbox from "../../../../Ui/Checkbox/Checkbox";
-import { useAppStore } from "../../../../Core/Store/AppStateStore";
+import { useAppStore } from "../../../../Core/Store/AppStore";
 import { Task } from "../../../../Core/Types/AppState";
 
 function Section({ section, onOpenSwiper, openSectionForm, type }) {

@@ -5,7 +5,7 @@ import "./AdditionalInfo.css";
 import clickTo1C from "../../../../Utils/clicker";
 import { createMarkupUniversal } from "../../../../Utils/createMarkup";
 import Button from "../../../../Ui/Button/Button";
-import { useAppStore } from "../../../../Core/Store/AppStateStore";
+import { useAppStore } from "../../../../Core/Store/AppStore";
 import { useActionsStore } from "../../../../Core/Store/ActionsStore";
 import { IAttachment } from "../../../../Core/Types/AppState";
 

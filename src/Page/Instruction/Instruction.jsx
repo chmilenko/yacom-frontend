@@ -1,7 +1,7 @@
 /* eslint-disable no-loop-func */
 import React, { useContext, useEffect, useState } from "react";
 import "./Instructions.scss";
-import { AppStateContext, useAppStore } from "../../Core/Store/AppStateStore";
+import { AppStateContext, useAppStore } from "../../Core/Store/AppStore";
 import { ActionsContext, useActionsStore } from "../../Core/Store/ActionsStore";
 import Input from "../../Ui/Input/Input";
 import clickTo1C from "../../Utils/clicker";
