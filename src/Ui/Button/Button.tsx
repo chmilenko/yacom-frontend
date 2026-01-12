@@ -2,8 +2,6 @@ import {
   useState,
   useRef,
   useEffect,
-  cloneElement,
-  ReactElement,
   ReactNode,
   MouseEvent,
   TouchEvent,
@@ -29,6 +27,7 @@ interface ButtonProps {
     | "danger"
     | "success"
     | "warning"
+    | "navigation"
     | "report";
   children?: ReactNode;
 }

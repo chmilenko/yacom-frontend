@@ -1,4 +1,4 @@
-import { useAppStore } from "../../Core/Store/AppStateStore";
+import { useAppStore } from "../../Core/Store/AppStore";
 import { useHomeActions } from "./useActionsHome";
 import Section from "./Components/Section/Section";
 import Swiper from "../../Components/Swiper/Swiper";

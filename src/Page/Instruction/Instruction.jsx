@@ -1,11 +1,12 @@
 /* eslint-disable no-loop-func */
-import React, { useContext, useEffect, useState } from "react";
+import React, { useEffect, useState } from "react";
 import "./Instructions.scss";
-import { AppStateContext, useAppStore } from "../../Core/Store/AppStateStore";
-import { ActionsContext, useActionsStore } from "../../Core/Store/ActionsStore";
+import { useAppStore } from "../../Core/Store/AppStore";
+import { useActionsStore } from "../../Core/Store/ActionsStore";
 import Input from "../../Ui/Input/Input";
 import clickTo1C from "../../Utils/clicker";
 import InstructionItem from "./InstructionItem";
+// import { IInstructions } from "@core/Types/AppState";
 
 function Instruction() {
   const { instructions, setInstructionsState, developer } = useAppStore();
@@ -16,7 +17,7 @@ function Instruction() {
 
   useEffect(() => {
     setInstructionsState();
-  }, [setInstructionsState]);
+  }, []);
 
   const sendByEmail = (id) => {
     setActions({ id, actionName: "sendByEmail", active: true });
@@ -128,6 +129,8 @@ function Instruction() {
     const idsToOpen = new Set();
 
     const findIdsToOpen = (items) => {
+      let hasAnyMatch = false;
+
       items.forEach((item) => {
         const isMatch = item.Наименование
           .toLowerCase()
@@ -135,6 +138,7 @@ function Instruction() {
         const hasChildren = item.Строки && item.Строки.length > 0;
 
         if (isMatch) {
+          hasAnyMatch = true;
           let parent = findParent(item.id, instructions);
           while (parent) {
             idsToOpen.add(parent.id);
@@ -145,10 +149,13 @@ function Instruction() {
         if (hasChildren) {
           const hasMatchInChildren = findIdsToOpen(item.Строки);
           if (hasMatchInChildren) {
+            hasAnyMatch = true;
             idsToOpen.add(item.id);
           }
         }
       });
+
+      return hasAnyMatch;
     };
 
     findIdsToOpen(instructions);
