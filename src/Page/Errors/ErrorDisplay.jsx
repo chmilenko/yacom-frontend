@@ -1,6 +1,6 @@
 // Errors.js
 import { useState } from "react";
-import { useErrorsStore } from "../../Core/Context/ErrorContext";
+import { useErrorsStore } from "../../Core/Store/ErrorsStore";
 import "./Errors.scss";
 
 const Errors = () => {

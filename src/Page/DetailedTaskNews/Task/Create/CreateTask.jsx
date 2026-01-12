@@ -1,10 +1,11 @@
 // src/components/CreateTask/CreateTask.jsx
 import React, { useEffect } from "react";
-import { useCreateTaskNews } from "../../../../Core/Context/CreateTaskNews";
 
 import "./CreateTask.scss";
 import CustomSelect from "../../../../Ui/CustomSelect/CustomSelect";
-import { useAppStore } from "../../../../Core/Context/AppStateContext";
+
+import { useCreateTaskNews } from "../../../../Core/Store/CreateTaskNews";
+import { useAppStore } from "../../../../Core/Store/AppStore";
 
 function CreateTask() {
   const {

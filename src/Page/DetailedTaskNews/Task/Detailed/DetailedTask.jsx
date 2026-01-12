@@ -1,9 +1,9 @@
 import React, { useEffect } from "react";
-import { useCreateTaskNews } from "../../../../Core/Context/CreateTaskNews";
+import { useCreateTaskNews } from "../../../../Core/Store/CreateTaskNews";
 import "./DetailedTask.scss";
 import Button from "../../../../Ui/Button/Button";
 import { useNavigate } from "react-router-dom";
-import { useActionsStore } from "../../../../Core/Context/ActionsContext";
+import { useActionsStore } from "../../../../Core/Store/ActionsStore";
 import clickTo1C from "../../../../Utils/clicker";
 
 function DetailedTask() {

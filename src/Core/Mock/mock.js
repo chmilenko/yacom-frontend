@@ -432,7 +432,7 @@ export const additionalData = [
     DoneCount: 1,
     QuestionCount: 1,
     ResultType: "1",
-    ObjectType: "Task",
+    ObjectType: "Poll",
     LongHeader: false,
     ListImage: "",
     ListImageID: "",

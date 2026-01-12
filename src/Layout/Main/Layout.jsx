@@ -3,12 +3,12 @@ import { Outlet } from "react-router-dom";
 
 import "./Layout.scss";
 
+import { useAppStore } from "../../Core/Store/AppStore";
+import { useActionsStore } from "../../Core/Store/ActionsStore";
 import MenuBar from "../../Components/MenuBar/MenuBar";
 import ScrollToTop from "../../Components/ScrollToTop/ScrollToTop";
 import PullToRefreshComponent from "../../Components/PullToRefresh/PullToRefresh";
 import clickTo1C from "../../Utils/clicker";
-import { useAppStore } from "../../Core/Context/AppStateContext";
-import { useActionsStore } from "../../Core/Context/ActionsContext";
 
 function Layout() {
   const contentRef = useRef(null);
@@ -21,6 +21,7 @@ function Layout() {
       case "":
         setActions({
           actionName: "pullToRefresh",
+          page: "main",
           active: true,
         });
         !developer && clickTo1C();
@@ -28,6 +29,7 @@ function Layout() {
       case "instructions":
         setActions({
           actionName: "pullToRefresh",
+          page: "instructions",
           active: true,
         });
         !developer && clickTo1C();

@@ -1,14 +1,8 @@
 /* eslint-disable no-loop-func */
-import React, { useContext, useEffect, useState } from "react";
+import React, { useEffect, useState } from "react";
 import "./Instructions.scss";
-import {
-  AppStateContext,
-  useAppStore,
-} from "../../Core/Context/AppStateContext";
-import {
-  ActionsContext,
-  useActionsStore,
-} from "../../Core/Context/ActionsContext";
+import { useAppStore } from "../../Core/Store/AppStore";
+import { useActionsStore } from "../../Core/Store/ActionsStore";
 import Input from "../../Ui/Input/Input";
 import clickTo1C from "../../Utils/clicker";
 import InstructionItem from "./InstructionItem";
@@ -21,8 +15,8 @@ function Instruction() {
   const [filterText, setFilterText] = useState("");
 
   useEffect(() => {
-    setInstructionsState();
-  }, [setInstructionsState]);
+    developer && setInstructionsState("");
+  }, []);
 
   const sendByEmail = (id) => {
     setActions({ id, actionName: "sendByEmail", active: true });
@@ -133,7 +127,9 @@ function Instruction() {
 
     const idsToOpen = new Set();
 
-    const findIdsToOpen = (items) => {
+    const findIdsToOpen = (items): boolean => {
+      let hasMatches = false;
+
       items.forEach((item) => {
         const isMatch = item.Наименование
           .toLowerCase()
@@ -141,6 +137,7 @@ function Instruction() {
         const hasChildren = item.Строки && item.Строки.length > 0;
 
         if (isMatch) {
+          hasMatches = true;
           let parent = findParent(item.id, instructions);
           while (parent) {
             idsToOpen.add(parent.id);
@@ -151,17 +148,20 @@ function Instruction() {
         if (hasChildren) {
           const hasMatchInChildren = findIdsToOpen(item.Строки);
           if (hasMatchInChildren) {
+            hasMatches = true;
             idsToOpen.add(item.id);
           }
         }
       });
+
+      return hasMatches;
     };
 
     findIdsToOpen(instructions);
 
     setOpenIndexes((prev) => {
       const newOpenIndexes = { ...prev };
-      idsToOpen.forEach((id) => {
+      idsToOpen.forEach((id: number) => {
         newOpenIndexes[id] = true;
       });
       return newOpenIndexes;

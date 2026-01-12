@@ -1,9 +1,10 @@
 import { useLocation, useNavigate, useParams } from "react-router-dom";
 import Button from "../../Ui/Button/Button";
-import { useCreateTaskNews } from "../../Core/Context/CreateTaskNews";
-import { useActionsStore } from "../../Core/Context/ActionsContext";
-import { useAppStore } from "../../Core/Context/AppStateContext";
+
 import clickTo1C from "../../Utils/clicker";
+import { useActionsStore } from "../../Core/Store/ActionsStore";
+import { useAppStore } from "../../Core/Store/AppStore";
+import { useCreateTaskNews } from "../../Core/Store/CreateTaskNews";
 
 function LayoutButtons() {
   const navigate = useNavigate();

@@ -1,11 +1,13 @@
 import React, { useEffect, useState } from "react";
-import { useCreateTaskNews } from "../../../../Core/Context/CreateTaskNews";
+
 import "./DetailedFullTask.scss";
-import { useActionsStore } from "../../../../Core/Context/ActionsContext";
+
 import Button from "../../../../Ui/Button/Button";
 import clickTo1C from "../../../../Utils/clicker";
 import { useParams } from "react-router-dom";
 import { createMarkupUniversal } from "../../../../Utils/createMarkup";
+import { useCreateTaskNews } from "../../../../Core/Store/CreateTaskNews";
+import { useActionsStore } from "../../../../Core/Store/ActionsStore";
 
 function DetailedFullTask() {
   const { oneTask, developer, getOneTask, getFullTaskDeveloper } =

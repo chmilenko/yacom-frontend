@@ -1,16 +1,17 @@
-import { useEffect } from "react";
-import { useAppStore } from "../../Core/Context/AppStateContext";
+import { useAppStore } from "../../Core/Store/AppStore";
 import { useHomeActions } from "./useActionsHome";
 import Section from "./Components/Section/Section";
 import Swiper from "../../Components/Swiper/Swiper";
 import AdditionalInfo from "./Components/AdditionalInfo/AdditionalInfo";
 import "./Home.scss";
+import { useEffect } from "react";
 
 function Home() {
   const {
+    setAppState,
+    developer,
     forState,
     additionalInfo,
-    setAppState,
     openSwiper,
     setOpenSwiper,
     setListStateClear,
@@ -30,8 +31,8 @@ function Home() {
   };
 
   useEffect(() => {
-    setAppState();
-    setUser();
+    developer && setUser("");
+    developer && setAppState("");
   }, []);
 
   return (
@@ -42,7 +43,7 @@ function Home() {
           <div className={`content_wrapper ${openSwiper ? "blur" : ""}`}>
             {forState.map((section, i) => (
               <Section
-                key={section.TaskID || section.ObjectID || `section-${i}`}
+                key={section.SectionKey || `section-${i}`}
                 section={section}
                 onOpenSwiper={handleOpenSwiper}
                 openSectionForm={openTasksOrNewsForm}
