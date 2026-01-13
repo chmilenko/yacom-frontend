@@ -68,7 +68,7 @@ export interface ITag {
 export interface IAdditionalInfo {
   // Основные поля
   Done: boolean;
-  DoneDate: string; // или Date если будет преобразование
+  DoneDate: string; 
   Date: string;
   Title: string;
   Deadline: string;
@@ -82,7 +82,7 @@ export interface IAdditionalInfo {
   QuestionCount: number;
 
   // Типы и классификаторы
-  ResultType: string; // или number если всегда числовой
+  ResultType: string; 
   ObjectType: string;
   LongHeader: boolean;
 
