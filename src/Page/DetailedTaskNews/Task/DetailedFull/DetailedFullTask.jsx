@@ -40,16 +40,11 @@ function DetailedFullTask() {
               src={image.address}
               alt={`Image ${index + 1}`}
               className="swipe_content_info_image"
-              onClick={() => clickHandler(image?.ImageID)}
             />
           ))}
         </div>
       )
     );
-  };
-
-  const clickHandler = (imageId) => {
-    console.log("Clicked image ID:", imageId);
   };
 
   const formatDate = (dateString) => {

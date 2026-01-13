@@ -16,10 +16,12 @@ interface I1CData {
 let forStateMock: I1CData[] | undefined;
 let dataInstructions: IInstructions[] | undefined;
 let additionalMock: IAdditionalInfo[] | undefined;
+let userMock: User | undefined;
 
 if (process.env.REACT_APP_DEVELOPER === "true") {
   const mockModule = require("../Mock/mock") as {
     data: I1CData[];
+    user: User;
     additionalData: IAdditionalInfo[];
   };
   const instructionsModule = require("../Mock/instructions") as {
@@ -27,6 +29,7 @@ if (process.env.REACT_APP_DEVELOPER === "true") {
   };
 
   forStateMock = mockModule.data;
+  userMock = mockModule.user;
   additionalMock = mockModule.additionalData;
   dataInstructions = instructionsModule.instructions;
 }
@@ -58,7 +61,38 @@ export const useAppStore = create<AppStore>()((set, get) => ({
 
   setPage: (newPage) => set({ page: newPage }),
 
-  setUser: (user) => set({ user: user }),
+  setUser: async (user) => {
+    try {
+      const { developer } = get();
+      const res = !developer ? JSON.parse(user) : userMock;
+      set({ user: res });
+    } catch (err) {
+      const { addError } = (
+        await import("./ErrorsStore")
+      ).useErrorsStore.getState();
+
+      addError({
+        type: "parsing",
+        message: "Ошибка получения данных о пользователе",
+        severity: "error",
+        context: "setAppState",
+        details: `Не удалось получить данные в setUser\nОшибка ${err.name}: ${
+          err.message
+        }\nДанные: ${
+          typeof user === "string"
+            ? user.substring(0, 200) + "..."
+            : typeof user
+        }\n${err.stack}`,
+        originalError: {
+          name: err.name,
+          message: err.message,
+          stack: err.stack,
+        },
+      });
+
+      console.error("setAppState error:", err);
+    }
+  },
 
   setAppState: async (appData: string) => {
     try {

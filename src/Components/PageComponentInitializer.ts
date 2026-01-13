@@ -9,7 +9,9 @@ declare global {
       // App State
       menuItems: ReturnType<typeof useAppStore.getState>["menuItems"];
       page: ReturnType<typeof useAppStore.getState>["page"];
+      user: ReturnType<typeof useAppStore.getState>["user"];
       setPage: ReturnType<typeof useAppStore.getState>["setPage"];
+      setUser: ReturnType<typeof useAppStore.getState>["setUser"];
       setAppState: ReturnType<typeof useAppStore.getState>["setAppState"];
       setInstructionsState: ReturnType<
         typeof useAppStore.getState
@@ -56,6 +58,8 @@ const PageComponentInitializer = () => {
     window.pageComponent = {
       menuItems: appState.menuItems,
       page: appState.page,
+      user: appState.user,
+      setUser: appState.setUser,
       setPage: appState.setPage,
       setAppState: appState.setAppState,
       setInstructionsState: appState.setInstructionsState,
