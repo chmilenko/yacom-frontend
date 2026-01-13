@@ -18,7 +18,6 @@ export const useHomeActions = () => {
     setReadNews,
     openSwiper,
     setOpenSwiper,
-    // setListState,
   } = useAppStore();
 
   const { errors } = useErrorsStore();

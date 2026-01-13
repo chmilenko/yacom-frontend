@@ -1,10 +1,42 @@
 import { create } from "zustand";
 
-export const useActionsStore = create((set, get) => ({
+export interface IAction {
+  objectId?: string | number;
+  attachmentId?: string | number;
+  actionName: string;
+  active?: boolean;
+  /** Дополнительные данные */
+  [key: string]: any;
+}
+
+export interface IActionParam extends Partial<IAction> {
+  objectId?: string | number;
+  attachmentId?: string | number;
+  actionName: string;
+  active?: boolean;
+}
+
+interface ActionsStore {
+  actions: IAction[];
+  loadingAdditionalInfo: boolean;
+
+  setActions: (param: IActionParam) => void;
+  changeActionState: (
+    actionName: string,
+    id: string | number,
+    newState: boolean
+  ) => void;
+  getActiveActionsCount: () => number;
+  getActiveActions: () => string;
+  setLoadingAdditionalInfo: (loading: boolean) => void;
+  clearActions: () => void;
+}
+
+export const useActionsStore = create<ActionsStore>((set, get) => ({
   actions: [],
   loadingAdditionalInfo: false,
 
-  setActions: (param) => {
+  setActions: (param: IActionParam) => {
     try {
       set((state) => {
         const existingIndex = state.actions.findIndex(
@@ -17,28 +49,33 @@ export const useActionsStore = create((set, get) => ({
 
         if (existingIndex > -1) {
           const updated = [...state.actions];
-          updated[existingIndex] = param;
+          updated[existingIndex] = param as IAction;
           return { actions: updated };
         }
 
-        return { actions: [...state.actions, param] };
+        return { actions: [...state.actions, param as IAction] };
       });
-    } catch (err) {
+    } catch (err: any) {
       const errorDescription = `Не удалось добавить Action в setActions\nОшибка ${err.name}: ${err.message}\n${err.stack}`;
       console.error("setActions error:", errorDescription);
     }
   },
 
-  changeActionState: (action, id, newState) => {
+  changeActionState: (
+    actionName: string,
+    id: string | number,
+    newState: boolean
+  ) => {
     try {
       set((state) => ({
         actions: state.actions.map((el) =>
-          el.objectId === id && el.actionName === action
+          (el.objectId === id || el.attachmentId === id) &&
+          el.actionName === actionName
             ? { ...el, active: newState }
             : el
         ),
       }));
-    } catch (err) {
+    } catch (err: any) {
       const errorDescription = `Не удалось изменить статус Action в changeActionState\nОшибка ${err.name}: ${err.message}\n${err.stack}`;
       console.error("changeActionState error:", errorDescription);
     }
@@ -48,7 +85,7 @@ export const useActionsStore = create((set, get) => ({
     try {
       const { actions } = get();
       return actions.filter((el) => el.active).length;
-    } catch (err) {
+    } catch (err: any) {
       const errorDescription = `Не удалось получить количество активных Actions\nОшибка ${err.name}: ${err.message}\n${err.stack}`;
       console.error("getActiveActionsCount error:", errorDescription);
       return 0;
@@ -59,14 +96,14 @@ export const useActionsStore = create((set, get) => ({
     try {
       const { actions } = get();
       return JSON.stringify(actions.filter((el) => el.active));
-    } catch (err) {
+    } catch (err: any) {
       const errorDescription = `Не удалось получить активные Actions\nОшибка ${err.name}: ${err.message}\n${err.stack}`;
       console.error("getActiveActions error:", errorDescription);
       return "[]";
     }
   },
 
-  setLoadingAdditionalInfo: (loading) =>
+  setLoadingAdditionalInfo: (loading: boolean) =>
     set({ loadingAdditionalInfo: loading }),
 
   clearActions: () => set({ actions: [] }),

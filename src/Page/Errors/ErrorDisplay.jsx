@@ -1,4 +1,3 @@
-// Errors.js
 import { useState } from "react";
 import { useErrorsStore } from "../../Core/Store/ErrorsStore";
 import "./Errors.scss";

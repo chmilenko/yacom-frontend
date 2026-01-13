@@ -46,7 +46,13 @@
   },
 
   // === Включить все файлы в src ===
-  "include": ["src/**/*.ts", "src/**/*.tsx", "src/**/*.js", "src/**/*.jsx"],
+  "include": [
+    "src/**/*.ts",
+    "src/**/*.tsx",
+    "src/**/*.js",
+    "src/**/*.jsx",
+    "src/types/**/*.d.ts"
+  ],
 
   // === Исключить ===
   "exclude": ["node_modules", "dist", "build", "**/*.test.ts", "**/*.test.tsx"]
