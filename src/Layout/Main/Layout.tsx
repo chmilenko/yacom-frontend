@@ -9,11 +9,12 @@ import MenuBar from "../../Components/MenuBar/MenuBar";
 import ScrollToTop from "../../Components/ScrollToTop/ScrollToTop";
 import PullToRefreshComponent from "../../Components/PullToRefresh/PullToRefresh";
 import clickTo1C from "../../Utils/clicker";
+import { useAppModeStore } from "../../Core/Store/AppModeStore";
 
 function Layout() {
   const contentRef = useRef(null);
-  const { setAppState, page, setInstructionsState, developer } = useAppStore();
-
+  const { page } = useAppStore();
+  const { useMockData } = useAppModeStore();
   const { setActions } = useActionsStore();
 
   const funcRefresh = (currentPage) => {
@@ -24,16 +25,16 @@ function Layout() {
           page: "main",
           active: true,
         });
-        !developer && clickTo1C();
-        return setAppState();
+        !useMockData && clickTo1C();
+        return;
       case "instructions":
         setActions({
           actionName: "pullToRefresh",
           page: "instructions",
           active: true,
         });
-        !developer && clickTo1C();
-        return setInstructionsState();
+        !useMockData && clickTo1C();
+        return;
       default:
         console.log("No refresh function implemented for this page");
         return "empty";

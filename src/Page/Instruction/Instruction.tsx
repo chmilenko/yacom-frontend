@@ -6,31 +6,33 @@ import { useActionsStore } from "../../Core/Store/ActionsStore";
 import Input from "../../Ui/Input/Input";
 import clickTo1C from "../../Utils/clicker";
 import InstructionItem from "./InstructionItem";
+import { useAppModeStore } from "../../Core/Store/AppModeStore";
 
 function Instruction() {
-  const { instructions, setInstructionsState, developer } = useAppStore();
+  const { instructions, setInstructionsState } = useAppStore();
   const { setActions } = useActionsStore();
+  const { useMockData } = useAppModeStore();
 
   const [openIndexes, setOpenIndexes] = useState({});
   const [filterText, setFilterText] = useState("");
 
   useEffect(() => {
-    developer && setInstructionsState("");
+    useMockData && setInstructionsState("");
   }, []);
 
   const sendByEmail = (id) => {
     setActions({ id, actionName: "sendByEmail", active: true });
-    !developer && clickTo1C();
+    !useMockData && clickTo1C();
   };
 
   const sendByPrint = (id) => {
     setActions({ id, actionName: "sendByPrint", active: true });
-    !developer && clickTo1C();
+    !useMockData && clickTo1C();
   };
 
   const openInstruction = (id) => {
     setActions({ id, actionName: "openInstruction", active: true });
-    !developer && clickTo1C();
+    !useMockData && clickTo1C();
   };
 
   function collectDescendantIds(items, parentId) {

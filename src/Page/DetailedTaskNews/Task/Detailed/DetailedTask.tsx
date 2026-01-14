@@ -1,23 +1,27 @@
 import React, { useEffect } from "react";
-import { useCreateTaskNews } from "../../../../Core/Store/CreateTaskNews";
+
 import "./DetailedTask.scss";
 import Button from "../../../../Ui/Button/Button";
 import { useNavigate } from "react-router-dom";
 import { useActionsStore } from "../../../../Core/Store/ActionsStore";
 import clickTo1C from "../../../../Utils/clicker";
+import { useCreateTaskStore } from "../../../../Core/Store/CreateTaskNews";
+import { useAppModeStore } from "../../../../Core/Store/AppModeStore";
 
 function DetailedTask() {
-  const { setFullTasks, fullTasks, developer } = useCreateTaskNews();
+  const { setFullTasks, fullTasks } = useCreateTaskStore();
+  const { useMockData } = useAppModeStore();
+
   const { setActions } = useActionsStore();
 
   const navigate = useNavigate();
 
   useEffect(() => {
-    setFullTasks();
+    useMockData && setFullTasks("");
   }, []);
 
   const handleClickCard = (id) => {
-    if (developer) {
+    if (useMockData) {
       navigate(`/task/full/${id}`);
     } else {
       setActions({
@@ -26,7 +30,7 @@ function DetailedTask() {
         active: true,
         TaskId: id,
       });
-      !developer && clickTo1C();
+      !useMockData && clickTo1C();
       navigate(`/task/full/${id}`);
     }
   };

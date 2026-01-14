@@ -4,8 +4,9 @@ import React, { useEffect } from "react";
 import "./CreateTask.scss";
 import CustomSelect from "../../../../Ui/CustomSelect/CustomSelect";
 
-import { useCreateTaskNews } from "../../../../Core/Store/CreateTaskNews";
+import { useCreateTaskStore } from "../../../../Core/Store/CreateTaskNews";
 import { useAppStore } from "../../../../Core/Store/AppStore";
+import { useAppModeStore } from "../../../../Core/Store/AppModeStore";
 
 function CreateTask() {
   const {
@@ -17,12 +18,14 @@ function CreateTask() {
     createTaskError,
     clearErrors,
     resultTypes,
-  } = useCreateTaskNews();
+  } = useCreateTaskStore();
+  const { useMockData } = useAppModeStore();
+
   const { user } = useAppStore();
 
   useEffect(() => {
-    setChapters();
-    setResultTypes();
+    useMockData && setChapters("");
+    useMockData && setResultTypes("");
     return () => clearErrors();
   }, []);
 

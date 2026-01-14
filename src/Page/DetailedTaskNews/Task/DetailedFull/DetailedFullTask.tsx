@@ -6,12 +6,14 @@ import Button from "../../../../Ui/Button/Button";
 import clickTo1C from "../../../../Utils/clicker";
 import { useParams } from "react-router-dom";
 import { createMarkupUniversal } from "../../../../Utils/createMarkup";
-import { useCreateTaskNews } from "../../../../Core/Store/CreateTaskNews";
+import { useCreateTaskStore } from "../../../../Core/Store/CreateTaskNews";
 import { useActionsStore } from "../../../../Core/Store/ActionsStore";
+import { useAppModeStore } from "../../../../Core/Store/AppModeStore";
 
 function DetailedFullTask() {
-  const { oneTask, developer, getOneTask, getFullTaskDeveloper } =
-    useCreateTaskNews();
+  const { oneTask, getOneTask, getFullTaskDeveloper } = useCreateTaskStore();
+  const { useMockData } = useAppModeStore();
+
   const { setActions } = useActionsStore();
   const [isExpanded, setIsExpanded] = useState(false);
   const params = useParams();
@@ -25,8 +27,8 @@ function DetailedFullTask() {
   };
 
   useEffect(() => {
-    getOneTask();
-    developer && getFullTaskDeveloper(Number(params.id));
+    useMockData && getOneTask("");
+    useMockData && getFullTaskDeveloper(Number(params.id));
   }, []);
 
   const renderImages = () => {
@@ -73,7 +75,7 @@ function DetailedFullTask() {
       objectType: oneTask?.ObjectType,
       active: true,
     });
-    !developer && clickTo1C();
+    !useMockData && clickTo1C();
   }
 
   if (!oneTask) {
@@ -132,7 +134,7 @@ function DetailedFullTask() {
                   <div className="attachment_child" key={index}>
                     <div
                       className="attachment_child_text"
-                      onClick={() => clickLink(attachment)}
+                      onClick={() => clickLink(attachment, false, false)}
                     >
                       {attachment.ObjectName}
                     </div>
@@ -156,7 +158,7 @@ function DetailedFullTask() {
                               drafts
                             </span>
                           }
-                          onClick={() => clickLink(attachment, true)}
+                          onClick={() => clickLink(attachment, true, false)}
                         />
                       )}
                     </div>

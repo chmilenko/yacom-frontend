@@ -4,11 +4,13 @@ import clickTo1C from "../../Utils/clicker";
 import { useAppStore } from "../../Core/Store/AppStore";
 import { useActionsStore } from "../../Core/Store/ActionsStore";
 import Button from "../../Ui/Button/Button";
+import { useAppModeStore } from "../../Core/Store/AppModeStore";
 
 function MenuBar() {
   const location = useLocation();
   const navigate = useNavigate();
-  const { developer, menuItems } = useAppStore();
+  const { menuItems } = useAppStore();
+  const { useMockData } = useAppModeStore();
   const { setActions } = useActionsStore();
 
   const handleNavigation = (item) => {
@@ -23,7 +25,7 @@ function MenuBar() {
       active: true,
       objectId: item.objectId,
     });
-    !developer && clickTo1C();
+    !useMockData && clickTo1C();
   };
 
   return (

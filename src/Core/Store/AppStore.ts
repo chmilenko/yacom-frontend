@@ -7,32 +7,7 @@ import {
   AppState,
   User,
 } from "@core/Types/AppState";
-
-interface I1CData {
-  Sections: ISection[];
-  Tabs: ITab[];
-}
-
-let forStateMock: I1CData[] | undefined;
-let dataInstructions: IInstructions[] | undefined;
-let additionalMock: IAdditionalInfo[] | undefined;
-let userMock: User | undefined;
-
-if (process.env.REACT_APP_DEVELOPER === "true") {
-  const mockModule = require("../Mock/mock") as {
-    data: I1CData[];
-    user: User;
-    additionalData: IAdditionalInfo[];
-  };
-  const instructionsModule = require("../Mock/instructions") as {
-    instructions: IInstructions[];
-  };
-
-  forStateMock = mockModule.data;
-  userMock = mockModule.user;
-  additionalMock = mockModule.additionalData;
-  dataInstructions = instructionsModule.instructions;
-}
+import { useAppModeStore } from "./AppModeStore";
 
 interface AppStore extends AppState {
   setAppState: (appData: string) => Promise<void>;
@@ -63,8 +38,17 @@ export const useAppStore = create<AppStore>()((set, get) => ({
 
   setUser: async (user) => {
     try {
-      const { developer } = get();
-      const res = !developer ? JSON.parse(user) : userMock;
+      const { useMockData } = useAppModeStore.getState();
+
+      let userMock;
+
+      if (useMockData) {
+        const mockModule = await import("../Mock/mock");
+        userMock = mockModule.user;
+      }
+      const res = !useMockData ? JSON.parse(user) : userMock;
+      console.log(res);
+
       set({ user: res });
     } catch (err) {
       const { addError } = (
@@ -95,13 +79,22 @@ export const useAppStore = create<AppStore>()((set, get) => ({
   },
 
   setAppState: async (appData: string) => {
+    const isDebugMode = useAppModeStore.getState().isDebugMode;
     try {
-      const { developer } = get();
-      const res = !developer
+      const useMockData = useAppModeStore.getState().useMockData;
+      // Получаем моки ТОЛЬКО если нужны
+      let forStateMock;
+
+      if (useMockData) {
+        // Динамический импорт моков
+        const mockModule = await import("../Mock/mock");
+        forStateMock = mockModule.data;
+      }
+      const res = !useMockData
         ? JSON.parse(appData)[0].Sections
         : forStateMock[0].Sections;
 
-      const menuItems = !developer
+      const menuItems = !useMockData
         ? JSON.parse(appData)[0].Tabs
         : forStateMock[0].Tabs;
 
@@ -132,24 +125,27 @@ export const useAppStore = create<AppStore>()((set, get) => ({
         await import("./ErrorsStore")
       ).useErrorsStore.getState();
 
-      addError({
-        type: "parsing",
-        message: "Ошибка парсинга данных приложения",
-        severity: "error",
-        context: "setAppState",
-        details: `Не удалось распарсить данные в setAppState\nОшибка ${
-          err.name
-        }: ${err.message}\nДанные: ${
-          typeof appData === "string"
-            ? appData.substring(0, 200) + "..."
-            : typeof appData
-        }\n${err.stack}`,
-        originalError: {
-          name: err.name,
-          message: err.message,
-          stack: err.stack,
+      addError(
+        {
+          type: "parsing",
+          message: "Ошибка парсинга данных приложения",
+          severity: "error",
+          context: "setAppState",
+          details: `Не удалось распарсить данные в setAppState\nОшибка ${
+            err.name
+          }: ${err.message}\nДанные: ${
+            typeof appData === "string"
+              ? appData.substring(0, 200) + "..."
+              : typeof appData
+          }\n${err.stack}`,
+          originalError: {
+            name: err.name,
+            message: err.message,
+            stack: err.stack,
+          },
         },
-      });
+        isDebugMode
+      );
 
       console.error("setAppState error:", err);
     }
@@ -158,6 +154,8 @@ export const useAppStore = create<AppStore>()((set, get) => ({
   setOpenSwiper: (swiperState) => set({ openSwiper: swiperState }),
 
   setTaskDoneStatus: async (id: number | string) => {
+    const isDebugMode = useAppModeStore.getState().isDebugMode;
+
     try {
       const { forState } = get();
 
@@ -245,28 +243,34 @@ export const useAppStore = create<AppStore>()((set, get) => ({
         await import("./ErrorsStore")
       ).useErrorsStore.getState();
 
-      addError({
-        type: "application",
-        message: "Ошибка обновления статуса задачи",
-        severity: "error",
-        context: "setTaskDoneStatus",
-        details: `Не удалось обновить статус задачи ID: ${id}\nОшибка ${err.name}: ${err.message}\n${err.stack}`,
-        originalError: {
-          name: err.name,
-          message: err.message,
-          stack: err.stack,
+      addError(
+        {
+          type: "application",
+          message: "Ошибка обновления статуса задачи",
+          severity: "error",
+          context: "setTaskDoneStatus",
+          details: `Не удалось обновить статус задачи ID: ${id}\nОшибка ${err.name}: ${err.message}\n${err.stack}`,
+          originalError: {
+            name: err.name,
+            message: err.message,
+            stack: err.stack,
+          },
         },
-      });
+        isDebugMode
+      );
 
       console.error("setTaskDoneStatus error:", err);
     }
   },
 
   setReadNews: async (id: number | string) => {
-    try {
-      const { developer, forState } = get();
+    const isDebugMode = useAppModeStore.getState().isDebugMode;
 
-      if (developer) {
+    try {
+      const { forState } = get();
+      const useMockData = useAppModeStore.getState().useMockData;
+
+      if (useMockData) {
         const updatedData = forState.map((section) => {
           if (!section.sectionData?.list) return section;
 
@@ -324,31 +328,43 @@ export const useAppStore = create<AppStore>()((set, get) => ({
         await import("./ErrorsStore")
       ).useErrorsStore.getState();
 
-      addError({
-        type: "application",
-        message: "Ошибка отметки новости как прочитанной",
-        severity: "error",
-        context: "setReadNews",
-        details: `Не удалось обновить статус новости ID: ${id}\nОшибка ${err.name}: ${err.message}\n${err.stack}`,
-        originalError: {
-          name: err.name,
-          message: err.message,
-          stack: err.stack,
+      addError(
+        {
+          type: "application",
+          message: "Ошибка отметки новости как прочитанной",
+          severity: "error",
+          context: "setReadNews",
+          details: `Не удалось обновить статус новости ID: ${id}\nОшибка ${err.name}: ${err.message}\n${err.stack}`,
+          originalError: {
+            name: err.name,
+            message: err.message,
+            stack: err.stack,
+          },
         },
-      });
+        isDebugMode
+      );
 
       console.error("setReadNews error:", err);
     }
   },
 
-  setAdditionalInfo: (id: number | string, type: string) => {
+  setAdditionalInfo: async (id: number | string, type: string) => {
     try {
-      let findAdditionalInfo: IAdditionalInfo;
+      const useMockData = useAppModeStore.getState().useMockData;
+      let findAdditionalInfo;
+
+      if (useMockData) {
+        // Динамический импорт моков
+        const mockModule = await import("../Mock/mock");
+        findAdditionalInfo = mockModule.additionalData;
+      }
 
       if (type === "Task" || type === "Задачи") {
-        findAdditionalInfo = additionalMock?.find((info) => info.TaskID === id);
+        findAdditionalInfo = findAdditionalInfo?.find(
+          (info) => info.TaskID === id
+        );
       } else {
-        findAdditionalInfo = additionalMock?.find(
+        findAdditionalInfo = findAdditionalInfo?.find(
           (info) => info.ObjectID === id
         );
       }
@@ -369,6 +385,8 @@ export const useAppStore = create<AppStore>()((set, get) => ({
   },
 
   setListState: async (ListData) => {
+    const isDebugMode = useAppModeStore.getState().isDebugMode;
+
     try {
       const res = JSON.parse(ListData).reduce((acc, val) => {
         acc = val;
@@ -403,27 +421,39 @@ export const useAppStore = create<AppStore>()((set, get) => ({
   },
 
   setInstructionsState: async (appData) => {
+    const isDebugMode = useAppModeStore.getState().isDebugMode;
+
     try {
-      const { developer } = get();
-      const res = !developer ? JSON.parse(appData) : dataInstructions;
+      const useMockData = useAppModeStore.getState().useMockData;
+      let dataInstructions: IInstructions[];
+
+      if (useMockData) {
+        // Динамический импорт моков
+        const mockModule = await import("../Mock/instructions");
+        dataInstructions = mockModule.instructions;
+      }
+      const res = !useMockData ? JSON.parse(appData) : dataInstructions;
       set({ instructions: res });
     } catch (err) {
       const { addError } = (
         await import("./ErrorsStore")
       ).useErrorsStore.getState();
 
-      addError({
-        type: "parsing",
-        message: "Ошибка парсинга инструкций",
-        severity: "error",
-        context: "setInstructionsState",
-        details: `Не удалось распарсить инструкции\nОшибка ${err.name}: ${err.message}\n${err.stack}`,
-        originalError: {
-          name: err.name,
-          message: err.message,
-          stack: err.stack,
+      addError(
+        {
+          type: "parsing",
+          message: "Ошибка парсинга инструкций",
+          severity: "error",
+          context: "setInstructionsState",
+          details: `Не удалось распарсить инструкции\nОшибка ${err.name}: ${err.message}\n${err.stack}`,
+          originalError: {
+            name: err.name,
+            message: err.message,
+            stack: err.stack,
+          },
         },
-      });
+        isDebugMode
+      );
 
       console.error("setInstructionsState error:", err);
     }

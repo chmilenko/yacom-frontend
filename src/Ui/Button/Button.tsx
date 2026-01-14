@@ -22,6 +22,8 @@ interface ButtonProps {
   ) => void;
   icon?: IconProps;
   className?: string;
+  disabled?: boolean;
+  style?: React.CSSProperties;
   type?:
     | "default"
     | "primary"
@@ -29,6 +31,7 @@ interface ButtonProps {
     | "danger"
     | "success"
     | "warning"
+    | "navigation"
     | "report";
   children?: ReactNode;
 }

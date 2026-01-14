@@ -4,7 +4,8 @@ import Button from "../../Ui/Button/Button";
 import clickTo1C from "../../Utils/clicker";
 import { useActionsStore } from "../../Core/Store/ActionsStore";
 import { useAppStore } from "../../Core/Store/AppStore";
-import { useCreateTaskNews } from "../../Core/Store/CreateTaskNews";
+import { useCreateTaskStore } from "../../Core/Store/CreateTaskNews";
+import { useAppModeStore } from "../../Core/Store/AppModeStore";
 
 function LayoutButtons() {
   const navigate = useNavigate();
@@ -12,8 +13,9 @@ function LayoutButtons() {
   const params = useParams();
 
   const { setActions } = useActionsStore();
-  const { developer, user } = useAppStore();
-  const { postTask, isCreatingTask, createTaskError } = useCreateTaskNews();
+  const { user } = useAppStore();
+  const { useMockData } = useAppModeStore();
+  const { postTask, isCreatingTask, createTaskError } = useCreateTaskStore();
 
   const isCreatePage = location.pathname === "/task/create";
   const isFullPage = location.pathname.startsWith("/task/full");
@@ -32,7 +34,7 @@ function LayoutButtons() {
       currentForm: "createTask",
     });
     navigate("/task/create");
-    !developer && clickTo1C();
+    !useMockData && clickTo1C();
   };
 
   const handleCreateTask = async () => {
@@ -48,7 +50,7 @@ function LayoutButtons() {
             subdivisionGuid: user.subdivisionGuid,
           },
         });
-        !developer && clickTo1C();
+        !useMockData && clickTo1C();
       }
     } catch (error) {
       console.error("Ошибка создания задачи:", error);

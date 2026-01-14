@@ -1,6 +1,7 @@
 const HtmlWebpackPlugin = require("html-webpack-plugin");
 const HtmlInlineScriptPlugin = require("html-inline-script-webpack-plugin");
 const webpack = require("webpack");
+const path = require('path');
 
 module.exports = {
   mode: "production",
@@ -42,6 +43,14 @@ module.exports = {
   },
   resolve: {
     extensions: [".js", ".jsx", ".json", ".ts", ".tsx"],
+    //  alias: {
+    //   // Добавь алиасы как в tsconfig.json
+    //   '@core': path.resolve(__dirname, 'src/Core'),
+    //   '@components': path.resolve(__dirname, 'src/Components'),
+    //   '@pages': path.resolve(__dirname, 'src/Pages'),
+    //   '@utils': path.resolve(__dirname, 'src/Utils'),
+    //   '@styles': path.resolve(__dirname, 'src/Styles'),
+    // },
   },
   plugins: [
     new HtmlWebpackPlugin({

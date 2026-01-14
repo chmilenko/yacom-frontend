@@ -2,7 +2,8 @@ import { useEffect } from "react";
 import { useAppStore } from "../Core/Store/AppStore";
 import { useActionsStore } from "../Core/Store/ActionsStore";
 import { useErrorsStore } from "../Core/Store/ErrorsStore";
-
+import { useAppModeStore } from "../Core/Store/AppModeStore";
+import { useCreateTaskStore } from "../Core/Store/CreateTaskNews";
 declare global {
   interface Window {
     pageComponent?: {
@@ -45,6 +46,22 @@ declare global {
       getErrorsJSON: ReturnType<
         typeof useErrorsStore.getState
       >["getErrorsJSON"];
+
+      //CreateOpenTasks
+      getOneTask: ReturnType<typeof useCreateTaskStore.getState>["getOneTask"];
+      setFullTasks: ReturnType<
+        typeof useCreateTaskStore.getState
+      >["setFullTasks"];
+      setChapters: ReturnType<
+        typeof useCreateTaskStore.getState
+      >["setChapters"];
+      setResultTypes: ReturnType<
+        typeof useCreateTaskStore.getState
+      >["setResultTypes"];
+
+      //debug
+      isDebugMode: ReturnType<typeof useAppModeStore.getState>["isDebugMode"];
+      setDebugMode: ReturnType<typeof useAppModeStore.getState>["setDebugMode"];
     };
   }
 }
@@ -53,6 +70,7 @@ const PageComponentInitializer = () => {
   useEffect(() => {
     const appState = useAppStore.getState();
     const actionsState = useActionsStore.getState();
+    const fullTasks = useCreateTaskStore.getState();
     const errorsState = useErrorsStore.getState();
 
     window.pageComponent = {
@@ -78,6 +96,14 @@ const PageComponentInitializer = () => {
       errors: errorsState.errors,
       errorHistory: errorsState.errorHistory,
       getErrorsJSON: errorsState.getErrorsJSON,
+
+      getOneTask: fullTasks.getOneTask,
+      setFullTasks: fullTasks.setFullTasks,
+      setChapters: fullTasks.setChapters,
+      setResultTypes: fullTasks.setResultTypes,
+      //debug
+      isDebugMode: useAppModeStore.getState().isDebugMode,
+      setDebugMode: useAppModeStore.getState().setDebugMode,
     };
 
     console.log("✅ pageComponent initialized once");
