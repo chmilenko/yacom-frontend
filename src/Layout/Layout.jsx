@@ -12,7 +12,7 @@ import { useActionsStore } from "../Core/Store/ActionsStore";
 
 function Layout() {
   const contentRef = useRef(null);
-  const { setAppState, page, setInstructionsState, developer } = useAppStore();
+  const { page, developer } = useAppStore();
 
   const { setActions } = useActionsStore();
 
@@ -25,7 +25,7 @@ function Layout() {
           active: true,
         });
         !developer && clickTo1C();
-        return setAppState();
+        return;
       case "instructions":
         setActions({
           actionName: "pullToRefresh",
@@ -33,7 +33,7 @@ function Layout() {
           active: true,
         });
         !developer && clickTo1C();
-        return setInstructionsState();
+        return;
       default:
         console.log("No refresh function implemented for this page");
         return "empty";

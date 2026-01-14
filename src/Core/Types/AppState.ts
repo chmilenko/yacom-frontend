@@ -4,7 +4,6 @@ export interface AppState {
   instructions: IInstructions[];
   additionalInfo: IAdditionalInfo | null;
   openSwiper: boolean;
-  developer: boolean;
   page: string;
   countActualTasks: number;
   countUnreadNews: number;
@@ -28,9 +27,9 @@ export interface Task {
   [key: string]: any;
 }
 export interface ISection {
-  SectionName: string;
+  SectionName?: string;
   SectionCode?: string;
-  SectionKey: string;
+  SectionKey?: string;
 
   sectionData?: {
     list?: Array<Task>;
@@ -68,7 +67,7 @@ export interface ITag {
 export interface IAdditionalInfo {
   // Основные поля
   Done: boolean;
-  DoneDate: string; 
+  DoneDate: string;
   Date: string;
   Title: string;
   Deadline: string;
@@ -82,7 +81,7 @@ export interface IAdditionalInfo {
   QuestionCount: number;
 
   // Типы и классификаторы
-  ResultType: string; 
+  ResultType: string;
   ObjectType: string;
   LongHeader: boolean;
 

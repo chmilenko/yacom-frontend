@@ -2,7 +2,7 @@ import { useEffect } from "react";
 import { useAppStore } from "../Core/Store/AppStore";
 import { useActionsStore } from "../Core/Store/ActionsStore";
 import { useErrorsStore } from "../Core/Store/ErrorsStore";
-
+import { useAppModeStore } from "../Core/Store/AppModeStore";
 declare global {
   interface Window {
     pageComponent?: {
@@ -43,6 +43,10 @@ declare global {
       getErrorsJSON: ReturnType<
         typeof useErrorsStore.getState
       >["getErrorsJSON"];
+
+      //debug
+      isDebugMode: ReturnType<typeof useAppModeStore.getState>["isDebugMode"];
+      setDebugMode: ReturnType<typeof useAppModeStore.getState>["setDebugMode"];
     };
   }
 }
@@ -74,6 +78,10 @@ const PageComponentInitializer = () => {
       errors: errorsState.errors,
       errorHistory: errorsState.errorHistory,
       getErrorsJSON: errorsState.getErrorsJSON,
+
+      //debug
+      isDebugMode: useAppModeStore.getState().isDebugMode,
+      setDebugMode: useAppModeStore.getState().setDebugMode,
     };
 
     console.log("✅ pageComponent initialized once");

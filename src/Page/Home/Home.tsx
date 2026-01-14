@@ -5,17 +5,18 @@ import Swiper from "../../Components/Swiper/Swiper";
 import AdditionalInfo from "./Components/AdditionalInfo/AdditionalInfo";
 import "./Home.scss";
 import { useEffect } from "react";
+import { useAppModeStore } from "../../Core/Store/AppModeStore";
 
 function Home() {
   const {
     setAppState,
-    developer,
     forState,
     additionalInfo,
     openSwiper,
     setOpenSwiper,
     setListStateClear,
   } = useAppStore();
+  const { useMockData } = useAppModeStore();
 
   const { openTasksOrNewsForm, handleOpenSwiper, onTaskExecute, taskFulfill } =
     useHomeActions();
@@ -30,7 +31,7 @@ function Home() {
   };
 
   useEffect(() => {
-    developer && setAppState("");
+    useMockData && setAppState("");
   }, []);
 
   return (

@@ -7,8 +7,10 @@ import Journals from "../Page/Journals";
 import Products from "../Page/Products";
 import Instruction from "../Page/Instruction/Instruction";
 import Errors from "../Page/Errors/ErrorDisplay";
+import { useAppModeStore } from "../Core/Store/AppModeStore";
 
 function MainRoute() {
+  const { isDebugMode } = useAppModeStore();
   return (
     <Routes>
       <Route element={<Layout />}>
@@ -17,7 +19,7 @@ function MainRoute() {
         <Route path="/help" element={<Help />} />
         <Route path="/journals" element={<Journals />} />
         <Route path="/products" element={<Products />} />
-        <Route path="/errors" element={<Errors />} />
+        {isDebugMode && <Route path="/errors" element={<Errors />} />}
       </Route>
     </Routes>
   );

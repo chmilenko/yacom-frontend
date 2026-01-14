@@ -8,9 +8,11 @@ import Button from "../../../../Ui/Button/Button";
 import { useAppStore } from "../../../../Core/Store/AppStore";
 import { useActionsStore } from "../../../../Core/Store/ActionsStore";
 import { IAttachment } from "../../../../Core/Types/AppState";
+import { useAppModeStore } from "../../../../Core/Store/AppModeStore";
 
 function AdditionalInfo({ onTaskExecute, taskFulfill }) {
-  const { additionalInfo, developer } = useAppStore();
+  const { additionalInfo } = useAppStore();
+  const { useMockData } = useAppModeStore();
 
   const { setActions } = useActionsStore();
   const [taskDone, setTaskDone] = useState(additionalInfo?.Done);
@@ -34,7 +36,7 @@ function AdditionalInfo({ onTaskExecute, taskFulfill }) {
           : [],
       active: true,
     });
-    !developer && clickTo1C();
+    !useMockData && clickTo1C();
   }
 
   function clickLink(attachment: IAttachment, send, print) {
@@ -49,7 +51,7 @@ function AdditionalInfo({ onTaskExecute, taskFulfill }) {
       objectType: additionalInfo?.ObjectType,
       active: true,
     });
-    !developer && clickTo1C();
+    !useMockData && clickTo1C();
   }
 
   useEffect(() => {

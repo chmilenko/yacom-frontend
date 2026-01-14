@@ -6,6 +6,7 @@ import { useAppStore } from "../../Core/Store/AppStore";
 import { useActionsStore } from "../../Core/Store/ActionsStore";
 import { useErrorsStore } from "../../Core/Store/ErrorsStore";
 import { IAdditionalInfo } from "../../Core/Types/AppState";
+import { useAppModeStore } from "../../Core/Store/AppModeStore";
 
 export const useHomeActions = () => {
   const { setActions } = useActionsStore();
@@ -13,7 +14,7 @@ export const useHomeActions = () => {
   const {
     additionalInfo,
     setAdditionalInfo,
-    developer,
+
     setTaskDoneStatus,
     setReadNews,
     openSwiper,
@@ -21,6 +22,7 @@ export const useHomeActions = () => {
   } = useAppStore();
 
   const { errors } = useErrorsStore();
+  const { useMockData } = useAppModeStore();
 
   const taskAction = (TypeResult) => {
     switch (TypeResult) {
@@ -63,12 +65,12 @@ export const useHomeActions = () => {
         objectType: info.ObjectType && info.ObjectType,
       });
 
-      developer && setAdditionalInfo(id, type);
+      useMockData && setAdditionalInfo(id, type);
       if (info.ObjectType && info.ObjectType === "Poll") {
         setOpenSwiper(false);
       } else setOpenSwiper(true);
 
-      !developer && clickTo1C();
+      !useMockData && clickTo1C();
     } catch (err) {
       const errorDescription = "Ошибка в handleOpenSwiper";
       const errorWithId = {
@@ -96,7 +98,7 @@ export const useHomeActions = () => {
       });
     }
     setTaskDoneStatus(id);
-    !developer && clickTo1C();
+    !useMockData && clickTo1C();
   };
 
   const taskFulfill = (id) => {
@@ -115,7 +117,7 @@ export const useHomeActions = () => {
       // setListState();
     }
     setActions(obj);
-    !developer && clickTo1C();
+    !useMockData && clickTo1C();
   };
 
   const sectionAction = (Section) => {
@@ -142,7 +144,7 @@ export const useHomeActions = () => {
         active: true,
         currentForm: sectionAction(block),
       });
-      !developer && clickTo1C();
+      !useMockData && clickTo1C();
     } else return;
   };
 

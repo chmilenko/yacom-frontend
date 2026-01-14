@@ -58,9 +58,10 @@ interface ErrorsStore {
   isOnline: boolean;
   config: ErrorsStoreConfig;
 
-  addError: (error: IErrorInput) => void;
+  addError: (error: IErrorInput, showAlert?: boolean) => void;
   addErrorFromException: (error: Error | unknown, context?: string) => void;
   removeError: (errorId: number) => void;
+  showErrorAlert: (errorId: IError) => void;
   removeErrorFromHistory: (errorId: number) => void;
   clearErrorHistory: () => void;
   clearErrors: () => void;
@@ -96,7 +97,7 @@ export const useErrorsStore = create<ErrorsStore>()(
       isOnline: navigator.onLine,
       config: defaultConfig,
 
-      addError: (errorInput: IErrorInput) => {
+      addError: (errorInput: IErrorInput, showAlert: boolean = false) => {
         const { config } = get();
         const errorWithId: IError = {
           id: Date.now(),
@@ -108,6 +109,10 @@ export const useErrorsStore = create<ErrorsStore>()(
           ...errorInput,
           message: errorInput.message,
         };
+
+        if (showAlert) {
+          get().showErrorAlert(errorWithId);
+        }
 
         set((state) => {
           const newHistory = [...state.errorHistory, errorWithId];
@@ -128,6 +133,22 @@ export const useErrorsStore = create<ErrorsStore>()(
         ) {
           sendErrorTo1C(errorWithId);
         }
+      },
+
+      showErrorAlert: (error: IError) => {
+        const alertMessage = `
+ОШИБКА [${error.type.toUpperCase()}]
+
+${error.message}
+
+${error.details ? `Детали: ${error.details}\n` : ""}
+${error.context ? `Контекст: ${error.context}\n` : ""}
+Время: ${new Date(error.timestamp).toLocaleTimeString()}
+Страница: ${error.page}
+  `.trim();
+
+        alert(alertMessage);
+        console.error("🚨 Ошибка:", error);
       },
 
       addErrorFromException: (error: Error | unknown, context?: string) => {
