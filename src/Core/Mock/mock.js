@@ -777,3 +777,5 @@ export const resultTypes = [
   name: "Ввести число",
 },
 ]
+
+

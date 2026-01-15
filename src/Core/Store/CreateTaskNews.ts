@@ -1,6 +1,6 @@
 // Core/Store/CreateTaskStore.ts
 import { create } from "zustand";
-import { persist } from "zustand/middleware";
+// import { persist } from "zustand/middleware";
 import { useAppModeStore } from "./AppModeStore";
 
 // Типы для данных
@@ -104,212 +104,239 @@ interface CreateTaskStore {
 }
 
 export const useCreateTaskStore = create<CreateTaskStore>()(
-  persist(
-    (set, get) => ({
-      // Начальное состояние
-      fullTasks: [],
-      oneTask: null,
-      chapters: [],
-      resultTypes: [],
-      taskFormData: {
-        chapter: "",
-        subdivision: "Т054 Томск, Тверская 81",
-        resultType: "",
-        title: "",
-        deadline: "",
-        content: "",
-      },
-      isCreatingTask: false,
-      createTaskError: null,
+  (set, get) => ({
+    // Начальное состояние
+    fullTasks: [],
+    oneTask: null,
+    chapters: [],
+    resultTypes: [],
+    taskFormData: {
+      chapter: "",
+      subdivision: "Т054 Томск, Тверская 81",
+      resultType: "",
+      title: "",
+      deadline: "",
+      content: "",
+    },
+    isCreatingTask: false,
+    createTaskError: null,
 
-      // Методы
-      setFullTasks: async (tasks: string) => {
-        try {
-          const { useMockData } = useAppModeStore.getState();
-          let fullTasksMock;
+    // Методы
+    setFullTasks: async (tasks: string) => {
+      const isDebugMode = useAppModeStore.getState().isDebugMode;
 
-          if (useMockData) {
-            const mockModule = await import("../Mock/fullTasks");
-            fullTasksMock = mockModule.fullTasks || [];
-          }
+      try {
+        const { useMockData } = useAppModeStore.getState();
+        let fullTasksMock;
 
-          const res = !useMockData
-            ? (JSON.parse(tasks) as ITask[])
-            : fullTasksMock;
-
-          set({
-            fullTasks: res,
-          });
-        } catch (err: any) {
-          console.error("Ошибка в setFullTasks:", err);
-        }
-      },
-
-      setChapters: async (chapters: string) => {
-        try {
-          const { useMockData } = useAppModeStore.getState();
-          let chaptersMock: IChapter[] = [];
-
-          if (useMockData) {
-            const mockModule = (await import("../Mock/mock")) as IMockModule;
-            chaptersMock = mockModule.chapters || [];
-          }
-
-          const res = !useMockData
-            ? (JSON.parse(chapters) as IChapter[])
-            : chaptersMock;
-
-          set({
-            chapters: res,
-          });
-        } catch (err: any) {
-          console.error("Ошибка в setChapters:", err);
-        }
-      },
-
-      setResultTypes: async (types: string) => {
-        try {
-          const { useMockData } = useAppModeStore.getState();
-          let tasksResultTypes: IResultType[] = [];
-
-          if (useMockData) {
-            const mockModule = (await import("../Mock/mock")) as IMockModule;
-            tasksResultTypes = mockModule.resultTypes || [];
-          }
-
-          const res = !useMockData
-            ? (JSON.parse(types) as IResultType[])
-            : tasksResultTypes;
-
-          set({
-            resultTypes: res,
-          });
-        } catch (err: any) {
-          console.error("Ошибка в setResultTypes:", err);
-        }
-      },
-
-      updateTaskFormData: (field: keyof ITaskFormData, value: string) => {
-        set((state) => ({
-          taskFormData: {
-            ...state.taskFormData,
-            [field]: value,
-          },
-          createTaskError: state.createTaskError
-            ? { ...state.createTaskError, [field]: undefined }
-            : null,
-        }));
-      },
-
-      resetTaskForm: () => {
-        set({
-          taskFormData: {
-            chapter: "",
-            subdivision: "Т054 Томск, Тверская 81",
-            resultType: "",
-            title: "",
-            deadline: "",
-            content: "",
-          },
-          createTaskError: null,
-        });
-      },
-
-      postTask: async () => {
-        const { taskFormData } = get();
-        const errors: IFormErrors = {};
-
-        // Валидация
-        if (!taskFormData.chapter) {
-          errors.chapter = "Выберите раздел";
-        }
-        if (!taskFormData.resultType) {
-          errors.resultType = "Выберите тип результата";
-        }
-        if (!taskFormData.title || !taskFormData.title.trim()) {
-          errors.title = "Введите заголовок";
-        }
-        if (!taskFormData.deadline) {
-          errors.deadline = "Выберите дату выполнения";
-        }
-        if (!taskFormData.content || !taskFormData.content.trim()) {
-          errors.content = "Введите содержание";
-        }
-
-        if (Object.keys(errors).length > 0) {
-          set({ createTaskError: errors });
-          throw new Error("Ошибка валидации формы");
-        }
-
-        set({ isCreatingTask: true, createTaskError: null });
-
-        try {
-          // Имитация запроса к API
-          await new Promise((resolve) => setTimeout(resolve, 1000));
-
-          const result = {
-            success: true,
-            data: { ...taskFormData },
-          };
-
-          get().resetTaskForm();
-          return result;
-        } catch (error: any) {
-          console.error("Ошибка при создании задачи:", error);
-          set({
-            createTaskError: {
-              general: error.message || "Неизвестная ошибка",
-            },
-          });
-          throw error;
-        } finally {
-          set({ isCreatingTask: false });
-        }
-      },
-
-      getFullTask: (task: string) => {
-        try {
-          const res = JSON.parse(task) as ITask[];
-          set({
-            oneTask: res || [],
-          });
-        } catch (err: any) {
-          console.error("Ошибка в getFullTask:", err);
-        }
-      },
-
-      getOneTask: async (oneTask: string) => {
-        try {
-          const res = JSON.parse(oneTask) as ITask;
-          set({
-            oneTask: res || [],
-          });
-        } catch (err: any) {
-          console.error("Ошибка в getOneTask:", err);
-        }
-      },
-
-      getFullTaskDeveloper: async (id: string | number) => {
-        try {
+        if (useMockData) {
           const mockModule = await import("../Mock/fullTasks");
-          const oneTaskData = mockModule.oneTask || [];
-          const res = oneTaskData.find((task) => task.TaskID === id);
-
-          set({
-            oneTask: res || [],
-          });
-        } catch (err: any) {
-          console.error("Ошибка в getFullTaskDeveloper:", err);
+          fullTasksMock = mockModule.fullTasks || [];
         }
-      },
 
-      clearErrors: () => {
-        set({ createTaskError: null });
-      },
-    }),
-    {
-      name: "create-task-storage",
-      partialize: (state) => ({}),
-    }
-  )
+        const res = !useMockData
+          ? (JSON.parse(tasks) as ITask[])
+          : fullTasksMock;
+
+        set({
+          fullTasks: res,
+        });
+      } catch (err: any) {
+        const { addError } = (
+          await import("./ErrorsStore")
+        ).useErrorsStore.getState();
+
+        addError(
+          {
+            type: "parsing",
+            message: "Ошибка парсинга данных задачи",
+            severity: "error",
+            context: "setFullTasks",
+            details: `Не удалось распарсить данные в setFullTasks\nОшибка ${
+              err.name
+            }: ${err.message}\nДанные: ${
+              typeof tasks === "string"
+                ? tasks.substring(0, 200) + "..."
+                : typeof tasks
+            }\n${err.stack}`,
+            originalError: {
+              name: err.name,
+              message: err.message,
+              stack: err.stack,
+            },
+          },
+          isDebugMode
+        );
+
+        console.error("setAppState error:", err);
+      }
+    },
+
+    setChapters: async (chapters: string) => {
+      try {
+        const { useMockData } = useAppModeStore.getState();
+        let chaptersMock: IChapter[] = [];
+
+        if (useMockData) {
+          const mockModule = (await import("../Mock/mock")) as IMockModule;
+          chaptersMock = mockModule.chapters || [];
+        }
+
+        const res = !useMockData
+          ? (JSON.parse(chapters) as IChapter[])
+          : chaptersMock;
+
+        set({
+          chapters: res,
+        });
+      } catch (err: any) {
+        console.error("Ошибка в setChapters:", err);
+      }
+    },
+
+    setResultTypes: async (types: string) => {
+      try {
+        const { useMockData } = useAppModeStore.getState();
+        let tasksResultTypes: IResultType[] = [];
+
+        if (useMockData) {
+          const mockModule = (await import("../Mock/mock")) as IMockModule;
+          tasksResultTypes = mockModule.resultTypes || [];
+        }
+
+        const res = !useMockData
+          ? (JSON.parse(types) as IResultType[])
+          : tasksResultTypes;
+
+        set({
+          resultTypes: res,
+        });
+      } catch (err: any) {
+        console.error("Ошибка в setResultTypes:", err);
+      }
+    },
+
+    updateTaskFormData: (field: keyof ITaskFormData, value: string) => {
+      set((state) => ({
+        taskFormData: {
+          ...state.taskFormData,
+          [field]: value,
+        },
+        createTaskError: state.createTaskError
+          ? { ...state.createTaskError, [field]: undefined }
+          : null,
+      }));
+    },
+
+    resetTaskForm: () => {
+      set({
+        taskFormData: {
+          chapter: "",
+          subdivision: "Т054 Томск, Тверская 81",
+          resultType: "",
+          title: "",
+          deadline: "",
+          content: "",
+        },
+        createTaskError: null,
+      });
+    },
+
+    postTask: async () => {
+      const { taskFormData } = get();
+      const errors: IFormErrors = {};
+
+      // Валидация
+      if (!taskFormData.chapter) {
+        errors.chapter = "Выберите раздел";
+      }
+      if (!taskFormData.resultType) {
+        errors.resultType = "Выберите тип результата";
+      }
+      if (!taskFormData.title || !taskFormData.title.trim()) {
+        errors.title = "Введите заголовок";
+      }
+      if (!taskFormData.deadline) {
+        errors.deadline = "Выберите дату выполнения";
+      }
+      if (!taskFormData.content || !taskFormData.content.trim()) {
+        errors.content = "Введите содержание";
+      }
+
+      if (Object.keys(errors).length > 0) {
+        set({ createTaskError: errors });
+        throw new Error("Ошибка валидации формы");
+      }
+
+      set({ isCreatingTask: true, createTaskError: null });
+
+      try {
+        // Имитация запроса к API
+        await new Promise((resolve) => setTimeout(resolve, 1000));
+
+        const result = {
+          success: true,
+          data: { ...taskFormData },
+        };
+
+        get().resetTaskForm();
+        return result;
+      } catch (error: any) {
+        console.error("Ошибка при создании задачи:", error);
+        set({
+          createTaskError: {
+            general: error.message || "Неизвестная ошибка",
+          },
+        });
+        throw error;
+      } finally {
+        set({ isCreatingTask: false });
+      }
+    },
+
+    getFullTask: (task: string) => {
+      try {
+        const res = JSON.parse(task) as ITask[];
+        set({
+          oneTask: res || [],
+        });
+      } catch (err: any) {
+        console.error("Ошибка в getFullTask:", err);
+      }
+    },
+
+    getOneTask: async (oneTask: string) => {
+      try {
+        const res = JSON.parse(oneTask) as ITask;
+        set({
+          oneTask: res || [],
+        });
+      } catch (err: any) {
+        console.error("Ошибка в getOneTask:", err);
+      }
+    },
+
+    getFullTaskDeveloper: async (id: string | number) => {
+      try {
+        const mockModule = await import("../Mock/fullTasks");
+        const oneTaskData = mockModule.oneTask || [];
+        const res = oneTaskData.find((task) => task.TaskID === id);
+
+        set({
+          oneTask: res || [],
+        });
+      } catch (err: any) {
+        console.error("Ошибка в getFullTaskDeveloper:", err);
+      }
+    },
+
+    clearErrors: () => {
+      set({ createTaskError: null });
+    },
+  })
+  // {
+  //   name: "create-task-storage",
+  //   partialize: (state) => ({}),
+  // }
+  // )
 );

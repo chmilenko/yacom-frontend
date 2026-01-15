@@ -11,7 +11,7 @@ import { useActionsStore } from "../../../../Core/Store/ActionsStore";
 import { useAppModeStore } from "../../../../Core/Store/AppModeStore";
 
 function DetailedFullTask() {
-  const { oneTask, getOneTask, getFullTaskDeveloper } = useCreateTaskStore();
+  const { oneTask, getFullTaskDeveloper } = useCreateTaskStore();
   const { useMockData } = useAppModeStore();
 
   const { setActions } = useActionsStore();
@@ -27,7 +27,6 @@ function DetailedFullTask() {
   };
 
   useEffect(() => {
-    useMockData && getOneTask("");
     useMockData && getFullTaskDeveloper(Number(params.id));
   }, []);
 

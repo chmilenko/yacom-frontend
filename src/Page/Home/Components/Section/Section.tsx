@@ -4,7 +4,6 @@ import "./Section.scss";
 import Checkbox from "../../../../Ui/Checkbox/Checkbox";
 import { useNavigate } from "react-router-dom";
 import { useAppStore } from "../../../../Core/Store/AppStore";
-import { Task } from "../../../../Core/Types/AppState";
 
 function Section({ section, onOpenSwiper, openSectionForm, type }) {
   const [isActive, setIsActive] = useState(false);
@@ -18,6 +17,7 @@ function Section({ section, onOpenSwiper, openSectionForm, type }) {
   };
 
   const items = section.sectionData?.list || [];
+  console.log(type);
 
   const showSectionCount = type === "Сигналы";
   const count = type === "Задачи" ? countActualTasks : countUnreadNews;
@@ -142,8 +142,8 @@ function Section({ section, onOpenSwiper, openSectionForm, type }) {
 
         {isExpanded && !isSpecialBlock && !showSectionCount && (
           <div className="section_content">
-            {items.length > 0
-              ? items.map((item: Task) => (
+            {items?.length > 0
+              ? items.map((item) => (
                   <div
                     key={item.TaskID || item.ObjectID}
                     className={`section_item ${
