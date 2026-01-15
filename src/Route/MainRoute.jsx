@@ -11,7 +11,7 @@ import Instruction from "../Page/Instruction/Instruction";
 import Errors from "../Page/Errors/ErrorDisplay";
 import { useAppModeStore } from "../Core/Store/AppModeStore";
 
-import DetailedTask from "../Page/DetailedTaskNews/Task/Detailed/DetailedTask";
+import DetailedTask from "../Page/DetailedTaskNews/Task/Detailed/DetailedTasks";
 import CreateTask from "../Page/DetailedTaskNews/Task/Create/CreateTask";
 import DetailedNews from "../Page/DetailedTaskNews/News/DetailedNews";
 import DetailedFullTask from "../Page/DetailedTaskNews/Task/DetailedFull/DetailedFullTask";

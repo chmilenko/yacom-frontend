@@ -61,7 +61,17 @@ function DetailedTask() {
               </div>
               <div className="task_date">
                 <span className="date_icon">📅</span>
-                <span className="date_text">{task.date}</span>
+                <span className="date_text">
+                  {task.date
+                    ? new Date(task.date)
+                        .toLocaleDateString("ru-RU", {
+                          day: "2-digit",
+                          month: "2-digit",
+                          year: "2-digit",
+                        })
+                        .replace(/\//g, ".")
+                    : ""}
+                </span>
               </div>
             </div>
 
