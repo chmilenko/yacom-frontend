@@ -143,6 +143,8 @@ export const useHomeActions = () => {
         actionName: "clickElement",
         active: true,
         currentForm: sectionAction(block),
+        month: "",
+        filter: true,
       });
       !useMockData && clickTo1C();
     } else return;

@@ -1,7 +1,7 @@
 import React from "react";
 import { Route, Routes } from "react-router-dom";
 import Layout from "../Layout/Main/Layout";
-import CreateTaskLayout from "../Layout/DetailtTaskNews/LayoutCreateTask";
+import TaskNewsLayout from "../Layout/DetailtTaskNews/LayoutCreateTask";
 
 import Home from "../Page/Home/Home";
 import Help from "../Page/Help/Help";
@@ -28,7 +28,7 @@ function MainRoute() {
         <Route path="/products" element={<Products />} />
         {isDebugMode && <Route path="/errors" element={<Errors />} />}
       </Route>
-      <Route path="/" element={<CreateTaskLayout />}>
+      <Route path="/" element={<TaskNewsLayout />}>
         <Route path="/task/full" element={<DetailedTask />} />
         <Route path="/task/full/:id" element={<DetailedFullTask />} />
         <Route path="/task/create" element={<CreateTask />} />

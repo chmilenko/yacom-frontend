@@ -47,8 +47,6 @@ export const useAppStore = create<AppStore>()((set, get) => ({
         userMock = mockModule.user;
       }
       const res = !useMockData ? JSON.parse(user) : userMock;
-      console.log(res);
-
       set({ user: res });
     } catch (err) {
       const { addError } = (

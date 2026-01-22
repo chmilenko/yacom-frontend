@@ -28,6 +28,7 @@ export interface IAttachment {
   ObjectName: string;
   PrintAvailable: boolean;
   IsFile: boolean;
+  ObjectID: string;
 }
 
 export interface IChapter {
@@ -66,6 +67,35 @@ export interface IFormErrors {
   [key: string]: string | undefined;
 }
 
+//---------------------протипизировать!!!!!!!!!!!!!-----------------------
+export interface INews {
+  ObjectID: string;
+  Title: string;
+  Content: string;
+  Author?: string;
+  Date: string;
+  New?: boolean;
+  ObjectType: string;
+  Images?: IImage[];
+  Attachments?: IAttachment[];
+  Tags?: ITag[];
+  [key: string]: any;
+}
+interface ITag {
+  TagName: string;
+  imgAddress: string;
+  ImageID?: string;
+  [key: string]: any;
+}
+
+// Тип для изображения
+interface IImage {
+  ImageID: string;
+  Адрес: string;
+  Порядок?: number;
+  [key: string]: any;
+}
+
 // Типы для мок-модулей
 interface IMockModule {
   chapters?: IChapter[];
@@ -81,6 +111,7 @@ interface IFullTasksModule {
 interface CreateTaskStore {
   // Данные
   fullTasks: ITask[];
+  fullNews: INews[];
   oneTask: ITask | null;
   chapters: IChapter[];
   resultTypes: IResultType[];
@@ -92,6 +123,7 @@ interface CreateTaskStore {
 
   // Методы
   setFullTasks: (tasks: string) => Promise<void>;
+  setFullNews: (news: string) => Promise<void>;
   setChapters: (chapters: string) => Promise<void>;
   setResultTypes: (types: string) => Promise<void>;
   updateTaskFormData: (field: keyof ITaskFormData, value: string) => void;
@@ -107,6 +139,7 @@ export const useCreateTaskStore = create<CreateTaskStore>()(
   (set, get) => ({
     // Начальное состояние
     fullTasks: [],
+    fullNews: [],
     oneTask: null,
     chapters: [],
     resultTypes: [],
@@ -171,6 +204,54 @@ export const useCreateTaskStore = create<CreateTaskStore>()(
         console.error("setAppState error:", err);
       }
     },
+    //изменить типизацию
+    setFullNews: async (news: string) => {
+      const isDebugMode = useAppModeStore.getState().isDebugMode;
+
+      try {
+        const { useMockData } = useAppModeStore.getState();
+        let fullNewsMock;
+
+        if (useMockData) {
+          const mockModule = await import("../Mock/fullTasks");
+          fullNewsMock = mockModule.fullNews || [];
+        }
+
+        const res = !useMockData ? (JSON.parse(news) as INews[]) : fullNewsMock;
+
+        set({
+          fullNews: res,
+        });
+      } catch (err: any) {
+        const { addError } = (
+          await import("./ErrorsStore")
+        ).useErrorsStore.getState();
+
+        addError(
+          {
+            type: "parsing",
+            message: "Ошибка парсинга полного списка Новостей",
+            severity: "error",
+            context: "setFullNews",
+            details: `Не удалось распарсить данные в setFullNews\nОшибка ${
+              err.name
+            }: ${err.message}\nДанные: ${
+              typeof news === "string"
+                ? news.substring(0, 200) + "..."
+                : typeof news
+            }\n${err.stack}`,
+            originalError: {
+              name: err.name,
+              message: err.message,
+              stack: err.stack,
+            },
+          },
+          isDebugMode
+        );
+
+        console.error("setFullNews error:", err);
+      }
+    },
 
     setChapters: async (chapters: string) => {
       try {
@@ -190,7 +271,34 @@ export const useCreateTaskStore = create<CreateTaskStore>()(
           chapters: res,
         });
       } catch (err: any) {
-        console.error("Ошибка в setChapters:", err);
+        const isDebugMode = useAppModeStore.getState().isDebugMode;
+        const { addError } = (
+          await import("./ErrorsStore")
+        ).useErrorsStore.getState();
+
+        addError(
+          {
+            type: "parsing",
+            message: "Ошибка парсинга данных задачи",
+            severity: "error",
+            context: "setChapters",
+            details: `Не удалось распарсить данные в setChapters\nОшибка ${
+              err.name
+            }: ${err.message}\nДанные: ${
+              typeof chapters === "string"
+                ? chapters.substring(0, 200) + "..."
+                : typeof chapters
+            }\n${err.stack}`,
+            originalError: {
+              name: err.name,
+              message: err.message,
+              stack: err.stack,
+            },
+          },
+          isDebugMode
+        );
+
+        console.error("setChapters error:", err);
       }
     },
 
@@ -212,7 +320,34 @@ export const useCreateTaskStore = create<CreateTaskStore>()(
           resultTypes: res,
         });
       } catch (err: any) {
-        console.error("Ошибка в setResultTypes:", err);
+        const isDebugMode = useAppModeStore.getState().isDebugMode;
+        const { addError } = (
+          await import("./ErrorsStore")
+        ).useErrorsStore.getState();
+
+        addError(
+          {
+            type: "parsing",
+            message: "Ошибка парсинга результатов задачи",
+            severity: "error",
+            context: "setResultTypes",
+            details: `Не удалось распарсить данные в setResultTypes\nОшибка ${
+              err.name
+            }: ${err.message}\nДанные: ${
+              typeof types === "string"
+                ? types.substring(0, 200) + "..."
+                : typeof types
+            }\n${err.stack}`,
+            originalError: {
+              name: err.name,
+              message: err.message,
+              stack: err.stack,
+            },
+          },
+          isDebugMode
+        );
+
+        console.error("setResultTypes error:", err);
       }
     },
 

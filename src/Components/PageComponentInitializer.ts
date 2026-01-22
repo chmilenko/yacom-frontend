@@ -47,7 +47,7 @@ declare global {
         typeof useErrorsStore.getState
       >["getErrorsJSON"];
 
-      //CreateOpenTasks
+      //CreateOpenTasksNews
       getOneTask: ReturnType<typeof useCreateTaskStore.getState>["getOneTask"];
       setFullTasks: ReturnType<
         typeof useCreateTaskStore.getState
@@ -58,6 +58,9 @@ declare global {
       setResultTypes: ReturnType<
         typeof useCreateTaskStore.getState
       >["setResultTypes"];
+      setFullNews: ReturnType<
+        typeof useCreateTaskStore.getState
+      >["setFullNews"];
 
       //debug
       isDebugMode: ReturnType<typeof useAppModeStore.getState>["isDebugMode"];
@@ -101,6 +104,7 @@ const PageComponentInitializer = () => {
       setFullTasks: fullTasks.setFullTasks,
       setChapters: fullTasks.setChapters,
       setResultTypes: fullTasks.setResultTypes,
+      setFullNews: fullTasks.setFullNews,
       //debug
       isDebugMode: useAppModeStore.getState().isDebugMode,
       setDebugMode: useAppModeStore.getState().setDebugMode,

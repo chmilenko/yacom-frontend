@@ -5,7 +5,7 @@ import "./CreateTaskLayout.scss";
 import ScrollToTop from "../../Components/ScrollToTop/ScrollToTop";
 import LayoutButtons from "./LayoutButton";
 
-function CreateTaskLayout() {
+function TaskNewsLayout() {
   const contentRef = useRef(null);
 
   return (
@@ -25,4 +25,4 @@ function CreateTaskLayout() {
   );
 }
 
-export default CreateTaskLayout;
+export default TaskNewsLayout;

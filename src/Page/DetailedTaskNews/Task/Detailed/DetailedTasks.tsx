@@ -7,6 +7,7 @@ import { useActionsStore } from "../../../../Core/Store/ActionsStore";
 import clickTo1C from "../../../../Utils/clicker";
 import { useCreateTaskStore } from "../../../../Core/Store/CreateTaskNews";
 import { useAppModeStore } from "../../../../Core/Store/AppModeStore";
+import DoneImg from "./DoneImg";
 
 function DetailedTask() {
   const { setFullTasks, fullTasks } = useCreateTaskStore();
@@ -45,17 +46,7 @@ function DetailedTask() {
             onClick={() => handleClickCard(task.TaskID)}
           >
             <div className="task_header">
-              <div>
-                <img
-                  src={task.mainTag}
-                  alt="Метка задачи"
-                  className="main_tag_icon"
-                  style={{
-                    width: "28px",
-                    height: "28px",
-                  }}
-                />
-              </div>
+              <DoneImg done={task.Done} />
               <div className="task_tag_title">
                 <span className="tag_badge">{task.tagTitle}</span>
               </div>
@@ -93,11 +84,7 @@ function DetailedTask() {
                 </div>
 
                 <div className="task_sub_tag">
-                  <img
-                    src={task.subTag}
-                    alt="Дополнительная метка"
-                    className="sub_tag_icon"
-                  />
+                  <img src={task.Tag} alt="" className="sub_tag_icon" />
                   <div className="sub_tag_fallback">🔖</div>
                 </div>
               </div>

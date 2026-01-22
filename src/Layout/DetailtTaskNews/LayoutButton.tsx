@@ -118,7 +118,6 @@ function LayoutButtons() {
           text="Создать"
         />
         <Button
-          onClick={() => console.log("Перейти к отчету")}
           type="navigation"
           text="Отчет"
         />
@@ -131,7 +130,6 @@ function LayoutButtons() {
       <>
         <Button onClick={() => navigate("/")} type="navigation" text="Назад" />
         <Button
-          onClick={() => console.log("Перейти к отбору")}
           type="navigation"
           text="Отбор"
         />

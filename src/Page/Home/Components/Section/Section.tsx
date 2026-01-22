@@ -17,7 +17,6 @@ function Section({ section, onOpenSwiper, openSectionForm, type }) {
   };
 
   const items = section.sectionData?.list || [];
-  console.log(type);
 
   const showSectionCount = type === "Сигналы";
   const count = type === "Задачи" ? countActualTasks : countUnreadNews;
