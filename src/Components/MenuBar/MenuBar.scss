@@ -1,6 +1,9 @@
 @import "../../Styles/variables.scss";
 
 .header-navigation {
+  * {
+    color: inherit;
+  }
   @include flex-center-around;
   flex-direction: row;
   padding: 8px 0px 8px 0px;
@@ -56,6 +59,15 @@ nav {
   flex-direction: column-reverse;
 }
 .menu-button {
+  -webkit-tap-highlight-color: transparent;
+
+  &.active {
+    color: $primary !important;
+  }
+
+  .material-symbols-outlined {
+    color: inherit !important;
+  }
   @media screen and (max-width: 385px) {
     font-size: 13px;
   }
