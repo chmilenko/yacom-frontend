@@ -24449,146 +24449,198 @@
                 const { setFullTasks: e, fullTasks: n } = Pe(),
                   { useMockData: r } = ye(),
                   { setActions: a } = (0, Ee.useActionsStore)(),
-                  o = K();
-                return (
-                  (0, t.useEffect)(() => {
-                    r && e("");
-                  }, []),
-                  (0, Xe.jsxs)("div", {
-                    children: [
-                      (0, Xe.jsx)("div", {
-                        className: "task_list_container",
-                        children: n.map((e) =>
-                          (0, Xe.jsxs)(
-                            "div",
-                            {
-                              className: "task_card",
-                              onClick: () => {
-                                return (
-                                  (t = e.TaskID),
-                                  r ||
-                                    (a({
-                                      actionName: "clickElement",
-                                      page: "oneTask",
-                                      active: !0,
-                                      TaskId: t,
-                                    }),
-                                    !r && (0, Ye.default)()),
-                                  void o("/task/full/".concat(t))
-                                );
-                                var t;
-                              },
-                              children: [
-                                (0, Xe.jsxs)("div", {
-                                  className: "task_header",
-                                  children: [
-                                    (0, Xe.jsx)(fi, { done: e.Done }),
-                                    (0, Xe.jsx)("div", {
-                                      className: "task_tag_title",
-                                      children: (0, Xe.jsx)("span", {
-                                        className: "tag_badge",
-                                        children: e.tagTitle,
-                                      }),
-                                    }),
-                                    (0, Xe.jsxs)("div", {
-                                      className: "task_date",
-                                      children: [
-                                        (0, Xe.jsx)("span", {
-                                          className: "date_icon",
-                                          children: "📅",
-                                        }),
-                                        (0, Xe.jsx)("span", {
-                                          className: "date_text",
-                                          children: e.date
-                                            ? new Date(e.date)
-                                                .toLocaleDateString("ru-RU", {
-                                                  day: "2-digit",
-                                                  month: "2-digit",
-                                                  year: "2-digit",
-                                                })
-                                                .replace(/\//g, ".")
-                                            : "",
-                                        }),
-                                      ],
-                                    }),
-                                  ],
-                                }),
-                                (0, Xe.jsx)("div", {
-                                  className: "task_divider",
-                                }),
-                                (0, Xe.jsxs)("div", {
-                                  className: "task_body",
-                                  children: [
-                                    (0, Xe.jsx)("h3", {
-                                      className: "task_title",
-                                      children: e.title,
-                                    }),
-                                    (0, Xe.jsxs)("div", {
-                                      className: "task_deadline",
-                                      children: [
-                                        (0, Xe.jsx)("span", {
-                                          className: "deadline_icon",
-                                          children: "⏰",
-                                        }),
-                                        (0, Xe.jsx)("span", {
-                                          className: "deadline_label",
-                                          children: "Выполнить до:",
-                                        }),
-                                        (0, Xe.jsx)("span", {
-                                          className: "deadline_date",
-                                          children: e.deadline,
-                                        }),
-                                      ],
-                                    }),
-                                    (0, Xe.jsxs)("div", {
-                                      className: "task_footer",
-                                      children: [
-                                        (0, Xe.jsxs)("div", {
-                                          className: "task_creator",
-                                          children: [
-                                            (0, Xe.jsx)("span", {
-                                              className: "creator_icon",
-                                              children: "👤",
-                                            }),
-                                            (0, Xe.jsx)("span", {
-                                              className: "creator_name",
-                                              children: e.creator,
-                                            }),
-                                          ],
-                                        }),
-                                        (0, Xe.jsxs)("div", {
-                                          className: "task_sub_tag",
-                                          children: [
-                                            (0, Xe.jsx)("img", {
-                                              src: e.Tag,
-                                              alt: "",
-                                              className: "sub_tag_icon",
-                                            }),
-                                            (0, Xe.jsx)("div", {
-                                              className: "sub_tag_fallback",
-                                              children: "🔖",
-                                            }),
-                                          ],
-                                        }),
-                                      ],
-                                    }),
-                                  ],
-                                }),
-                              ],
+                  o = K(),
+                  [i, l] = (0, t.useState)(0),
+                  [s, c] = (0, t.useState)([]);
+                (0, t.useEffect)(() => {
+                  r && e(""), u();
+                }, []);
+                const u = () => {
+                    const e = [],
+                      t = new Date();
+                    for (let n = 0; n < 12; n++) {
+                      const r = new Date(t.getFullYear(), t.getMonth() - n, 1);
+                      e.push(d(r));
+                    }
+                    c(e);
+                  },
+                  d = (e) => {
+                    const t = String(e.getDate()).padStart(2, "0"),
+                      n = String(e.getMonth() + 1).padStart(2, "0"),
+                      r = e.getFullYear();
+                    return "".concat(r).concat(n).concat(t);
+                  };
+                return (0, Xe.jsxs)("div", {
+                  children: [
+                    (0, Xe.jsx)("div", {
+                      className: "task_list_container",
+                      children: n.map((e) =>
+                        (0, Xe.jsxs)(
+                          "div",
+                          {
+                            className: "task_card",
+                            onClick: () => {
+                              return (
+                                (t = e.TaskID),
+                                r ||
+                                  (a({
+                                    actionName: "clickElement",
+                                    page: "oneTask",
+                                    active: !0,
+                                    TaskId: t,
+                                  }),
+                                  !r && (0, Ye.default)()),
+                                void o("/task/full/".concat(t))
+                              );
+                              var t;
                             },
-                            e.TaskID
-                          )
-                        ),
+                            children: [
+                              (0, Xe.jsxs)("div", {
+                                className: "task_header",
+                                children: [
+                                  (0, Xe.jsx)(fi, { done: e.Done }),
+                                  (0, Xe.jsx)("div", {
+                                    className: "task_tag_title",
+                                    children: (0, Xe.jsx)("span", {
+                                      className: "tag_badge",
+                                      children: e.tagTitle,
+                                    }),
+                                  }),
+                                  (0, Xe.jsxs)("div", {
+                                    className: "task_date",
+                                    children: [
+                                      (0, Xe.jsx)("span", {
+                                        className: "date_icon",
+                                        children: "📅",
+                                      }),
+                                      (0, Xe.jsx)("span", {
+                                        className: "date_text",
+                                        children: e.date
+                                          ? new Date(e.date)
+                                              .toLocaleDateString("ru-RU", {
+                                                day: "2-digit",
+                                                month: "2-digit",
+                                                year: "2-digit",
+                                              })
+                                              .replace(/\//g, ".")
+                                          : "",
+                                      }),
+                                    ],
+                                  }),
+                                ],
+                              }),
+                              (0, Xe.jsx)("div", { className: "task_divider" }),
+                              (0, Xe.jsxs)("div", {
+                                className: "task_body",
+                                children: [
+                                  (0, Xe.jsx)("h3", {
+                                    className: "task_title",
+                                    children: e.title,
+                                  }),
+                                  (0, Xe.jsxs)("div", {
+                                    className: "task_deadline",
+                                    children: [
+                                      (0, Xe.jsx)("span", {
+                                        className: "deadline_icon",
+                                        children: "⏰",
+                                      }),
+                                      (0, Xe.jsx)("span", {
+                                        className: "deadline_label",
+                                        children: "Выполнить до:",
+                                      }),
+                                      (0, Xe.jsx)("span", {
+                                        className: "deadline_date",
+                                        children: e.deadline,
+                                      }),
+                                    ],
+                                  }),
+                                  (0, Xe.jsxs)("div", {
+                                    className: "task_footer",
+                                    children: [
+                                      (0, Xe.jsxs)("div", {
+                                        className: "task_creator",
+                                        children: [
+                                          (0, Xe.jsx)("span", {
+                                            className: "creator_icon",
+                                            children: "👤",
+                                          }),
+                                          (0, Xe.jsx)("span", {
+                                            className: "creator_name",
+                                            children: e.creator,
+                                          }),
+                                        ],
+                                      }),
+                                      (0, Xe.jsxs)("div", {
+                                        className: "task_sub_tag",
+                                        children: [
+                                          (0, Xe.jsx)("img", {
+                                            src: e.Tag,
+                                            alt: "",
+                                            className: "sub_tag_icon",
+                                          }),
+                                          (0, Xe.jsx)("div", {
+                                            className: "sub_tag_fallback",
+                                            children: "🔖",
+                                          }),
+                                        ],
+                                      }),
+                                    ],
+                                  }),
+                                ],
+                              }),
+                            ],
+                          },
+                          e.TaskID
+                        )
+                      ),
+                    }),
+                    (0, Xe.jsx)("div", {
+                      className: "task_list_action",
+                      children: (0, Xe.jsx)(et, {
+                        text: (() => {
+                          const e =
+                            0 === s.length
+                              ? "текущий месяц"
+                              : ((e) => {
+                                  if (!e || 8 !== e.length)
+                                    return "текущий месяц";
+                                  const t = e.slice(4, 6);
+                                  return (
+                                    [
+                                      "Январь",
+                                      "Февраль",
+                                      "Март",
+                                      "Апрель",
+                                      "Май",
+                                      "Июнь",
+                                      "Июль",
+                                      "Август",
+                                      "Сентябрь",
+                                      "Октябрь",
+                                      "Ноябрь",
+                                      "Декабрь",
+                                    ][parseInt(t, 10) - 1] || "текущий месяц"
+                                  );
+                                })(s[i]);
+                          return "Раннее за ".concat(e);
+                        })(),
+                        onClick: () => {
+                          if (0 === s.length) return;
+                          const e = s[i];
+                          a({
+                            actionName: "clickElement",
+                            active: !0,
+                            currentForm: "Задачи",
+                            month: e,
+                            filter: !1,
+                          }),
+                            r || (0, Ye.default)(),
+                            i + 1 < s.length && l(i + 1);
+                        },
                       }),
-                      (0, Xe.jsx)("div", {
-                        className: "task_list_action",
-                        children: (0, Xe.jsx)(et, {
-                          text: "Задачи за December",
-                        }),
-                      }),
-                    ],
-                  })
-                );
+                    }),
+                  ],
+                });
               };
             var mi = i(7379),
               hi = {};
@@ -25275,22 +25327,25 @@
                           0 === s.length
                             ? "текущий месяц"
                             : ((e) => {
-                                const [t] = e.split(" "),
-                                  [n, r, a] = t.split(".");
-                                return [
-                                  "Январь",
-                                  "Февраль",
-                                  "Март",
-                                  "Апрель",
-                                  "Май",
-                                  "Июнь",
-                                  "Июль",
-                                  "Август",
-                                  "Сентябрь",
-                                  "Октябрь",
-                                  "Ноябрь",
-                                  "Декабрь",
-                                ][parseInt(r) - 1];
+                                if (!e || 8 !== e.length)
+                                  return "текущий месяц";
+                                const t = e.slice(4, 6);
+                                return (
+                                  [
+                                    "Январь",
+                                    "Февраль",
+                                    "Март",
+                                    "Апрель",
+                                    "Май",
+                                    "Июнь",
+                                    "Июль",
+                                    "Август",
+                                    "Сентябрь",
+                                    "Октябрь",
+                                    "Ноябрь",
+                                    "Декабрь",
+                                  ][parseInt(t, 10) - 1] || "текущий месяц"
+                                );
                               })(s[i]);
                         return "Раннее за ".concat(e);
                       })(),
