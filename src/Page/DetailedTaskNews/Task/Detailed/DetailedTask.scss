@@ -1,6 +1,8 @@
 @import "../../../../Styles/variables.scss";
 
 .task_list_container {
+  flex: 1; // Занимает все доступное пространство
+  overflow-y: auto; // Скролл если много карточек
   display: flex;
   flex-direction: column;
   gap: 20px;

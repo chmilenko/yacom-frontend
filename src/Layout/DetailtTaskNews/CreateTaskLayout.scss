@@ -1,16 +1,26 @@
 @import "../../Styles/variables.scss";
 
 .create_task_layout {
+  * {
+    color: inherit;
+  }
   display: flex;
   flex-direction: column;
   height: 100vh;
   position: relative;
+  -webkit-tap-highlight-color: transparent;
 }
 
 .create_task_content {
   flex: 1;
   overflow-y: auto;
   padding-bottom: 60px;
+}
+> div:first-child {
+  // Контейнер для ContentTransition
+  flex: 1;
+  position: relative;
+  overflow: hidden;
 }
 
 .create_task_footer {

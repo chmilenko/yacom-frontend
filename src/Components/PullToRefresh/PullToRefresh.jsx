@@ -4,6 +4,7 @@ import PullToRefresh from "pulltorefreshjs";
 import { faSyncAlt } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { useAppStore } from "../../Core/Store/AppStore";
+import "./pullToRefresh.css";
 
 function PullToRefreshComponent({ children, refreshFunk, contentRef }) {
   const { openSwiper } = useAppStore();
@@ -21,10 +22,10 @@ function PullToRefreshComponent({ children, refreshFunk, contentRef }) {
         },
         onRefresh: handlePullToRefresh,
         iconArrow: ReactDOMServer.renderToString(
-          <FontAwesomeIcon icon={faSyncAlt} />
+          <FontAwesomeIcon icon={faSyncAlt} />,
         ),
         iconRefreshing: ReactDOMServer.renderToString(
-          <FontAwesomeIcon icon={faSyncAlt} spin={true} />
+          <FontAwesomeIcon icon={faSyncAlt} spin={true} />,
         ),
       });
     }
@@ -35,13 +36,7 @@ function PullToRefreshComponent({ children, refreshFunk, contentRef }) {
   }, [refreshFunk, contentRef, openSwiper]);
 
   return (
-    <div
-      style={{
-        width: "100%",
-        height: "100%",
-      }}
-      ref={contentRef}
-    >
+    <div className="pullToRefresh" ref={contentRef}>
       {children}
     </div>
   );

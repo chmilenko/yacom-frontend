@@ -10,6 +10,7 @@ import ScrollToTop from "../../Components/ScrollToTop/ScrollToTop";
 import PullToRefreshComponent from "../../Components/PullToRefresh/PullToRefresh";
 import clickTo1C from "../../Utils/clicker";
 import { useAppModeStore } from "../../Core/Store/AppModeStore";
+import ContentTransition from "../../Components/PageTransition/PageTransition";
 
 function Layout() {
   const contentRef = useRef(null);
@@ -49,7 +50,9 @@ function Layout() {
           contentRef={contentRef}
           refreshFunk={() => funcRefresh(page)}
         >
+          {/* <ContentTransition> */}
           <Outlet />
+          {/* </ContentTransition> */}
         </PullToRefreshComponent>
       </main>
       <footer className="footer ">
