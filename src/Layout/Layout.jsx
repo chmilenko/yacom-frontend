@@ -10,6 +10,7 @@ import clickTo1C from "../Utils/clicker";
 import { useAppStore } from "../Core/Store/AppStore";
 import { useActionsStore } from "../Core/Store/ActionsStore";
 import { useAppModeStore } from "../Core/Store/AppModeStore";
+import PageTransition from "../Components/PageTransition/PageTransition";
 
 function Layout() {
   const contentRef = useRef(null);
@@ -52,7 +53,9 @@ function Layout() {
           contentRef={contentRef}
           refreshFunk={() => funcRefresh(page)}
         >
-          <Outlet />
+          <PageTransition>
+            <Outlet />
+          </PageTransition>
         </PullToRefreshComponent>
       </main>
       <footer className="footer ">
