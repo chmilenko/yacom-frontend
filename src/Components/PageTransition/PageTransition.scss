@@ -1,0 +1,92 @@
+// PageTransition.scss
+.page-transition-container {
+  position: relative;
+  width: 100%;
+  height: 100vh;
+  overflow: hidden; // Важно!
+}
+
+.page-content {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: #fff;
+  overflow-y: auto;
+  -webkit-overflow-scrolling: touch;
+  will-change: transform, opacity; // Для оптимизации
+
+  // Принудительно сбрасываем скролл для входящей страницы
+  &.page-enter,
+  &.page-enter-active {
+    overflow-y: hidden; // Временно отключаем скролл во время анимации
+
+    &::after {
+      content: "";
+      display: block;
+      height: 1px;
+    }
+  }
+
+  // После анимации включаем скролл
+  &:not(.page-enter):not(.page-enter-active):not(.page-exit):not(
+      .page-exit-active
+    ) {
+    overflow-y: auto;
+  }
+}
+
+// iOS-style анимация
+.page-enter {
+  transform: translateX(100%);
+  opacity: 1;
+  z-index: 2;
+  scroll-behavior: auto !important; // Отключаем плавный скролл
+}
+
+.page-enter-active {
+  transform: translateX(0);
+  opacity: 1;
+  transition:
+    transform 0.4s cubic-bezier(0.32, 0.72, 0, 1),
+    opacity 0.4s cubic-bezier(0.32, 0.72, 0, 1);
+}
+
+.page-exit {
+  transform: translateX(0);
+  opacity: 1;
+  z-index: 1;
+  pointer-events: none;
+  overflow-y: hidden !important; // Выключаем скролл у уходящей страницы
+
+  // Маска для предотвращения видимости скроллнутого контента
+  &::before {
+    content: "";
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: #fff;
+    z-index: 1;
+  }
+
+  > * {
+    position: relative;
+    z-index: 2;
+  }
+}
+
+.page-exit-active {
+  transform: translateX(-30%);
+  opacity: 0.8;
+  transition:
+    transform 0.4s cubic-bezier(0.32, 0.72, 0, 1),
+    opacity 0.4s cubic-bezier(0.32, 0.72, 0, 1);
+
+  &::before {
+    opacity: 0.9;
+    transition: opacity 0.4s ease;
+  }
+}
