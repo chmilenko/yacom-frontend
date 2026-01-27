@@ -17,14 +17,24 @@ function PullToRefreshComponent({ children, refreshFunk, contentRef }) {
       PullToRefresh.init({
         mainElement: contentRef.current,
         shouldPullToRefresh: function () {
-          return !openSwiper && !this.mainElement.scrollTop;
+          if (openSwiper) return false;
+
+          const element = this.mainElement;
+          // Проверяем, есть ли скролл вообще
+          const hasScroll = element.scrollHeight > element.clientHeight;
+
+          // Если скролла нет - разрешаем PTR
+          if (!hasScroll) return true;
+
+          // Если скролл есть - только когда в самом верху
+          return element.scrollTop <= 0;
         },
         onRefresh: handlePullToRefresh,
         iconArrow: ReactDOMServer.renderToString(
-          <FontAwesomeIcon icon={faSyncAlt} />
+          <FontAwesomeIcon icon={faSyncAlt} />,
         ),
         iconRefreshing: ReactDOMServer.renderToString(
-          <FontAwesomeIcon icon={faSyncAlt} spin={true} />
+          <FontAwesomeIcon icon={faSyncAlt} spin={true} />,
         ),
       });
     }

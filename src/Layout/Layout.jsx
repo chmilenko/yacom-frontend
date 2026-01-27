@@ -9,10 +9,12 @@ import PullToRefreshComponent from "../Components/PullToRefresh/PullToRefresh";
 import clickTo1C from "../Utils/clicker";
 import { useAppStore } from "../Core/Store/AppStore";
 import { useActionsStore } from "../Core/Store/ActionsStore";
+import { useAppModeStore } from "../Core/Store/AppModeStore";
 
 function Layout() {
   const contentRef = useRef(null);
-  const { page, developer } = useAppStore();
+  const { page } = useAppStore();
+  const { useMockData } = useAppModeStore();
 
   const { setActions } = useActionsStore();
 
@@ -24,7 +26,9 @@ function Layout() {
           page: "main",
           active: true,
         });
-        !developer && clickTo1C();
+        console.log("вызвали");
+
+        !useMockData && clickTo1C();
         return;
       case "instructions":
         setActions({
@@ -32,7 +36,7 @@ function Layout() {
           page: "instructions",
           active: true,
         });
-        !developer && clickTo1C();
+        !useMockData && clickTo1C();
         return;
       default:
         console.log("No refresh function implemented for this page");
