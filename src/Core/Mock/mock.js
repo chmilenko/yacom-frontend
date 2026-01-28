@@ -97,55 +97,7 @@ export const data = [
         SectionKey: "Tasks",
         sectionData: {
           list: [
-                {
-              Done: false,
-              Header: "Отметка о выполнении",
-              TaskID: "b48742bc-1cd5-c824-a9a7-40c205ee325f",
-              ResultType: "1",
-              Key: "b48742bc-1cd5-c824-a9a7-40c205ee325f",
-              ObjectType: "Poll",
-            },
-                {
-              Done: false,
-              Header: "Отметка о выполнении",
-              TaskID: "b48742bc-1cd5-c824-a9a7-40c205ee325f",
-              ResultType: "1",
-              Key: "b48742bc-1cd5-c824-a9a7-40c205ee325f",
-              ObjectType: "Poll",
-            },
-                {
-              Done: false,
-              Header: "Отметка о выполнении",
-              TaskID: "b48742bc-1cd5-c824-a9a7-40c205ee325f",
-              ResultType: "1",
-              Key: "b48742bc-1cd5-c824-a9a7-40c205ee325f",
-              ObjectType: "Poll",
-            },
-                {
-              Done: false,
-              Header: "Отметка о выполнении",
-              TaskID: "b48742bc-1cd5-c824-a9a7-40c205ee325f",
-              ResultType: "1",
-              Key: "b48742bc-1cd5-c824-a9a7-40c205ee325f",
-              ObjectType: "Poll",
-            },
 
-                {
-              Done: false,
-              Header: "Отметка о выполнении",
-              TaskID: "b48742bc-1cd5-c824-a9a7-40c205ee325f",
-              ResultType: "1",
-              Key: "b48742bc-1cd5-c824-a9a7-40c205ee325f",
-              ObjectType: "Poll",
-            },
-                {
-              Done: false,
-              Header: "Отметка о выполнении",
-              TaskID: "b48742bc-1cd5-c824-a9a7-40c205ee325f",
-              ResultType: "1",
-              Key: "b48742bc-1cd5-c824-a9a7-40c205ee325f",
-              ObjectType: "Poll",
-            },
             {
               Done: false,
               Header: "Отметка о выполнении",

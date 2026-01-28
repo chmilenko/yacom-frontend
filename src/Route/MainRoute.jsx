@@ -15,12 +15,10 @@ import DetailedTask from "../Page/DetailedTaskNews/Task/Detailed/DetailedTasks";
 import CreateTask from "../Page/DetailedTaskNews/Task/Create/CreateTask";
 import DetailedNews from "../Page/DetailedTaskNews/News/DetailedNews";
 import DetailedFullTask from "../Page/DetailedTaskNews/Task/DetailedFull/DetailedFullTask";
-import PageTransition from "../Components/PageTransition/PageTransition";
 
 function MainRoute() {
   const { isDebugMode } = useAppModeStore();
   return (
-    // <PageTransition>
     <Routes>
       <Route element={<Layout />}>
         <Route path="/" element={<Home />} />
@@ -37,7 +35,6 @@ function MainRoute() {
         <Route path="/news/full" element={<DetailedNews />} />
       </Route>
     </Routes>
-    // </PageTransition>
   );
 }
 

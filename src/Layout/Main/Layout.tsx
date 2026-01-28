@@ -1,5 +1,5 @@
-import { useRef } from "react";
-import { Outlet } from "react-router-dom";
+import { useEffect, useRef } from "react";
+import { Outlet, useLocation } from "react-router-dom";
 
 import "./Layout.scss";
 
@@ -11,12 +11,25 @@ import PullToRefreshComponent from "../../Components/PullToRefresh/PullToRefresh
 import clickTo1C from "../../Utils/clicker";
 import { useAppModeStore } from "../../Core/Store/AppModeStore";
 import ContentTransition from "../../Components/PageTransition/PageTransition";
+import usePageScroll from "../../Hooks/usePageScroll";
 
 function Layout() {
   const contentRef = useRef(null);
   const { page } = useAppStore();
   const { useMockData } = useAppModeStore();
   const { setActions } = useActionsStore();
+  const location = useLocation();
+  usePageScroll(contentRef);
+
+  useEffect(() => {
+    console.log("🔍 LAYOUT - Container ref updated:", {
+      current: contentRef.current,
+      className: contentRef.current?.className,
+      id: contentRef.current?.id,
+      scrollTop: contentRef.current?.scrollTop,
+      path: location.pathname,
+    });
+  }, [location.pathname]);
 
   const funcRefresh = (currentPage) => {
     switch (currentPage) {

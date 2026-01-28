@@ -8,16 +8,60 @@ import clickTo1C from "../../Utils/clicker";
 import InstructionItem from "./InstructionItem";
 import { useAppModeStore } from "../../Core/Store/AppModeStore";
 
+// Ключи для localStorage
+const STORAGE_KEYS = {
+  OPEN_INDEXES: "instructions_open_indexes",
+  FILTER_TEXT: "instructions_filter_text",
+};
+
 function Instruction() {
   const { instructions, setInstructionsState } = useAppStore();
   const { setActions } = useActionsStore();
   const { useMockData } = useAppModeStore();
 
-  const [openIndexes, setOpenIndexes] = useState({});
-  const [filterText, setFilterText] = useState("");
+  // Восстанавливаем состояние из localStorage
+  const [openIndexes, setOpenIndexes] = useState(() => {
+    try {
+      const saved = localStorage.getItem(STORAGE_KEYS.OPEN_INDEXES);
+      return saved ? JSON.parse(saved) : {};
+    } catch {
+      return {};
+    }
+  });
+
+  const [filterText, setFilterText] = useState(() => {
+    try {
+      const saved = localStorage.getItem(STORAGE_KEYS.FILTER_TEXT);
+      return saved || "";
+    } catch {
+      return "";
+    }
+  });
 
   useEffect(() => {
     useMockData && setInstructionsState("");
+  }, []);
+
+  // Сохраняем openIndexes в localStorage при изменении
+  useEffect(() => {
+    localStorage.setItem(
+      STORAGE_KEYS.OPEN_INDEXES,
+      JSON.stringify(openIndexes),
+    );
+  }, [openIndexes]);
+
+  // Сохраняем filterText в localStorage при изменении
+  useEffect(() => {
+    localStorage.setItem(STORAGE_KEYS.FILTER_TEXT, filterText);
+  }, [filterText]);
+
+  // Очистка localStorage при размонтировании (опционально)
+  useEffect(() => {
+    return () => {
+      // Если хотите очищать при уходе со страницы, раскомментируйте:
+      // localStorage.removeItem(STORAGE_KEYS.OPEN_INDEXES);
+      // localStorage.removeItem(STORAGE_KEYS.FILTER_TEXT);
+    };
   }, []);
 
   const sendByEmail = (id) => {
@@ -72,6 +116,7 @@ function Instruction() {
   };
 
   const closeAdditional = () => {
+    setFilterText("");
     setOpenIndexes({});
   };
 
@@ -92,7 +137,7 @@ function Instruction() {
             </span>
           ) : (
             <React.Fragment key={i}>{part}</React.Fragment>
-          )
+          ),
         )}
       </span>
     );
@@ -121,9 +166,10 @@ function Instruction() {
       .filter(Boolean);
   };
 
+  // Обновленный useEffect для фильтрации
   useEffect(() => {
     if (!filterText) {
-      setOpenIndexes({});
+      // При очистке фильтра НЕ очищаем openIndexes, а оставляем как есть
       return;
     }
 
@@ -219,4 +265,5 @@ function Instruction() {
     </div>
   );
 }
+
 export default Instruction;

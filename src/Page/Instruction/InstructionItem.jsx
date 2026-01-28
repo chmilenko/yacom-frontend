@@ -14,7 +14,11 @@ function InstructionItem({
   sendByPrint,
 }) {
   return (
-    <div className="instructions_content" key={item.id}>
+    <div
+      className="instructions_content"
+      key={item.id}
+      data-instruction-id={item.id}
+    >
       <div className="instructions_child_wrapper">
         <div
           className={`instructions_child ${!hasChildren && "no_children"}`}
