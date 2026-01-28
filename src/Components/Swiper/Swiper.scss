@@ -10,6 +10,10 @@
   max-width: 100%;
   box-sizing: border-box;
   transition: slideUp 0.3s ease-out;
+
+  overscroll-behavior: contain; // Предотвращает передачу скролла родителю
+  touch-action: pan-y; // Разрешаем только вертикальный скролл
+
   &-content {
     display: flex;
     flex-direction: column;
@@ -19,6 +23,12 @@
     border-radius: 12px 12px 0px 0px;
     touch-action: auto !important;
     width: 100%;
+
+    overflow-y: auto;
+    -webkit-overflow-scrolling: touch;
+
+    // Предотвращаем передачу скролла
+    overscroll-behavior: contain;
     &-header {
       display: flex;
       flex-direction: column;

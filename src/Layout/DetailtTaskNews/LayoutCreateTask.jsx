@@ -14,9 +14,9 @@ function TaskNewsLayout() {
       <ScrollToTop scrollContainerRef={contentRef} />
 
       <main className="create_task_content" ref={contentRef}>
-        {/* <ContentTransition> */}
+        <ContentTransition>
           <Outlet />
-        {/* </ContentTransition> */}
+        </ContentTransition>
       </main>
 
       <footer className="create_task_footer">

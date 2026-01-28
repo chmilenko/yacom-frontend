@@ -50,9 +50,9 @@ function Layout() {
           contentRef={contentRef}
           refreshFunk={() => funcRefresh(page)}
         >
-          {/* <ContentTransition> */}
-          <Outlet />
-          {/* </ContentTransition> */}
+          <ContentTransition>
+            <Outlet />
+          </ContentTransition>
         </PullToRefreshComponent>
       </main>
       <footer className="footer ">

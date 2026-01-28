@@ -123,7 +123,7 @@ function DetailedTask() {
   };
 
   return (
-    <div>
+    <div className="task_list">
       <div className="task_list_container">
         {fullTasks.map((task) => (
           <div

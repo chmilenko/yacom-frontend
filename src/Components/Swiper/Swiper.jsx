@@ -21,6 +21,20 @@ const Swiper = ({ children, header, closeSwiper }) => {
     });
   }, []);
 
+  useEffect(() => {
+    // Хак для iOS - предотвращаем скролл body
+    const preventDefault = (e) => {
+      if (openSwiper) {
+        e.preventDefault();
+      }
+    };
+    document.addEventListener("touchmove", preventDefault, { passive: false });
+
+    return () => {
+      document.removeEventListener("touchmove", preventDefault);
+    };
+  }, [openSwiper]);
+
   const handleMouseDown = useCallback(
     (event) => {
       isDragging.current = true;
@@ -53,7 +67,7 @@ const Swiper = ({ children, header, closeSwiper }) => {
       window.addEventListener("mousemove", handleMouseMove);
       window.addEventListener("mouseup", handleMouseUp);
     },
-    [closeSwiper, handleDrag]
+    [closeSwiper, handleDrag],
   );
 
   const handleTouchStart = useCallback(
@@ -88,7 +102,7 @@ const Swiper = ({ children, header, closeSwiper }) => {
       window.addEventListener("touchmove", handleTouchMove);
       window.addEventListener("touchend", handleTouchEnd);
     },
-    [closeSwiper, handleDrag]
+    [closeSwiper, handleDrag],
   );
 
   useEffect(() => {
