@@ -1,5 +1,4 @@
-import React, { useEffect, useLayoutEffect, useRef } from "react";
-import { Route, Routes, useLocation } from "react-router-dom";
+import { Route, Routes } from "react-router-dom";
 import Layout from "../Layout/Main/Layout";
 import TaskNewsLayout from "../Layout/DetailtTaskNews/LayoutCreateTask";
 
@@ -15,7 +14,6 @@ import DetailedTask from "../Page/DetailedTaskNews/Task/Detailed/DetailedTasks";
 import CreateTask from "../Page/DetailedTaskNews/Task/Create/CreateTask";
 import DetailedNews from "../Page/DetailedTaskNews/News/DetailedNews";
 import DetailedFullTask from "../Page/DetailedTaskNews/Task/DetailedFull/DetailedFullTask";
-import AppLayoutTransition from "../Layout/AppLayoutTransition/AppLayoutTransition";
 
 function MainRoute() {
   const { isDebugMode } = useAppModeStore();
@@ -23,20 +21,18 @@ function MainRoute() {
   return (
     <Routes>
       <Route element={<Layout />}>
-        <Route element={<AppLayoutTransition />}>
-          <Route path="/" element={<Home />} />
-          <Route path="/instructions" element={<Instruction />} />
-          <Route path="/help" element={<Help />} />
-          <Route path="/journals" element={<Journals />} />
-          <Route path="/products" element={<Products />} />
-          {isDebugMode && <Route path="/errors" element={<Errors />} />}
-        </Route>
-        <Route path="/" element={<TaskNewsLayout />}>
-          <Route path="/task/full" element={<DetailedTask />} />
-          <Route path="/task/full/:id" element={<DetailedFullTask />} />
-          <Route path="/task/create" element={<CreateTask />} />
-          <Route path="/news/full" element={<DetailedNews />} />
-        </Route>
+        <Route path="/" element={<Home />} />
+        <Route path="/instructions" element={<Instruction />} />
+        <Route path="/help" element={<Help />} />
+        <Route path="/journals" element={<Journals />} />
+        <Route path="/products" element={<Products />} />
+        {isDebugMode && <Route path="/errors" element={<Errors />} />}
+      </Route>
+      <Route path="/" element={<TaskNewsLayout />}>
+        <Route path="/task/full" element={<DetailedTask />} />
+        <Route path="/task/full/:id" element={<DetailedFullTask />} />
+        <Route path="/task/create" element={<CreateTask />} />
+        <Route path="/news/full" element={<DetailedNews />} />
       </Route>
     </Routes>
   );

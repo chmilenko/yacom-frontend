@@ -14,8 +14,10 @@ function MenuBar() {
   const { setActions } = useActionsStore();
 
   const handleNavigation = (item) => {
-    navigate(item.path);
-    openChildMenu(item);
+    if (location.pathname !== item.path) {
+      navigate(item.path);
+      openChildMenu(item);
+    }
   };
 
   const openChildMenu = (item) => {

@@ -1,0 +1,70 @@
+.footer-container {
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  z-index: 100;
+}
+
+/* Анимация появления справа */
+.footer-slide-right-enter {
+  transform: translateX(100%);
+  opacity: 0;
+}
+
+.footer-slide-right-enter-active {
+  transform: translateX(0);
+  opacity: 1;
+  transition:
+    transform 300ms ease-out,
+    opacity 300ms ease-out;
+}
+
+.footer-slide-right-exit {
+  transform: translateX(0);
+  opacity: 1;
+}
+
+.footer-slide-right-exit-active {
+  transform: translateX(-100%);
+  opacity: 0;
+  transition:
+    transform 300ms ease-out,
+    opacity 300ms ease-out;
+}
+
+/* Обратная анимация (для выхода справа) */
+.footer-slide-right-reverse-exit-active {
+  transform: translateX(100%);
+  opacity: 0;
+  transition:
+    transform 300ms ease-out,
+    opacity 300ms ease-out;
+}
+
+/* Анимация появления слева */
+.footer-slide-left-enter {
+  transform: translateX(-100%);
+  opacity: 0;
+}
+
+.footer-slide-left-enter-active {
+  transform: translateX(0);
+  opacity: 1;
+  transition:
+    transform 300ms ease-out,
+    opacity 300ms ease-out;
+}
+
+.footer-slide-left-exit {
+  transform: translateX(0);
+  opacity: 1;
+}
+
+.footer-slide-left-exit-active {
+  transform: translateX(100%);
+  opacity: 0;
+  transition:
+    transform 300ms ease-out,
+    opacity 300ms ease-out;
+}

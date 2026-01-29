@@ -117,10 +117,7 @@ function LayoutButtons() {
           type="navigation"
           text="Создать"
         />
-        <Button
-          type="navigation"
-          text="Отчет"
-        />
+        <Button type="navigation" text="Отчет" />
       </>
     );
   }
@@ -129,10 +126,7 @@ function LayoutButtons() {
     return (
       <>
         <Button onClick={() => navigate("/")} type="navigation" text="Назад" />
-        <Button
-          type="navigation"
-          text="Отбор"
-        />
+        <Button type="navigation" text="Отбор" />
       </>
     );
   }

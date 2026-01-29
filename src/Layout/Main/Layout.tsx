@@ -16,23 +16,10 @@ import ContentTransition from "../../Components/PageTransition/PageTransition";
 function Layout() {
   const location = useLocation();
   const contentRef = useRef(null);
-  const [showFooter, setShowFooter] = useState(true);
 
   const { page } = useAppStore();
   const { useMockData } = useAppModeStore();
   const { setActions } = useActionsStore();
-
-  useEffect(() => {
-    const isGoingToTaskNews =
-      location.pathname.startsWith("/task") ||
-      location.pathname.startsWith("/news");
-
-    if (isGoingToTaskNews) {
-      setShowFooter(false);
-    } else {
-      setShowFooter(true);
-    }
-  }, [location.pathname]);
 
   useEffect(() => {
     if (contentRef.current) {
@@ -78,11 +65,9 @@ function Layout() {
           </ContentTransition>
         </PullToRefreshComponent>
       </main>
-      {showFooter && (
-        <footer className="footer">
-          <MenuBar />
-        </footer>
-      )}
+      <footer className="footer">
+        <MenuBar />
+      </footer>
     </div>
   );
 }
