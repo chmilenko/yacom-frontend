@@ -21,15 +21,9 @@ function Layout() {
   const contentRef = useRef(null);
 
   useEffect(() => {
-    console.log("🔄 Сбрасываем скролл .content элемента");
-    alert(location.pathname);
-    alert(contentRef);
-
     if (contentRef.current) {
-      // Скроллим именно content элемент
       contentRef.current.scrollTop = 0;
       contentRef.current.scrollTo({ top: 0, behavior: "instant" });
-      alert(`Скролл сбросился: ${contentRef.current.scrollTop}`);
     }
 
     // Также скроллим window на всякий случай
@@ -58,7 +52,7 @@ function Layout() {
         return "empty";
     }
   };
-  alert("работаешь ваще не");
+
   return (
     <div className="layout">
       <ScrollToTop scrollContainerRef={contentRef} />

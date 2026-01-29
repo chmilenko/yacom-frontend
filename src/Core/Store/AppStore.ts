@@ -78,7 +78,6 @@ export const useAppStore = create<AppStore>()((set, get) => ({
 
   setAppState: async (appData: string) => {
     const isDebugMode = useAppModeStore.getState().isDebugMode;
-    alert("setAppState");
     try {
       const useMockData = useAppModeStore.getState().useMockData;
       // Получаем моки ТОЛЬКО если нужны

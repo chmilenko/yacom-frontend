@@ -23157,18 +23157,11 @@
                   o = (0, t.useRef)(null);
                 return (
                   (0, t.useEffect)(() => {
-                    (console.log("🔄 Сбрасываем скролл .content элемента"),
-                      alert(a.pathname),
-                      alert(o),
-                      o.current &&
-                        ((o.current.scrollTop = 0),
-                        o.current.scrollTo({ top: 0, behavior: "instant" }),
-                        alert(
-                          "Скролл сбросился: ".concat(o.current.scrollTop),
-                        )),
+                    (o.current &&
+                      ((o.current.scrollTop = 0),
+                      o.current.scrollTo({ top: 0, behavior: "instant" })),
                       window.scrollTo(0, 0));
                   }, [a.pathname]),
-                  alert("работаешь ваще не"),
                   (0, Je.jsxs)("div", {
                     className: "layout",
                     children: [
@@ -24502,7 +24495,6 @@
                   (0, t.useEffect)(() => {
                     (s && e(""), s && l(""));
                   }, []),
-                  alert("main"),
                   (0, Je.jsxs)("div", {
                     className: "main",
                     children: [
