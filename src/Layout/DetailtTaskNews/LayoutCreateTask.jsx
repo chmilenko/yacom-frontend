@@ -13,15 +13,11 @@ function TaskNewsLayout() {
   const location = useLocation();
 
   useEffect(() => {
-    console.log("🔄 Сбрасываем скролл .content элемента");
-
     if (contentRef.current) {
-      // Скроллим именно content элемент
       contentRef.current.scrollTop = 0;
       contentRef.current.scrollTo({ top: 0, behavior: "instant" });
     }
 
-    // Также скроллим window на всякий случай
     window.scrollTo(0, 0);
   }, [location.pathname]);
 

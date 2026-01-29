@@ -54,6 +54,20 @@
               ]);
               const l = i;
             },
+            332(e, t, n) {
+              "use strict";
+              n.d(t, { A: () => l });
+              var r = n(1601),
+                a = n.n(r),
+                o = n(6314),
+                i = n.n(o)()(a());
+              i.push([
+                e.id,
+                ".layout-enter{opacity:0;transform:translateX(30px)}.layout-enter-active{opacity:1;transform:translateX(0);transition:opacity 350ms ease-out,transform 350ms ease-out}.layout-exit{opacity:1;transform:translateX(0)}.layout-exit-active{opacity:0;transform:translateX(-30px);transition:opacity 350ms ease-out,transform 350ms ease-out}.page-change-enter{opacity:0;transform:translateX(30px)}.page-change-enter-active{opacity:1;transform:translateX(0);transition:opacity 300ms ease-out,transform 300ms ease-out}.page-change-exit{opacity:1;transform:translateX(0)}.page-change-exit-active{opacity:0;transform:translateX(-30px);transition:opacity 300ms ease-out,transform 300ms ease-out}.app-layout-container{width:100%;height:100%;position:relative}.layout .footer{z-index:10}.create_task_layout .create_task_footer{z-index:20}",
+                "",
+              ]);
+              const l = i;
+            },
             540(e) {
               "use strict";
               e.exports = function (e) {
@@ -778,7 +792,7 @@
                   (e = r) !== n && (t.setValue(e), !0)
                 );
               }
-              function Q(e) {
+              function X(e) {
                 if (
                   void 0 ===
                   (e =
@@ -791,7 +805,7 @@
                   return e.body;
                 }
               }
-              function X(e, t) {
+              function Q(e, t) {
                 var n = t.checked;
                 return z({}, t, {
                   defaultChecked: void 0,
@@ -857,7 +871,7 @@
                   "" !== n && (e.name = n));
               }
               function ee(e, t, n) {
-                ("number" === t && Q(e.ownerDocument) === e) ||
+                ("number" === t && X(e.ownerDocument) === e) ||
                   (null == n
                     ? (e.defaultValue = "" + e._wrapperState.initialValue)
                     : e.defaultValue !== "" + n && (e.defaultValue = "" + n));
@@ -1315,8 +1329,8 @@
                 return null;
               }
               var Ye = a.unstable_scheduleCallback,
-                Qe = a.unstable_cancelCallback,
-                Xe = a.unstable_shouldYield,
+                Xe = a.unstable_cancelCallback,
+                Qe = a.unstable_shouldYield,
                 Je = a.unstable_requestPaint,
                 Ke = a.unstable_now,
                 Ge = a.unstable_getCurrentPriorityLevel,
@@ -1562,7 +1576,7 @@
               function Mt(e) {
                 if (null !== e.blockedOn) return !1;
                 for (var t = e.targetContainers; 0 < t.length; ) {
-                  var n = Xt(
+                  var n = Qt(
                     e.domEventName,
                     e.eventSystemFlags,
                     t[0],
@@ -1649,8 +1663,8 @@
               }
               function Yt(e, t, n, r) {
                 if (Ht) {
-                  var a = Xt(e, t, n, r);
-                  if (null === a) (Hr(e, t, r, Qt, n), Rt(e, r));
+                  var a = Qt(e, t, n, r);
+                  if (null === a) (Hr(e, t, r, Xt, n), Rt(e, r));
                   else if (
                     (function (e, t, n, r, a) {
                       switch (t) {
@@ -1682,7 +1696,7 @@
                       var o = ya(a);
                       if (
                         (null !== o && wt(o),
-                        null === (o = Xt(e, t, n, r)) && Hr(e, t, r, Qt, n),
+                        null === (o = Qt(e, t, n, r)) && Hr(e, t, r, Xt, n),
                         o === a)
                       )
                         break;
@@ -1692,9 +1706,9 @@
                   } else Hr(e, t, r, null, n);
                 }
               }
-              var Qt = null;
-              function Xt(e, t, n, r) {
-                if (((Qt = null), null !== (e = ba((e = we(r))))))
+              var Xt = null;
+              function Qt(e, t, n, r) {
+                if (((Xt = null), null !== (e = ba((e = we(r))))))
                   if (null === (t = $e(e))) e = null;
                   else if (13 === (n = t.tag)) {
                     if (null !== (e = Ve(t))) return e;
@@ -1704,7 +1718,7 @@
                       return 3 === t.tag ? t.stateNode.containerInfo : null;
                     e = null;
                   } else t !== e && (e = null);
-                return ((Qt = e), null);
+                return ((Xt = e), null);
               }
               function Jt(e) {
                 switch (e) {
@@ -2169,10 +2183,10 @@
               }
               var qn = null,
                 Yn = null;
-              function Qn(e) {
+              function Xn(e) {
                 Mr(e, 0);
               }
-              function Xn(e) {
+              function Qn(e) {
                 if (Y(xa(e))) return e;
               }
               function Jn(e, t) {
@@ -2198,9 +2212,9 @@
                   (qn.detachEvent("onpropertychange", nr), (Yn = qn = null));
               }
               function nr(e) {
-                if ("value" === e.propertyName && Xn(Yn)) {
+                if ("value" === e.propertyName && Qn(Yn)) {
                   var t = [];
-                  (Wn(t, Yn, e, we(e)), Oe(Qn, t));
+                  (Wn(t, Yn, e, we(e)), Oe(Xn, t));
                 }
               }
               function rr(e, t, n) {
@@ -2212,13 +2226,13 @@
               }
               function ar(e) {
                 if ("selectionchange" === e || "keyup" === e || "keydown" === e)
-                  return Xn(Yn);
+                  return Qn(Yn);
               }
               function or(e, t) {
-                if ("click" === e) return Xn(t);
+                if ("click" === e) return Qn(t);
               }
               function ir(e, t) {
-                if ("input" === e || "change" === e) return Xn(t);
+                if ("input" === e || "change" === e) return Qn(t);
               }
               var lr =
                 "function" == typeof Object.is
@@ -2288,7 +2302,7 @@
               }
               function fr() {
                 for (
-                  var e = window, t = Q();
+                  var e = window, t = X();
                   t instanceof e.HTMLIFrameElement;
                 ) {
                   try {
@@ -2297,7 +2311,7 @@
                     n = !1;
                   }
                   if (!n) break;
-                  t = Q((e = t.contentWindow).document);
+                  t = X((e = t.contentWindow).document);
                 }
                 return t;
               }
@@ -2391,7 +2405,7 @@
                       : n.ownerDocument;
                 yr ||
                   null == gr ||
-                  gr !== Q(r) ||
+                  gr !== X(r) ||
                   ((r =
                     "selectionStart" in (r = gr) && pr(r)
                       ? { start: r.selectionStart, end: r.selectionEnd }
@@ -2816,8 +2830,8 @@
                           u = null;
                         }
                       else u = null;
-                      (null !== s && Qr(i, l, s, u, !1),
-                        null !== c && null !== d && Qr(i, d, c, u, !0));
+                      (null !== s && Xr(i, l, s, u, !1),
+                        null !== c && null !== d && Xr(i, d, c, u, !0));
                     }
                     if (
                       "select" ===
@@ -2982,7 +2996,7 @@
                 } while (e && 5 !== e.tag);
                 return e || null;
               }
-              function Qr(e, t, n, r, a) {
+              function Xr(e, t, n, r, a) {
                 for (var o = t._reactName, i = []; null !== n && n !== r; ) {
                   var l = n,
                     s = l.alternate,
@@ -2998,11 +3012,11 @@
                 }
                 0 !== i.length && e.push({ event: t, listeners: i });
               }
-              var Xr = /\r\n?/g,
+              var Qr = /\r\n?/g,
                 Jr = /\u0000|\uFFFD/g;
               function Kr(e) {
                 return ("string" == typeof e ? e : "" + e)
-                  .replace(Xr, "\n")
+                  .replace(Qr, "\n")
                   .replace(Jr, "");
               }
               function Gr(e, t, n) {
@@ -3231,15 +3245,15 @@
                 Wa = null,
                 qa = 0,
                 Ya = [],
-                Qa = 0,
-                Xa = null,
+                Xa = 0,
+                Qa = null,
                 Ja = 1,
                 Ka = "";
               function Ga(e, t) {
                 ((Va[Ha++] = qa), (Va[Ha++] = Wa), (Wa = e), (qa = t));
               }
               function Za(e, t, n) {
-                ((Ya[Qa++] = Ja), (Ya[Qa++] = Ka), (Ya[Qa++] = Xa), (Xa = e));
+                ((Ya[Xa++] = Ja), (Ya[Xa++] = Ka), (Ya[Xa++] = Qa), (Qa = e));
                 var r = Ja;
                 e = Ka;
                 var a = 32 - it(r) - 1;
@@ -3263,13 +3277,13 @@
                     (Va[Ha] = null),
                     (qa = Va[--Ha]),
                     (Va[Ha] = null));
-                for (; e === Xa; )
-                  ((Xa = Ya[--Qa]),
-                    (Ya[Qa] = null),
-                    (Ka = Ya[--Qa]),
-                    (Ya[Qa] = null),
-                    (Ja = Ya[--Qa]),
-                    (Ya[Qa] = null));
+                for (; e === Qa; )
+                  ((Qa = Ya[--Xa]),
+                    (Ya[Xa] = null),
+                    (Ka = Ya[--Xa]),
+                    (Ya[Xa] = null),
+                    (Ja = Ya[--Xa]),
+                    (Ya[Xa] = null));
               }
               var no = null,
                 ro = null,
@@ -3309,7 +3323,7 @@
                   case 13:
                     return (
                       null !== (t = 8 !== t.nodeType ? null : t) &&
-                      ((n = null !== Xa ? { id: Ja, overflow: Ka } : null),
+                      ((n = null !== Qa ? { id: Ja, overflow: Ka } : null),
                       (e.memoizedState = {
                         dehydrated: t,
                         treeContext: n,
@@ -4109,13 +4123,13 @@
               var Wo = {},
                 qo = Ea(Wo),
                 Yo = Ea(Wo),
-                Qo = Ea(Wo);
-              function Xo(e) {
+                Xo = Ea(Wo);
+              function Qo(e) {
                 if (e === Wo) throw Error(o(174));
                 return e;
               }
               function Jo(e, t) {
-                switch ((ja(Qo, t), ja(Yo, e), ja(qo, Wo), (e = t.nodeType))) {
+                switch ((ja(Xo, t), ja(Yo, e), ja(qo, Wo), (e = t.nodeType))) {
                   case 9:
                   case 11:
                     t = (t = t.documentElement) ? t.namespaceURI : se(null, "");
@@ -4130,11 +4144,11 @@
                 (_a(qo), ja(qo, t));
               }
               function Ko() {
-                (_a(qo), _a(Yo), _a(Qo));
+                (_a(qo), _a(Yo), _a(Xo));
               }
               function Go(e) {
-                Xo(Qo.current);
-                var t = Xo(qo.current),
+                Qo(Xo.current);
+                var t = Qo(qo.current),
                   n = se(t, e.type);
                 t !== n && (ja(Yo, e), ja(qo, n));
               }
@@ -4427,7 +4441,7 @@
                     lastRenderedState: e,
                   }),
                   (t.queue = e),
-                  (e = e.dispatch = Qi.bind(null, li, e)),
+                  (e = e.dispatch = Xi.bind(null, li, e)),
                   [t.memoizedState, e]
                 );
               }
@@ -4555,12 +4569,12 @@
                   eagerState: null,
                   next: null,
                 }),
-                  Xi(e)
+                  Qi(e)
                     ? Ji(t, n)
                     : null !== (n = Io(e, t, n, r)) &&
                       (tc(n, e, r, Zs()), Ki(n, t, r)));
               }
-              function Qi(e, t, n) {
+              function Xi(e, t, n) {
                 var r = ec(e),
                   a = {
                     lane: r,
@@ -4569,7 +4583,7 @@
                     eagerState: null,
                     next: null,
                   };
-                if (Xi(e)) Ji(t, a);
+                if (Qi(e)) Ji(t, a);
                 else {
                   var o = e.alternate;
                   if (
@@ -4596,7 +4610,7 @@
                     (tc(n, e, r, (a = Zs())), Ki(n, t, r));
                 }
               }
-              function Xi(e) {
+              function Qi(e) {
                 var t = e.alternate;
                 return e === li || (null !== t && t === li);
               }
@@ -5448,12 +5462,12 @@
                         (ao = !0),
                         (oo = null),
                         null !== e &&
-                          ((Ya[Qa++] = Ja),
-                          (Ya[Qa++] = Ka),
-                          (Ya[Qa++] = Xa),
+                          ((Ya[Xa++] = Ja),
+                          (Ya[Xa++] = Ka),
+                          (Ya[Xa++] = Qa),
                           (Ja = e.id),
                           (Ka = e.overflow),
-                          (Xa = t)),
+                          (Qa = t)),
                         ((t = zl(t, r.children)).flags |= 4096),
                         t);
                   })(e, t, s, a, r, i, n);
@@ -5713,7 +5727,7 @@
                     );
                   case 5:
                     Zo(t);
-                    var a = Xo(Qo.current);
+                    var a = Qo(Xo.current);
                     if (((n = t.type), null !== e && null != t.stateNode))
                       (Al(e, t, n, r),
                         e.ref !== t.ref &&
@@ -5723,7 +5737,7 @@
                         if (null === t.stateNode) throw Error(o(166));
                         return (Wl(t), null);
                       }
-                      if (((e = Xo(qo.current)), fo(t))) {
+                      if (((e = Qo(qo.current)), fo(t))) {
                         ((r = t.stateNode), (n = t.type));
                         var i = t.memoizedProps;
                         switch (
@@ -5845,7 +5859,7 @@
                               (Lr("toggle", e), (a = r));
                               break;
                             case "input":
-                              (J(e, r), (a = X(e, r)), Lr("invalid", e));
+                              (J(e, r), (a = Q(e, r)), Lr("invalid", e));
                               break;
                             case "option":
                             default:
@@ -5930,7 +5944,7 @@
                     else {
                       if ("string" != typeof r && null === t.stateNode)
                         throw Error(o(166));
-                      if (((n = Xo(Qo.current)), Xo(qo.current), fo(t))) {
+                      if (((n = Qo(Xo.current)), Qo(qo.current), fo(t))) {
                         if (
                           ((r = t.stateNode),
                           (n = t.memoizedProps),
@@ -6188,12 +6202,12 @@
                 (Al = function (e, t, n, r) {
                   var a = e.memoizedProps;
                   if (a !== r) {
-                    ((e = t.stateNode), Xo(qo.current));
+                    ((e = t.stateNode), Qo(qo.current));
                     var o,
                       i = null;
                     switch (n) {
                       case "input":
-                        ((a = X(e, a)), (r = X(e, r)), (i = []));
+                        ((a = Q(e, a)), (r = Q(e, r)), (i = []));
                         break;
                       case "select":
                         ((a = z({}, a, { value: void 0 })),
@@ -6272,8 +6286,8 @@
                 (Fl = function (e, t, n, r) {
                   n !== r && (t.flags |= 4);
                 }));
-              var Ql = !1,
-                Xl = !1,
+              var Xl = !1,
+                Ql = !1,
                 Jl = "function" == typeof WeakSet ? WeakSet : Set,
                 Kl = null;
               function Gl(e, t) {
@@ -6413,7 +6427,7 @@
                   } catch (e) {}
                 switch (n.tag) {
                   case 5:
-                    Xl || Gl(n, t);
+                    Ql || Gl(n, t);
                   case 6:
                     var r = cs,
                       a = us;
@@ -6454,7 +6468,7 @@
                   case 14:
                   case 15:
                     if (
-                      !Xl &&
+                      !Ql &&
                       null !== (r = n.updateQueue) &&
                       null !== (r = r.lastEffect)
                     ) {
@@ -6471,7 +6485,7 @@
                     break;
                   case 1:
                     if (
-                      !Xl &&
+                      !Ql &&
                       (Gl(n, t),
                       "function" ==
                         typeof (r = n.stateNode).componentWillUnmount)
@@ -6490,9 +6504,9 @@
                     break;
                   case 22:
                     1 & n.mode
-                      ? ((Xl = (r = Xl) || null !== n.memoizedState),
+                      ? ((Ql = (r = Ql) || null !== n.memoizedState),
                         ds(e, t, n),
-                        (Xl = r))
+                        (Ql = r))
                       : ds(e, t, n);
                     break;
                   default:
@@ -6677,7 +6691,7 @@
                     if (
                       ((d = null !== n && null !== n.memoizedState),
                       1 & e.mode
-                        ? ((Xl = (u = Xl) || d), ms(t, e), (Xl = u))
+                        ? ((Ql = (u = Ql) || d), ms(t, e), (Ql = u))
                         : ms(t, e),
                       gs(e),
                       8192 & r)
@@ -6826,13 +6840,13 @@
                   var a = Kl,
                     o = a.child;
                   if (22 === a.tag && r) {
-                    var i = null !== a.memoizedState || Ql;
+                    var i = null !== a.memoizedState || Xl;
                     if (!i) {
                       var l = a.alternate,
-                        s = (null !== l && null !== l.memoizedState) || Xl;
-                      l = Ql;
-                      var c = Xl;
-                      if (((Ql = i), (Xl = s) && !c))
+                        s = (null !== l && null !== l.memoizedState) || Ql;
+                      l = Xl;
+                      var c = Ql;
+                      if (((Xl = i), (Ql = s) && !c))
                         for (Kl = a; null !== Kl; )
                           ((s = (i = Kl).child),
                             22 === i.tag && null !== i.memoizedState
@@ -6842,7 +6856,7 @@
                                 : ws(a));
                       for (; null !== o; )
                         ((Kl = o), bs(o, t, n), (o = o.sibling));
-                      ((Kl = a), (Ql = l), (Xl = c));
+                      ((Kl = a), (Xl = l), (Ql = c));
                     }
                     ys(e);
                   } else
@@ -6862,11 +6876,11 @@
                           case 0:
                           case 11:
                           case 15:
-                            Xl || ns(5, t);
+                            Ql || ns(5, t);
                             break;
                           case 1:
                             var r = t.stateNode;
-                            if (4 & t.flags && !Xl)
+                            if (4 & t.flags && !Ql)
                               if (null === n) r.componentDidMount();
                               else {
                                 var a =
@@ -6936,7 +6950,7 @@
                           default:
                             throw Error(o(163));
                         }
-                      Xl || (512 & t.flags && rs(t));
+                      Ql || (512 & t.flags && rs(t));
                     } catch (e) {
                       Sc(t, t.return, e);
                     }
@@ -7048,8 +7062,8 @@
                 Ws = null,
                 qs = !1,
                 Ys = null,
-                Qs = 0,
                 Xs = 0,
+                Qs = 0,
                 Js = null,
                 Ks = -1,
                 Gs = 0;
@@ -7068,7 +7082,7 @@
                   : 1;
               }
               function tc(e, t, n, r) {
-                if (50 < Xs) throw ((Xs = 0), (Js = null), Error(o(185)));
+                if (50 < Qs) throw ((Qs = 0), (Js = null), Error(o(185)));
                 (vt(e, n, r),
                   (2 & Cs && e === Ns) ||
                     (e === Ns &&
@@ -7100,11 +7114,11 @@
                 })(e, t);
                 var r = ft(e, e === Ns ? Ps : 0);
                 if (0 === r)
-                  (null !== n && Qe(n),
+                  (null !== n && Xe(n),
                     (e.callbackNode = null),
                     (e.callbackPriority = 0));
                 else if (((t = r & -r), e.callbackPriority !== t)) {
-                  if ((null != n && Qe(n), 1 === t))
+                  if ((null != n && Xe(n), 1 === t))
                     (0 === e.tag
                       ? (function (e) {
                           ((La = !0), Ba(e));
@@ -7553,7 +7567,7 @@
                 for (; null !== Ts; ) bc(Ts);
               }
               function vc() {
-                for (; null !== Ts && !Xe(); ) bc(Ts);
+                for (; null !== Ts && !Qe(); ) bc(Ts);
               }
               function bc(e) {
                 var t = ks(e.alternate, e, Os);
@@ -7774,7 +7788,7 @@
                           (js.transition = i));
                       } else e.current = n;
                       if (
-                        (qs && ((qs = !1), (Ys = e), (Qs = a)),
+                        (qs && ((qs = !1), (Ys = e), (Xs = a)),
                         0 === (i = e.pendingLanes) && (Ws = null),
                         (function (e) {
                           if (ot && "function" == typeof ot.onCommitFiberRoot)
@@ -7796,12 +7810,12 @@
                             digest: a.digest,
                           });
                       if (Vs) throw ((Vs = !1), (e = Hs), (Hs = null), e);
-                      (!!(1 & Qs) && 0 !== e.tag && wc(),
+                      (!!(1 & Xs) && 0 !== e.tag && wc(),
                         1 & (i = e.pendingLanes)
                           ? e === Js
-                            ? Xs++
-                            : ((Xs = 0), (Js = e))
-                          : (Xs = 0),
+                            ? Qs++
+                            : ((Qs = 0), (Js = e))
+                          : (Qs = 0),
                         $a());
                     })(e, t, n, r));
                 } finally {
@@ -7811,7 +7825,7 @@
               }
               function wc() {
                 if (null !== Ys) {
-                  var e = xt(Qs),
+                  var e = xt(Xs),
                     t = js.transition,
                     n = yt;
                   try {
@@ -7822,7 +7836,7 @@
                     )
                       var r = !1;
                     else {
-                      if (((e = Ys), (Ys = null), (Qs = 0), 6 & Cs))
+                      if (((e = Ys), (Ys = null), (Xs = 0), 6 & Cs))
                         throw Error(o(331));
                       var a = Cs;
                       for (Cs |= 4, Kl = e.current; null !== Kl; ) {
@@ -8636,10 +8650,10 @@
               function Yc(e) {
                 this._internalRoot = e;
               }
-              function Qc(e) {
+              function Xc(e) {
                 this._internalRoot = e;
               }
-              function Xc(e) {
+              function Qc(e) {
                 return !(
                   !e ||
                   (1 !== e.nodeType && 9 !== e.nodeType && 11 !== e.nodeType)
@@ -8708,13 +8722,13 @@
                   })(n, t, e, a, r);
                 return Vc(i);
               }
-              ((Qc.prototype.render = Yc.prototype.render =
+              ((Xc.prototype.render = Yc.prototype.render =
                 function (e) {
                   var t = this._internalRoot;
                   if (null === t) throw Error(o(409));
                   $c(e, t, null, null);
                 }),
-                (Qc.prototype.unmount = Yc.prototype.unmount =
+                (Xc.prototype.unmount = Yc.prototype.unmount =
                   function () {
                     var e = this._internalRoot;
                     if (null !== e) {
@@ -8726,7 +8740,7 @@
                         (t[ma] = null));
                     }
                   }),
-                (Qc.prototype.unstable_scheduleHydration = function (e) {
+                (Xc.prototype.unstable_scheduleHydration = function (e) {
                   if (e) {
                     var t = Et();
                     e = { blockedOn: null, target: e, priority: t };
@@ -8873,7 +8887,7 @@
                     2 < arguments.length && void 0 !== arguments[2]
                       ? arguments[2]
                       : null;
-                  if (!Xc(t)) throw Error(o(200));
+                  if (!Qc(t)) throw Error(o(200));
                   return (function (e, t, n) {
                     var r =
                       3 < arguments.length && void 0 !== arguments[3]
@@ -8889,7 +8903,7 @@
                   })(e, t, null, n);
                 }),
                 (t.createRoot = function (e, t) {
-                  if (!Xc(e)) throw Error(o(299));
+                  if (!Qc(e)) throw Error(o(299));
                   var n = !1,
                     r = "",
                     a = qc;
@@ -8923,7 +8937,7 @@
                   return Gc(null, e, t, !0, n);
                 }),
                 (t.hydrateRoot = function (e, t, n) {
-                  if (!Xc(e)) throw Error(o(405));
+                  if (!Qc(e)) throw Error(o(405));
                   var r = (null != n && n.hydratedSources) || null,
                     a = !1,
                     i = "",
@@ -8944,7 +8958,7 @@
                         null == t.mutableSourceEagerHydrationData
                           ? (t.mutableSourceEagerHydrationData = [n, a])
                           : t.mutableSourceEagerHydrationData.push(n, a));
-                  return new Qc(t);
+                  return new Xc(t);
                 }),
                 (t.render = function (e, t, n) {
                   if (!Jc(t)) throw Error(o(200));
@@ -9352,8 +9366,8 @@
               var W = f(" "),
                 q = f('="'),
                 Y = f('"'),
-                Q = f('=""');
-              function X(e, t, n, r) {
+                X = f('=""');
+              function Q(e, t, n, r) {
                 switch (n) {
                   case "style":
                     return void H(e, t, r);
@@ -9379,11 +9393,11 @@
                     }
                     switch (((n = d(t.attributeName)), t.type)) {
                       case 3:
-                        r && e.push(W, n, Q);
+                        r && e.push(W, n, X);
                         break;
                       case 4:
                         !0 === r
-                          ? e.push(W, n, Q)
+                          ? e.push(W, n, X)
                           : !1 !== r && e.push(W, n, q, d(j(r)), Y);
                         break;
                       case 5:
@@ -9438,7 +9452,7 @@
                           o = i;
                           break;
                         default:
-                          X(e, r, a, i);
+                          Q(e, r, a, i);
                       }
                   }
                 return (
@@ -9509,8 +9523,8 @@
                 ),
                 qe = f('$RC("'),
                 Ye = f('","'),
-                Qe = f('")<\/script>'),
-                Xe = f(
+                Xe = f('")<\/script>'),
+                Qe = f(
                   'function $RX(b,c,d,e){var a=document.getElementById(b);a&&(b=a.previousSibling,b.data="$!",a=a.dataset,c&&(a.dgst=c),d&&(a.msg=d),e&&(a.stck=e),b._reactRetry&&b._reactRetry())};$RX("',
                 ),
                 Je = f('$RX("'),
@@ -9773,18 +9787,18 @@
                 if (null === Mt) throw Error(a(321));
                 return Mt;
               }
-              function Qt() {
+              function Xt() {
                 if (0 < qt) throw Error(a(312));
                 return { memoizedState: null, queue: null, next: null };
               }
-              function Xt() {
+              function Qt() {
                 return (
                   null === Bt
                     ? null === Ut
-                      ? (($t = !1), (Ut = Bt = Qt()))
+                      ? (($t = !1), (Ut = Bt = Xt()))
                       : (($t = !0), (Bt = Ut))
                     : null === Bt.next
-                      ? (($t = !1), (Bt = Bt.next = Qt()))
+                      ? (($t = !1), (Bt = Bt.next = Xt()))
                       : (($t = !0), (Bt = Bt.next)),
                   Bt
                 );
@@ -9800,7 +9814,7 @@
                 return "function" == typeof t ? t(e) : t;
               }
               function Gt(e, t, n) {
-                if (((Mt = Yt()), (Bt = Xt()), $t)) {
+                if (((Mt = Yt()), (Bt = Qt()), $t)) {
                   var r = Bt.queue;
                   if (
                     ((t = r.dispatch),
@@ -9834,7 +9848,7 @@
                 if (
                   ((Mt = Yt()),
                   (t = void 0 === t ? null : t),
-                  null !== (Bt = Xt()))
+                  null !== (Bt = Qt()))
                 ) {
                   var n = Bt.memoizedState;
                   if (null !== n && null !== t) {
@@ -9883,7 +9897,7 @@
                   useReducer: Gt,
                   useRef: function (e) {
                     Mt = Yt();
-                    var t = (Bt = Xt()).memoizedState;
+                    var t = (Bt = Qt()).memoizedState;
                     return null === t
                       ? ((e = { current: e }), (Bt.memoizedState = e))
                       : t;
@@ -10204,7 +10218,7 @@
                                   case "value":
                                     break;
                                   default:
-                                    X(e, o, p, c);
+                                    Q(e, o, p, c);
                                 }
                             }
                           return (e.push(J), G(e, s, l), l);
@@ -10230,7 +10244,7 @@
                                   case "value":
                                     u = h;
                                   default:
-                                    X(e, o, l, h);
+                                    Q(e, o, l, h);
                                 }
                             }
                           if (null != s)
@@ -10275,7 +10289,7 @@
                                 case "dangerouslySetInnerHTML":
                                   throw Error(a(91));
                                 default:
-                                  X(e, o, c, u);
+                                  Q(e, o, c, u);
                               }
                           if (
                             (null === l && null !== s && (l = s),
@@ -10313,15 +10327,15 @@
                                   l = f;
                                   break;
                                 default:
-                                  X(e, o, s, f);
+                                  Q(e, o, s, f);
                               }
                           return (
                             null !== p
-                              ? X(e, o, "checked", p)
-                              : null !== u && X(e, o, "checked", u),
+                              ? Q(e, o, "checked", p)
+                              : null !== u && Q(e, o, "checked", u),
                             null !== l
-                              ? X(e, o, "value", l)
-                              : null !== c && X(e, o, "value", c),
+                              ? Q(e, o, "value", l)
+                              : null !== c && Q(e, o, "value", c),
                             e.push(K),
                             null
                           );
@@ -10333,7 +10347,7 @@
                                 case "dangerouslySetInnerHTML":
                                   throw Error(a(400));
                                 default:
-                                  X(e, o, g, l);
+                                  Q(e, o, g, l);
                               }
                           return (e.push(J), null);
                         case "title":
@@ -10346,7 +10360,7 @@
                                 case "dangerouslySetInnerHTML":
                                   throw Error(a(434));
                                 default:
-                                  X(e, o, h, s);
+                                  Q(e, o, h, s);
                               }
                           return (e.push(J), l);
                         case "listing":
@@ -10361,7 +10375,7 @@
                                   s = c;
                                   break;
                                 default:
-                                  X(e, o, u, c);
+                                  Q(e, o, u, c);
                               }
                           if ((e.push(J), null != s)) {
                             if (null != l) throw Error(a(60));
@@ -10399,7 +10413,7 @@
                                 case "dangerouslySetInnerHTML":
                                   throw Error(a(399, t));
                                 default:
-                                  X(e, o, v, l);
+                                  Q(e, o, v, l);
                               }
                           return (e.push(K), null);
                         case "annotation-xml":
@@ -10913,7 +10927,7 @@
                   l(t, Ye),
                   l(t, e.segmentPrefix),
                   l(t, n),
-                  s(t, Qe)
+                  s(t, Xe)
                 );
               }
               function Tn(e, t, n, r) {
@@ -10961,7 +10975,7 @@
                       (l(r, m.startInlineScript),
                       m.sentClientRenderFunction
                         ? l(r, Je)
-                        : ((m.sentClientRenderFunction = !0), l(r, Xe)),
+                        : ((m.sentClientRenderFunction = !0), l(r, Qe)),
                       null === h)
                     )
                       throw Error(a(395));
@@ -13959,8 +13973,8 @@
                 W = Symbol.for("react.memo"),
                 q = Symbol.for("react.lazy"),
                 Y = Symbol.for("react.scope"),
-                Q = Symbol.for("react.debug_trace_mode"),
-                X = Symbol.for("react.legacy_hidden"),
+                X = Symbol.for("react.debug_trace_mode"),
+                Q = Symbol.for("react.legacy_hidden"),
                 J = Symbol.for("react.default_value"),
                 K = Symbol.iterator;
               function G(e) {
@@ -14413,8 +14427,8 @@
                       if (!(s in i)) throw Error(a(108, G(r) || "Unknown", s));
                     r = I({}, l, n);
                   }
-                  ((t.legacyContext = r), Qe(e, t, o), (t.legacyContext = l));
-                } else Qe(e, t, o);
+                  ((t.legacyContext = r), Xe(e, t, o), (t.legacyContext = l));
+                } else Xe(e, t, o);
               }
               function qe(e, t) {
                 if (e && e.defaultProps) {
@@ -14454,22 +14468,22 @@
                     else if (u) {
                       ((i = t.treeContext), (t.treeContext = de(i, 1, 0)));
                       try {
-                        Qe(e, t, l);
+                        Xe(e, t, l);
                       } finally {
                         t.treeContext = i;
                       }
-                    } else Qe(e, t, l);
+                    } else Xe(e, t, l);
                   }
                 else {
                   if ("string" != typeof n) {
                     switch (n) {
-                      case X:
                       case Q:
+                      case X:
                       case M:
                       case L:
                       case z:
                       case H:
-                        return void Qe(e, t, i.children);
+                        return void Xe(e, t, i.children);
                       case Y:
                         throw Error(a(343));
                       case V:
@@ -14542,11 +14556,11 @@
                             ((n = t.treeContext),
                               (t.treeContext = de(n, 1, 0)));
                             try {
-                              Qe(e, t, i);
+                              Xe(e, t, i);
                             } finally {
                               t.treeContext = n;
                             }
-                          } else Qe(e, t, i);
+                          } else Xe(e, t, i);
                           return;
                         case W:
                           return void Ye(e, t, (n = n.type), (i = qe(n, i)), l);
@@ -14566,7 +14580,7 @@
                                 value: i,
                               }),
                             (t.context = i),
-                            Qe(e, t, l),
+                            Xe(e, t, l),
                             null === (e = te))
                           )
                             throw Error(a(403));
@@ -14578,7 +14592,7 @@
                             void (t.context = e)
                           );
                         case B:
-                          return void Qe(
+                          return void Xe(
                             e,
                             t,
                             (i = (i = i.children)(n._currentValue2)),
@@ -14921,7 +14935,7 @@
                   l.lastPushedText = !1;
                 }
               }
-              function Qe(e, t, n) {
+              function Xe(e, t, n) {
                 if (((t.node = n), "object" == typeof n && null !== n)) {
                   switch (n.$$typeof) {
                     case R:
@@ -14930,9 +14944,9 @@
                       throw Error(a(257));
                     case q:
                       var r = n._init;
-                      return void Qe(e, t, (n = r(n._payload)));
+                      return void Xe(e, t, (n = r(n._payload)));
                   }
-                  if (x(n)) return void Xe(e, t, n);
+                  if (x(n)) return void Qe(e, t, n);
                   if (
                     (r =
                       null === n || "object" != typeof n
@@ -14948,7 +14962,7 @@
                       do {
                         (o.push(n.value), (n = r.next()));
                       } while (!n.done);
-                      Xe(e, t, o);
+                      Qe(e, t, o);
                     }
                     return;
                   }
@@ -14981,7 +14995,7 @@
                       r.lastPushedText,
                     ));
               }
-              function Xe(e, t, n) {
+              function Qe(e, t, n) {
                 for (var r = n.length, a = 0; a < r; a++) {
                   var o = t.treeContext;
                   t.treeContext = de(o, r, a);
@@ -14997,7 +15011,7 @@
                   a = t.legacyContext,
                   o = t.context;
                 try {
-                  return Qe(e, t, n);
+                  return Xe(e, t, n);
                 } catch (s) {
                   if (
                     (Ne(),
@@ -15121,7 +15135,7 @@
                       if (0 === s.status) {
                         le(i.context);
                         try {
-                          (Qe(l, i, i.node),
+                          (Xe(l, i, i.node),
                             l.responseState.generateStaticMarkup ||
                               (s.lastPushedText &&
                                 s.textEmbedded &&
@@ -16437,11 +16451,11 @@
                 isDataRoute: !1,
               }),
               Y = t.createContext(null);
-            function Q() {
+            function X() {
               return null != t.useContext(W);
             }
-            function X() {
-              return (Q() || c(!1), t.useContext(W).location);
+            function Q() {
+              return (X() || c(!1), t.useContext(W).location);
             }
             function J(e) {
               t.useContext(H).static || t.useLayoutEffect(e);
@@ -16472,7 +16486,7 @@
                     return a;
                   })()
                 : (function () {
-                    Q() || c(!1);
+                    X() || c(!1);
                     let e = t.useContext($),
                       {
                         basename: n,
@@ -16480,7 +16494,7 @@
                         navigator: a,
                       } = t.useContext(H),
                       { matches: o } = t.useContext(q),
-                      { pathname: i } = X(),
+                      { pathname: i } = Q(),
                       l = JSON.stringify(
                         (function (e, t) {
                           let n = (function (e) {
@@ -16526,7 +16540,7 @@
               return n ? n.params : {};
             }
             function ee(n, r, a, o) {
-              Q() || c(!1);
+              X() || c(!1);
               let { navigator: i } = t.useContext(H),
                 { matches: l } = t.useContext(q),
                 s = l[l.length - 1],
@@ -16534,7 +16548,7 @@
                 d = (s && s.pathname, s ? s.pathnameBase : "/");
               s && s.route;
               let f,
-                p = X();
+                p = Q();
               if (r) {
                 var h;
                 let e = "string" == typeof r ? m(r) : r;
@@ -16867,7 +16881,7 @@
                 static: s = !1,
                 future: u,
               } = n;
-              Q() && c(!1);
+              X() && c(!1);
               let d = r.replace(/^\/*/, "/"),
                 f = t.useMemo(
                   () => ({
@@ -18083,15 +18097,15 @@
               Ae()(We.A, qe),
               We.A && We.A.locals && We.A.locals);
             var Ye = i(9660),
-              Qe = i(9722),
-              Xe = {};
-            ((Xe.styleTagTransform = $e()),
-              (Xe.setAttributes = Me()),
-              (Xe.insert = De().bind(null, "head")),
-              (Xe.domAPI = Ie()),
-              (Xe.insertStyleElement = Ue()),
-              Ae()(Qe.A, Xe),
-              Qe.A && Qe.A.locals && Qe.A.locals);
+              Xe = i(9722),
+              Qe = {};
+            ((Qe.styleTagTransform = $e()),
+              (Qe.setAttributes = Me()),
+              (Qe.insert = De().bind(null, "head")),
+              (Qe.domAPI = Ie()),
+              (Qe.insertStyleElement = Ue()),
+              Ae()(Xe.A, Qe),
+              Xe.A && Xe.A.locals && Xe.A.locals);
             var Je = i(4848);
             function Ke(e, t) {
               var n = Object.keys(e);
@@ -18223,7 +18237,7 @@
                 });
               },
               tt = function () {
-                const e = X(),
+                const e = Q(),
                   t = K(),
                   { menuItems: n } = Se(),
                   { useMockData: r } = ye(),
@@ -18690,8 +18704,8 @@
               Wt = "jelly-fill",
               qt = "notdog",
               Yt = "notdog-duo",
-              Qt = "slab",
-              Xt = "slab-press",
+              Xt = "slab",
+              Qt = "slab-press",
               Jt = "thumbprint",
               Kt = "utility",
               Gt = "utility-duo",
@@ -18709,8 +18723,8 @@
                 Wt,
                 qt,
                 Yt,
-                Qt,
                 Xt,
+                Qt,
                 Jt,
                 Kt,
                 Gt,
@@ -18757,8 +18771,8 @@
                       ft(
                         ft(
                           ft(
-                            ft(ft(_t, Yt, "Notdog Duo"), Qt, "Slab"),
-                            Xt,
+                            ft(ft(_t, Yt, "Notdog Duo"), Xt, "Slab"),
+                            Qt,
                             "Slab Press",
                           ),
                           Jt,
@@ -19539,12 +19553,12 @@
                 .replace(/</g, "&lt;")
                 .replace(/>/g, "&gt;");
             }
-            function Qn(e) {
+            function Xn(e) {
               return Object.keys(e || {}).reduce(function (t, n) {
                 return t + "".concat(n, ": ").concat(e[n].trim(), ";");
               }, "");
             }
-            function Xn(e) {
+            function Qn(e) {
               return (
                 e.size !== Vn.size ||
                 e.x !== Vn.x ||
@@ -20308,9 +20322,9 @@
                         a = e.attributes,
                         o = e.styles,
                         i = e.transform;
-                      if (Xn(i) && n.found && !r.found) {
+                      if (Qn(i) && n.found && !r.found) {
                         var l = { x: n.width / n.height / 2, y: 0.5 };
-                        a.style = Qn(
+                        a.style = Xn(
                           mt(
                             mt({}, o),
                             {},
@@ -20326,7 +20340,7 @@
                     })(v)
               );
             }
-            function Qr(e) {
+            function Xr(e) {
               var t = e.content,
                 n = e.width,
                 r = e.height,
@@ -20341,7 +20355,7 @@
                 );
               l && (s[pn] = "");
               var c = mt({}, o.styles);
-              Xn(a) &&
+              Qn(a) &&
                 ((c.transform = (function (e) {
                   var t = e.transform,
                     n = e.width,
@@ -20371,12 +20385,12 @@
                   );
                 })({ transform: a, startCentered: !0, width: n, height: r })),
                 (c["-webkit-transform"] = c.transform));
-              var u = Qn(c);
+              var u = Xn(c);
               u.length > 0 && (s.style = u);
               var d = [];
               return (d.push({ tag: "span", attributes: s, children: [t] }), d);
             }
-            var Xr = tr.styles;
+            var Qr = tr.styles;
             function Jr(e) {
               var t = e[0],
                 n = e[1],
@@ -20423,7 +20437,7 @@
                     var o = _r(e) || {};
                     ((e = o.iconName || e), (t = o.prefix || t));
                   }
-                  if (e && t && Xr[t] && Xr[t][e]) return r(Jr(Xr[t][e]));
+                  if (e && t && Qr[t] && Qr[t][e]) return r(Jr(Qr[t][e]));
                   (!(function (e, t) {
                     xn ||
                       Un.showMissingIcons ||
@@ -20924,10 +20938,10 @@
                         r = e.attributes,
                         a = e.main,
                         o = e.transform,
-                        i = Qn(e.styles);
+                        i = Xn(e.styles);
                       return (
                         i.length > 0 && (r.style = i),
-                        Xn(o) &&
+                        Qn(o) &&
                           (t = Ur("generateAbstractTransformGrouping", {
                             main: a,
                             transform: o,
@@ -21011,7 +21025,7 @@
                                 {},
                                 { class: n.classes.join(" ") },
                               ),
-                              a = Qn(n.styles);
+                              a = Xn(n.styles);
                             a.length > 0 && (r.style = a);
                             var o = [];
                             return (
@@ -21061,7 +21075,7 @@
                             content: e,
                             params: t,
                           }),
-                          Qr({
+                          Xr({
                             content: e,
                             transform: mt(mt({}, Vn), r),
                             extra: {
@@ -21090,7 +21104,7 @@
                     }
                     return Promise.resolve([
                       e,
-                      Qr({
+                      Xr({
                         content: e.innerHTML,
                         width: a,
                         height: o,
@@ -21906,9 +21920,9 @@
               }));
             var qa,
               Ya = Hr.parse,
-              Qa = Hr.icon,
-              Xa = i(5556),
-              Ja = i.n(Xa);
+              Xa = Hr.icon,
+              Qa = i(5556),
+              Ja = i.n(Qa);
             function Ka(e, t) {
               (null == t || t > e.length) && (t = e.length);
               for (var n = 0, r = Array(t); n < t; n++) r[n] = e[n];
@@ -22294,7 +22308,7 @@
                       : n.transform,
                   ),
                   p = uo("mask", co(a)),
-                  m = Qa(
+                  m = Xa(
                     u,
                     eo(
                       eo(eo(eo({}, d), f), p),
@@ -23131,7 +23145,7 @@
               $o.A && $o.A.locals && $o.A.locals);
             const Ho = (e) => {
                 let { children: t } = e;
-                const n = X();
+                const n = Q();
                 return (0, Je.jsx)(No, {
                   component: null,
                   children: (0, Je.jsx)(
@@ -23153,13 +23167,18 @@
                 const { page: e } = Se(),
                   { useMockData: n } = ye(),
                   { setActions: r } = (0, Ee.useActionsStore)(),
-                  a = X(),
-                  o = (0, t.useRef)(null);
+                  a = Q(),
+                  o = (0, t.useRef)(null),
+                  [i, l] = (0, t.useState)(!0);
                 return (
                   (0, t.useEffect)(() => {
-                    (o.current &&
-                      ((o.current.scrollTop = 0),
-                      o.current.scrollTo({ top: 0, behavior: "instant" })),
+                    const e =
+                      a.pathname.startsWith("/task") ||
+                      a.pathname.startsWith("/news");
+                    l(!e);
+                  }, [a.pathname]),
+                  (0, t.useEffect)(() => {
+                    (o.current && (o.current.scrollTop = 0),
                       window.scrollTo(0, 0));
                   }, [a.pathname]),
                   (0, Je.jsxs)("div", {
@@ -23206,17 +23225,18 @@
                           }),
                         }),
                       }),
-                      (0, Je.jsx)("footer", {
-                        className: "footer ",
-                        children: (0, Je.jsx)(tt, {}),
-                      }),
+                      i &&
+                        (0, Je.jsx)("footer", {
+                          className: "footer",
+                          children: (0, Je.jsx)(tt, {}),
+                        }),
                     ],
                   })
                 );
               };
             var qo = i(1408),
               Yo = {};
-            function Qo(e, t) {
+            function Xo(e, t) {
               var n = Object.keys(e);
               if (Object.getOwnPropertySymbols) {
                 var r = Object.getOwnPropertySymbols(e);
@@ -23228,11 +23248,11 @@
               }
               return n;
             }
-            function Xo(e) {
+            function Qo(e) {
               for (var t = 1; t < arguments.length; t++) {
                 var n = null != arguments[t] ? arguments[t] : {};
                 t % 2
-                  ? Qo(Object(n), !0).forEach(function (t) {
+                  ? Xo(Object(n), !0).forEach(function (t) {
                       Jo(e, t, n[t]);
                     })
                   : Object.getOwnPropertyDescriptors
@@ -23240,7 +23260,7 @@
                         e,
                         Object.getOwnPropertyDescriptors(n),
                       )
-                    : Qo(Object(n)).forEach(function (t) {
+                    : Xo(Object(n)).forEach(function (t) {
                         Object.defineProperty(
                           e,
                           t,
@@ -23286,7 +23306,7 @@
               qo.A && qo.A.locals && qo.A.locals);
             const Ko = function () {
                 const e = K(),
-                  t = X(),
+                  t = Q(),
                   n = Z(),
                   { setActions: r } = (0, Ee.useActionsStore)(),
                   { user: a } = Se(),
@@ -23315,8 +23335,8 @@
                                 (r({
                                   actionName: "postTask",
                                   active: !0,
-                                  data: Xo(
-                                    Xo({}, e.data),
+                                  data: Qo(
+                                    Qo({}, e.data),
                                     {},
                                     {
                                       userGuid: a.userGuid,
@@ -23407,13 +23427,12 @@
               },
               Go = function () {
                 const e = (0, t.useRef)(null),
-                  n = X();
+                  n = Q();
                 return (
                   (0, t.useEffect)(() => {
-                    (console.log("🔄 Сбрасываем скролл .content элемента"),
-                      e.current &&
-                        ((e.current.scrollTop = 0),
-                        e.current.scrollTo({ top: 0, behavior: "instant" })),
+                    (e.current &&
+                      ((e.current.scrollTop = 0),
+                      e.current.scrollTo({ top: 0, behavior: "instant" })),
                       window.scrollTo(0, 0));
                   }, [n.pathname]),
                   (0, Je.jsxs)("div", {
@@ -25458,15 +25477,15 @@
               Ae()(Wi.A, qi),
               Wi.A && Wi.A.locals && Wi.A.locals);
             var Yi = i(9692),
-              Qi = {};
-            ((Qi.styleTagTransform = $e()),
-              (Qi.setAttributes = Me()),
-              (Qi.insert = De().bind(null, "head")),
-              (Qi.domAPI = Ie()),
-              (Qi.insertStyleElement = Ue()),
-              Ae()(Yi.A, Qi),
+              Xi = {};
+            ((Xi.styleTagTransform = $e()),
+              (Xi.setAttributes = Me()),
+              (Xi.insert = De().bind(null, "head")),
+              (Xi.domAPI = Ie()),
+              (Xi.insertStyleElement = Ue()),
+              Ae()(Yi.A, Xi),
               Yi.A && Yi.A.locals && Yi.A.locals);
-            const Xi = (e) => {
+            const Qi = (e) => {
                 let {
                   id: n,
                   name: r,
@@ -25651,7 +25670,7 @@
                   children: (0, Je.jsxs)("div", {
                     className: "create_task_form",
                     children: [
-                      (0, Je.jsx)(Xi, {
+                      (0, Je.jsx)(Qi, {
                         id: "chapter",
                         name: "chapter",
                         label: "Раздел",
@@ -25687,7 +25706,7 @@
                           }),
                         ],
                       }),
-                      (0, Je.jsx)(Xi, {
+                      (0, Je.jsx)(Qi, {
                         id: "resultType",
                         name: "resultType",
                         label: "Тип результата",
@@ -26183,406 +26202,447 @@
               Ae()(el.A, tl),
               el.A && el.A.locals && el.A.locals);
             const nl = function () {
-                const { oneTask: e, getFullTaskDeveloper: n } = Te(),
-                  { useMockData: r } = ye(),
-                  { setActions: a } = (0, Ee.useActionsStore)(),
-                  [o, i] = (0, t.useState)(!1),
-                  l = Z();
-                (0, t.useEffect)(() => {
-                  r && n(Number(l.id));
-                }, []);
-                const s = (e) => {
-                  if (!e) return "Не указано";
-                  try {
-                    return new Date(e).toLocaleDateString("ru-RU", {
-                      day: "2-digit",
-                      month: "2-digit",
-                      year: "numeric",
-                    });
-                  } catch (t) {
-                    return e;
-                  }
-                };
-                function c(t, n, o) {
-                  (a({
-                    actionName: (n ? "SendEmail" : o && "print") || "openFile",
-                    printAvailable: t.PrintAvailable,
-                    attachmentId: t.ObjectID,
-                    fileType: t.Type,
-                    objectId:
-                      (null == e ? void 0 : e.ObjectID) ||
-                      (null == e ? void 0 : e.TaskID),
-                    objectType: null == e ? void 0 : e.ObjectType,
-                    active: !0,
-                  }),
-                    !r && (0, Ye.default)());
+              const { oneTask: e, getFullTaskDeveloper: n } = Te(),
+                { useMockData: r } = ye(),
+                { setActions: a } = (0, Ee.useActionsStore)(),
+                [o, i] = (0, t.useState)(!1),
+                l = Z();
+              (0, t.useEffect)(() => {
+                r && n(Number(l.id));
+              }, []);
+              const s = (e) => {
+                if (!e) return "Не указано";
+                try {
+                  return new Date(e).toLocaleDateString("ru-RU", {
+                    day: "2-digit",
+                    month: "2-digit",
+                    year: "numeric",
+                  });
+                } catch (t) {
+                  return e;
                 }
-                return e
-                  ? (0, Je.jsxs)("div", {
-                      className: "detailed-task",
-                      children: [
-                        (0, Je.jsxs)("div", {
-                          className: "task-header",
+              };
+              function c(t, n, o) {
+                (a({
+                  actionName: (n ? "SendEmail" : o && "print") || "openFile",
+                  printAvailable: t.PrintAvailable,
+                  attachmentId: t.ObjectID,
+                  fileType: t.Type,
+                  objectId:
+                    (null == e ? void 0 : e.ObjectID) ||
+                    (null == e ? void 0 : e.TaskID),
+                  objectType: null == e ? void 0 : e.ObjectType,
+                  active: !0,
+                }),
+                  !r && (0, Ye.default)());
+              }
+              return e
+                ? (0, Je.jsxs)("div", {
+                    className: "detailed-task",
+                    children: [
+                      (0, Je.jsxs)("div", {
+                        className: "task-header",
+                        children: [
+                          (0, Je.jsx)("div", {
+                            className: "task-title",
+                            children: e.title || "Без названия",
+                          }),
+                          (0, Je.jsx)("button", {
+                            className: "expand-button ".concat(
+                              o ? "expanded" : "",
+                            ),
+                            onClick: () => i(!o),
+                            "aria-label": o ? "Свернуть" : "Раскрыть",
+                            children: (0, Je.jsx)("svg", {
+                              width: "24",
+                              height: "24",
+                              viewBox: "0 0 24 24",
+                              fill: "none",
+                              xmlns: "http://www.w3.org/2000/svg",
+                              children: (0, Je.jsx)("path", {
+                                d: "M7 10L12 15L17 10",
+                                stroke: "currentColor",
+                                strokeWidth: "2",
+                                strokeLinecap: "round",
+                                strokeLinejoin: "round",
+                              }),
+                            }),
+                          }),
+                        ],
+                      }),
+                      (0, Je.jsx)("hr", { className: "divider" }),
+                      !o &&
+                        (0, Je.jsxs)(Je.Fragment, {
                           children: [
                             (0, Je.jsx)("div", {
-                              className: "task-title",
-                              children: e.title || "Без названия",
-                            }),
-                            (0, Je.jsx)("button", {
-                              className: "expand-button ".concat(
-                                o ? "expanded" : "",
-                              ),
-                              onClick: () => i(!o),
-                              "aria-label": o ? "Свернуть" : "Раскрыть",
-                              children: (0, Je.jsx)("svg", {
-                                width: "24",
-                                height: "24",
-                                viewBox: "0 0 24 24",
-                                fill: "none",
-                                xmlns: "http://www.w3.org/2000/svg",
-                                children: (0, Je.jsx)("path", {
-                                  d: "M7 10L12 15L17 10",
-                                  stroke: "currentColor",
-                                  strokeWidth: "2",
-                                  strokeLinecap: "round",
-                                  strokeLinejoin: "round",
-                                }),
+                              className: "task-content",
+                              children: (0, Je.jsx)("div", {
+                                dangerouslySetInnerHTML: xi(e.Content),
+                                className: "attachment_content_html",
                               }),
                             }),
-                          ],
-                        }),
-                        (0, Je.jsx)("hr", { className: "divider" }),
-                        !o &&
-                          (0, Je.jsxs)(Je.Fragment, {
-                            children: [
-                              (0, Je.jsx)("div", {
-                                className: "task-content",
-                                children: (0, Je.jsx)("div", {
-                                  dangerouslySetInnerHTML: xi(e.Content),
-                                  className: "attachment_content_html",
-                                }),
-                              }),
-                              e.attachments &&
-                                e.attachments.length > 0 &&
-                                (0, Je.jsxs)("div", {
-                                  className: "attachments-section",
-                                  children: [
-                                    (0, Je.jsx)("h3", {
-                                      className: "attachments-title",
-                                      children: "Прикрепленные файлы",
-                                    }),
-                                    (0, Je.jsx)("div", {
-                                      className: "attachments-list",
-                                      children: e.attachments.map((e, t) =>
-                                        (0, Je.jsxs)(
-                                          "div",
-                                          {
-                                            className: "attachment_child",
-                                            children: [
-                                              (0, Je.jsx)("div", {
-                                                className:
-                                                  "attachment_child_text",
-                                                onClick: () => c(e, !1, !1),
-                                                children: e.ObjectName,
-                                              }),
-                                              (0, Je.jsxs)("div", {
-                                                className: "attachment_image",
-                                                children: [
-                                                  e.PrintAvailable &&
-                                                    (0, Je.jsx)(et, {
-                                                      type: "report",
-                                                      icon: (0, Je.jsx)(
-                                                        "span",
-                                                        {
-                                                          className:
-                                                            "material-symbols-outlined",
-                                                          children: "print",
-                                                        },
-                                                      ),
-                                                      onClick: () =>
-                                                        c(e, !1, !0),
-                                                    }),
-                                                  e.IsFile &&
-                                                    (0, Je.jsx)(et, {
-                                                      type: "report",
-                                                      icon: (0, Je.jsx)(
-                                                        "span",
-                                                        {
-                                                          className:
-                                                            "material-symbols-outlined",
-                                                          children: "drafts",
-                                                        },
-                                                      ),
-                                                      onClick: () =>
-                                                        c(e, !0, !1),
-                                                    }),
-                                                ],
-                                              }),
-                                            ],
-                                          },
-                                          t,
-                                        ),
-                                      ),
-                                    }),
-                                  ],
-                                }),
-                              (() => {
-                                const t = ((e) =>
-                                  e && Array.isArray(e)
-                                    ? e.map((e) => ({
-                                        address: e.address || "",
-                                        ImageID: e.ImageID || "",
-                                      }))
-                                    : [])(null == e ? void 0 : e.images);
-                                return (
-                                  t.length > 0 &&
+                            e.attachments &&
+                              e.attachments.length > 0 &&
+                              (0, Je.jsxs)("div", {
+                                className: "attachments-section",
+                                children: [
+                                  (0, Je.jsx)("h3", {
+                                    className: "attachments-title",
+                                    children: "Прикрепленные файлы",
+                                  }),
                                   (0, Je.jsx)("div", {
-                                    className: "image-container",
-                                    children: t.map((e, t) =>
-                                      (0, Je.jsx)(
-                                        "img",
+                                    className: "attachments-list",
+                                    children: e.attachments.map((e, t) =>
+                                      (0, Je.jsxs)(
+                                        "div",
                                         {
-                                          src: e.address,
-                                          alt: "Image ".concat(t + 1),
-                                          className: "swipe_content_info_image",
+                                          className: "attachment_child",
+                                          children: [
+                                            (0, Je.jsx)("div", {
+                                              className:
+                                                "attachment_child_text",
+                                              onClick: () => c(e, !1, !1),
+                                              children: e.ObjectName,
+                                            }),
+                                            (0, Je.jsxs)("div", {
+                                              className: "attachment_image",
+                                              children: [
+                                                e.PrintAvailable &&
+                                                  (0, Je.jsx)(et, {
+                                                    type: "report",
+                                                    icon: (0, Je.jsx)("span", {
+                                                      className:
+                                                        "material-symbols-outlined",
+                                                      children: "print",
+                                                    }),
+                                                    onClick: () => c(e, !1, !0),
+                                                  }),
+                                                e.IsFile &&
+                                                  (0, Je.jsx)(et, {
+                                                    type: "report",
+                                                    icon: (0, Je.jsx)("span", {
+                                                      className:
+                                                        "material-symbols-outlined",
+                                                      children: "drafts",
+                                                    }),
+                                                    onClick: () => c(e, !0, !1),
+                                                  }),
+                                              ],
+                                            }),
+                                          ],
                                         },
                                         t,
                                       ),
                                     ),
-                                  })
-                                );
-                              })(),
+                                  }),
+                                ],
+                              }),
+                            (() => {
+                              const t = ((e) =>
+                                e && Array.isArray(e)
+                                  ? e.map((e) => ({
+                                      address: e.address || "",
+                                      ImageID: e.ImageID || "",
+                                    }))
+                                  : [])(null == e ? void 0 : e.images);
+                              return (
+                                t.length > 0 &&
+                                (0, Je.jsx)("div", {
+                                  className: "image-container",
+                                  children: t.map((e, t) =>
+                                    (0, Je.jsx)(
+                                      "img",
+                                      {
+                                        src: e.address,
+                                        alt: "Image ".concat(t + 1),
+                                        className: "swipe_content_info_image",
+                                      },
+                                      t,
+                                    ),
+                                  ),
+                                })
+                              );
+                            })(),
+                          ],
+                        }),
+                      o &&
+                        (0, Je.jsx)("div", {
+                          className: "additional-info",
+                          children: (0, Je.jsxs)("div", {
+                            className: "info-grid",
+                            children: [
+                              (0, Je.jsxs)("div", {
+                                className: "info-row",
+                                children: [
+                                  (0, Je.jsx)("span", {
+                                    className: "info-label",
+                                    children: "Раздел задачи:",
+                                  }),
+                                  (0, Je.jsx)("span", {
+                                    className: "info-value",
+                                    children: e.tagTitle || "Не указано",
+                                  }),
+                                ],
+                              }),
+                              (0, Je.jsxs)("div", {
+                                className: "info-row",
+                                children: [
+                                  (0, Je.jsx)("span", {
+                                    className: "info-label",
+                                    children: "Номер:",
+                                  }),
+                                  (0, Je.jsx)("span", {
+                                    className: "info-value",
+                                    children: e.number || "Не указано",
+                                  }),
+                                ],
+                              }),
+                              (0, Je.jsxs)("div", {
+                                className: "info-row",
+                                children: [
+                                  (0, Je.jsx)("span", {
+                                    className: "info-label",
+                                    children: "Дата:",
+                                  }),
+                                  (0, Je.jsx)("span", {
+                                    className: "info-value",
+                                    children: s(e.date),
+                                  }),
+                                ],
+                              }),
+                              (0, Je.jsxs)("div", {
+                                className: "info-row",
+                                children: [
+                                  (0, Je.jsx)("span", {
+                                    className: "info-label",
+                                    children: "Выполнить до:",
+                                  }),
+                                  (0, Je.jsx)("span", {
+                                    className: "info-value deadline",
+                                    children: s(e.deadline),
+                                  }),
+                                ],
+                              }),
+                              (0, Je.jsxs)("div", {
+                                className: "info-row",
+                                children: [
+                                  (0, Je.jsx)("span", {
+                                    className: "info-label",
+                                    children: "Тип задачи:",
+                                  }),
+                                  (0, Je.jsx)("span", {
+                                    className: "info-value",
+                                    children: e.typeTask || "Не указано",
+                                  }),
+                                ],
+                              }),
+                              (0, Je.jsxs)("div", {
+                                className: "info-row",
+                                children: [
+                                  (0, Je.jsx)("span", {
+                                    className: "info-label",
+                                    children: "Тип результата:",
+                                  }),
+                                  (0, Je.jsx)("span", {
+                                    className: "info-value",
+                                    children: e.resultType || "Не указано",
+                                  }),
+                                ],
+                              }),
+                              (0, Je.jsxs)("div", {
+                                className: "info-row",
+                                children: [
+                                  (0, Je.jsx)("span", {
+                                    className: "info-label",
+                                    children: "Постановщик:",
+                                  }),
+                                  (0, Je.jsx)("span", {
+                                    className: "info-value",
+                                    children: e.creator || "Не указано",
+                                  }),
+                                ],
+                              }),
+                              (0, Je.jsxs)("div", {
+                                className: "info-row",
+                                children: [
+                                  (0, Je.jsx)("span", {
+                                    className: "info-label",
+                                    children: "Ответственный:",
+                                  }),
+                                  (0, Je.jsx)("span", {
+                                    className: "info-value",
+                                    children: e.Responsible || "Не указано",
+                                  }),
+                                ],
+                              }),
+                              (0, Je.jsxs)("div", {
+                                className: "info-row",
+                                children: [
+                                  (0, Je.jsx)("span", {
+                                    className: "info-label",
+                                    children: "Дата выполнения:",
+                                  }),
+                                  (0, Je.jsx)("span", {
+                                    className: "info-value",
+                                    children: s(e.DoneDate),
+                                  }),
+                                ],
+                              }),
+                              (0, Je.jsxs)("div", {
+                                className: "info-row",
+                                children: [
+                                  (0, Je.jsx)("span", {
+                                    className: "info-label",
+                                    children: "Исполнитель:",
+                                  }),
+                                  (0, Je.jsx)("span", {
+                                    className: "info-value",
+                                    children: e.Executor || "Не указано",
+                                  }),
+                                ],
+                              }),
                             ],
                           }),
-                        o &&
-                          (0, Je.jsx)("div", {
-                            className: "additional-info",
-                            children: (0, Je.jsxs)("div", {
-                              className: "info-grid",
-                              children: [
-                                (0, Je.jsxs)("div", {
-                                  className: "info-row",
-                                  children: [
-                                    (0, Je.jsx)("span", {
-                                      className: "info-label",
-                                      children: "Раздел задачи:",
-                                    }),
-                                    (0, Je.jsx)("span", {
-                                      className: "info-value",
-                                      children: e.tagTitle || "Не указано",
-                                    }),
-                                  ],
-                                }),
-                                (0, Je.jsxs)("div", {
-                                  className: "info-row",
-                                  children: [
-                                    (0, Je.jsx)("span", {
-                                      className: "info-label",
-                                      children: "Номер:",
-                                    }),
-                                    (0, Je.jsx)("span", {
-                                      className: "info-value",
-                                      children: e.number || "Не указано",
-                                    }),
-                                  ],
-                                }),
-                                (0, Je.jsxs)("div", {
-                                  className: "info-row",
-                                  children: [
-                                    (0, Je.jsx)("span", {
-                                      className: "info-label",
-                                      children: "Дата:",
-                                    }),
-                                    (0, Je.jsx)("span", {
-                                      className: "info-value",
-                                      children: s(e.date),
-                                    }),
-                                  ],
-                                }),
-                                (0, Je.jsxs)("div", {
-                                  className: "info-row",
-                                  children: [
-                                    (0, Je.jsx)("span", {
-                                      className: "info-label",
-                                      children: "Выполнить до:",
-                                    }),
-                                    (0, Je.jsx)("span", {
-                                      className: "info-value deadline",
-                                      children: s(e.deadline),
-                                    }),
-                                  ],
-                                }),
-                                (0, Je.jsxs)("div", {
-                                  className: "info-row",
-                                  children: [
-                                    (0, Je.jsx)("span", {
-                                      className: "info-label",
-                                      children: "Тип задачи:",
-                                    }),
-                                    (0, Je.jsx)("span", {
-                                      className: "info-value",
-                                      children: e.typeTask || "Не указано",
-                                    }),
-                                  ],
-                                }),
-                                (0, Je.jsxs)("div", {
-                                  className: "info-row",
-                                  children: [
-                                    (0, Je.jsx)("span", {
-                                      className: "info-label",
-                                      children: "Тип результата:",
-                                    }),
-                                    (0, Je.jsx)("span", {
-                                      className: "info-value",
-                                      children: e.resultType || "Не указано",
-                                    }),
-                                  ],
-                                }),
-                                (0, Je.jsxs)("div", {
-                                  className: "info-row",
-                                  children: [
-                                    (0, Je.jsx)("span", {
-                                      className: "info-label",
-                                      children: "Постановщик:",
-                                    }),
-                                    (0, Je.jsx)("span", {
-                                      className: "info-value",
-                                      children: e.creator || "Не указано",
-                                    }),
-                                  ],
-                                }),
-                                (0, Je.jsxs)("div", {
-                                  className: "info-row",
-                                  children: [
-                                    (0, Je.jsx)("span", {
-                                      className: "info-label",
-                                      children: "Ответственный:",
-                                    }),
-                                    (0, Je.jsx)("span", {
-                                      className: "info-value",
-                                      children: e.Responsible || "Не указано",
-                                    }),
-                                  ],
-                                }),
-                                (0, Je.jsxs)("div", {
-                                  className: "info-row",
-                                  children: [
-                                    (0, Je.jsx)("span", {
-                                      className: "info-label",
-                                      children: "Дата выполнения:",
-                                    }),
-                                    (0, Je.jsx)("span", {
-                                      className: "info-value",
-                                      children: s(e.DoneDate),
-                                    }),
-                                  ],
-                                }),
-                                (0, Je.jsxs)("div", {
-                                  className: "info-row",
-                                  children: [
-                                    (0, Je.jsx)("span", {
-                                      className: "info-label",
-                                      children: "Исполнитель:",
-                                    }),
-                                    (0, Je.jsx)("span", {
-                                      className: "info-value",
-                                      children: e.Executor || "Не указано",
-                                    }),
-                                  ],
-                                }),
-                              ],
-                            }),
-                          }),
-                      ],
-                    })
-                  : (0, Je.jsx)("div", {
-                      className: "detailed-task",
-                      children: (0, Je.jsx)("div", {
-                        className: "task-not-found",
-                        children: (0, Je.jsx)("p", {
-                          children: "Задача не найдена",
                         }),
+                    ],
+                  })
+                : (0, Je.jsx)("div", {
+                    className: "detailed-task",
+                    children: (0, Je.jsx)("div", {
+                      className: "task-not-found",
+                      children: (0, Je.jsx)("p", {
+                        children: "Задача не найдена",
                       }),
-                    });
+                    }),
+                  });
+            };
+            var rl = i(332),
+              al = {};
+            ((al.styleTagTransform = $e()),
+              (al.setAttributes = Me()),
+              (al.insert = De().bind(null, "head")),
+              (al.domAPI = Ie()),
+              (al.insertStyleElement = Ue()),
+              Ae()(rl.A, al),
+              rl.A && rl.A.locals && rl.A.locals);
+            const ol = () => {
+                const e = Q(),
+                  n = (0, t.useRef)(e);
+                return (
+                  (0, t.useEffect)(() => {
+                    n.current = e;
+                  }, [e]),
+                  (0, Je.jsx)(No, {
+                    component: null,
+                    children: (0, Je.jsx)(
+                      Bo,
+                      {
+                        timeout: 350,
+                        classNames: (() => {
+                          const t =
+                              n.current.pathname.startsWith("/task") ||
+                              n.current.pathname.startsWith("/news"),
+                            r =
+                              e.pathname.startsWith("/task") ||
+                              e.pathname.startsWith("/news");
+                          return t && !r
+                            ? "layout-exit"
+                            : !t && r
+                              ? "layout-enter"
+                              : "page-change";
+                        })(),
+                        unmountOnExit: !0,
+                        children: (0, Je.jsx)("div", {
+                          className: "app-layout-container",
+                          children: (0, Je.jsx)(ce, {}),
+                        }),
+                      },
+                      e.key,
+                    ),
+                  })
+                );
               },
-              rl = function () {
+              il = function () {
                 const { isDebugMode: e } = ye();
-                return (0, Je.jsxs)(fe, {
-                  children: [
-                    (0, Je.jsxs)(ue, {
-                      element: (0, Je.jsx)(Wo, {}),
-                      children: [
-                        (0, Je.jsx)(ue, {
-                          path: "/",
-                          element: (0, Je.jsx)(ki, {}),
-                        }),
-                        (0, Je.jsx)(ue, {
-                          path: "/instructions",
-                          element: (0, Je.jsx)(zi, {}),
-                        }),
-                        (0, Je.jsx)(ue, {
-                          path: "/help",
-                          element: (0, Je.jsx)(Si, {}),
-                        }),
-                        (0, Je.jsx)(ue, {
-                          path: "/journals",
-                          element: (0, Je.jsx)(Ei, {}),
-                        }),
-                        (0, Je.jsx)(ue, {
-                          path: "/products",
-                          element: (0, Je.jsx)(_i, {}),
-                        }),
-                        e &&
+                return (0, Je.jsx)(fe, {
+                  children: (0, Je.jsxs)(ue, {
+                    element: (0, Je.jsx)(Wo, {}),
+                    children: [
+                      (0, Je.jsxs)(ue, {
+                        element: (0, Je.jsx)(ol, {}),
+                        children: [
                           (0, Je.jsx)(ue, {
-                            path: "/errors",
-                            element: (0, Je.jsx)(Ui, {}),
+                            path: "/",
+                            element: (0, Je.jsx)(ki, {}),
                           }),
-                      ],
-                    }),
-                    (0, Je.jsxs)(ue, {
-                      path: "/",
-                      element: (0, Je.jsx)(Go, {}),
-                      children: [
-                        (0, Je.jsx)(ue, {
-                          path: "/task/full",
-                          element: (0, Je.jsx)(Hi, {}),
-                        }),
-                        (0, Je.jsx)(ue, {
-                          path: "/task/full/:id",
-                          element: (0, Je.jsx)(nl, {}),
-                        }),
-                        (0, Je.jsx)(ue, {
-                          path: "/task/create",
-                          element: (0, Je.jsx)(Ji, {}),
-                        }),
-                        (0, Je.jsx)(ue, {
-                          path: "/news/full",
-                          element: (0, Je.jsx)(Zi, {}),
-                        }),
-                      ],
-                    }),
-                  ],
+                          (0, Je.jsx)(ue, {
+                            path: "/instructions",
+                            element: (0, Je.jsx)(zi, {}),
+                          }),
+                          (0, Je.jsx)(ue, {
+                            path: "/help",
+                            element: (0, Je.jsx)(Si, {}),
+                          }),
+                          (0, Je.jsx)(ue, {
+                            path: "/journals",
+                            element: (0, Je.jsx)(Ei, {}),
+                          }),
+                          (0, Je.jsx)(ue, {
+                            path: "/products",
+                            element: (0, Je.jsx)(_i, {}),
+                          }),
+                          e &&
+                            (0, Je.jsx)(ue, {
+                              path: "/errors",
+                              element: (0, Je.jsx)(Ui, {}),
+                            }),
+                        ],
+                      }),
+                      (0, Je.jsxs)(ue, {
+                        path: "/",
+                        element: (0, Je.jsx)(Go, {}),
+                        children: [
+                          (0, Je.jsx)(ue, {
+                            path: "/task/full",
+                            element: (0, Je.jsx)(Hi, {}),
+                          }),
+                          (0, Je.jsx)(ue, {
+                            path: "/task/full/:id",
+                            element: (0, Je.jsx)(nl, {}),
+                          }),
+                          (0, Je.jsx)(ue, {
+                            path: "/task/create",
+                            element: (0, Je.jsx)(Ji, {}),
+                          }),
+                          (0, Je.jsx)(ue, {
+                            path: "/news/full",
+                            element: (0, Je.jsx)(Zi, {}),
+                          }),
+                        ],
+                      }),
+                    ],
+                  }),
                 });
               },
-              al = function () {
+              ll = function () {
                 return (0, Je.jsxs)(Je.Fragment, {
-                  children: [(0, Je.jsx)(Pe, {}), (0, Je.jsx)(rl, {})],
+                  children: [(0, Je.jsx)(Pe, {}), (0, Je.jsx)(il, {})],
                 });
               };
-            var ol = i(2),
-              il = {};
-            ((il.styleTagTransform = $e()),
-              (il.setAttributes = Me()),
-              (il.insert = De().bind(null, "head")),
-              (il.domAPI = Ie()),
-              (il.insertStyleElement = Ue()),
-              Ae()(ol.A, il),
-              ol.A && ol.A.locals && ol.A.locals,
+            var sl = i(2),
+              cl = {};
+            ((cl.styleTagTransform = $e()),
+              (cl.setAttributes = Me()),
+              (cl.insert = De().bind(null, "head")),
+              (cl.domAPI = Ie()),
+              (cl.insertStyleElement = Ue()),
+              Ae()(sl.A, cl),
+              sl.A && sl.A.locals && sl.A.locals,
               document.addEventListener("DOMContentLoaded", function () {
                 r.createRoot(document.getElementById("root")).render(
                   (0, Je.jsx)(t.StrictMode, {
                     children: (0, Je.jsx)(he, {
-                      children: (0, Je.jsx)(al, {}),
+                      children: (0, Je.jsx)(ll, {}),
                     }),
                   }),
                 );

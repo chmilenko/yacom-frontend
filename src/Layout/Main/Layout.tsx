@@ -1,4 +1,4 @@
-import { useEffect, useLayoutEffect, useRef } from "react";
+import { useEffect, useRef, useState } from "react";
 import { Outlet, useLocation } from "react-router-dom";
 
 import "./Layout.scss";
@@ -14,21 +14,33 @@ import ContentTransition from "../../Components/PageTransition/PageTransition";
 // import usePageScroll from "../../Hooks/usePageScroll";
 
 function Layout() {
+  const location = useLocation();
+  const contentRef = useRef(null);
+  const [showFooter, setShowFooter] = useState(true);
+
   const { page } = useAppStore();
   const { useMockData } = useAppModeStore();
   const { setActions } = useActionsStore();
-  const location = useLocation();
-  const contentRef = useRef(null);
+
+  useEffect(() => {
+    const isGoingToTaskNews =
+      location.pathname.startsWith("/task") ||
+      location.pathname.startsWith("/news");
+
+    if (isGoingToTaskNews) {
+      setShowFooter(false);
+    } else {
+      setShowFooter(true);
+    }
+  }, [location.pathname]);
 
   useEffect(() => {
     if (contentRef.current) {
       contentRef.current.scrollTop = 0;
-      contentRef.current.scrollTo({ top: 0, behavior: "instant" });
     }
-
-    // Также скроллим window на всякий случай
     window.scrollTo(0, 0);
   }, [location.pathname]);
+
   const funcRefresh = (currentPage) => {
     switch (currentPage) {
       case "":
@@ -66,9 +78,11 @@ function Layout() {
           </ContentTransition>
         </PullToRefreshComponent>
       </main>
-      <footer className="footer ">
-        <MenuBar />
-      </footer>
+      {showFooter && (
+        <footer className="footer">
+          <MenuBar />
+        </footer>
+      )}
     </div>
   );
 }
