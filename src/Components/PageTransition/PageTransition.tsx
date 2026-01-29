@@ -10,11 +10,6 @@ interface PageTransitionProps {
 const PageTransition: React.FC<PageTransitionProps> = ({ children }) => {
   const location = useLocation();
 
-  // Сброс скролла при смене страницы
-  useEffect(() => {
-    // Эта логика теперь в Layout
-  }, [location.key]);
-
   return (
     <TransitionGroup component={null}>
       <CSSTransition

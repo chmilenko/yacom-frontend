@@ -36,6 +36,8 @@ function Home() {
     useMockData && setUser("");
   }, []);
 
+  alert("main");
+
   return (
     <div className="main">
       {forState.length > 0 && (

@@ -78,6 +78,7 @@ export const useAppStore = create<AppStore>()((set, get) => ({
 
   setAppState: async (appData: string) => {
     const isDebugMode = useAppModeStore.getState().isDebugMode;
+    alert("setAppState");
     try {
       const useMockData = useAppModeStore.getState().useMockData;
       // Получаем моки ТОЛЬКО если нужны
@@ -98,12 +99,12 @@ export const useAppStore = create<AppStore>()((set, get) => ({
 
       const tasksSection = res.find(
         (section) =>
-          section.SectionName === "Задачи" || section.SectionName === "Tasks"
+          section.SectionName === "Задачи" || section.SectionName === "Tasks",
       );
 
       const newsSection = res.find(
         (section: ISection) =>
-          section.SectionName === "Новости" || section.SectionName === "News"
+          section.SectionName === "Новости" || section.SectionName === "News",
       );
 
       const tasks =
@@ -142,7 +143,7 @@ export const useAppStore = create<AppStore>()((set, get) => ({
             stack: err.stack,
           },
         },
-        isDebugMode
+        isDebugMode,
       );
 
       console.error("setAppState error:", err);
@@ -196,7 +197,7 @@ export const useAppStore = create<AppStore>()((set, get) => ({
       if (taskToMove) {
         let newsSection = updatedSections.find(
           (s: ISection) =>
-            s.SectionName === "Новости" || s.SectionName === "News"
+            s.SectionName === "Новости" || s.SectionName === "News",
         );
 
         if (!newsSection) {
@@ -219,14 +220,14 @@ export const useAppStore = create<AppStore>()((set, get) => ({
 
       const tasksSection = updatedSections.find(
         (section: ISection) =>
-          section.SectionName === "Задачи" || section.SectionName === "Tasks"
+          section.SectionName === "Задачи" || section.SectionName === "Tasks",
       );
       const tasks =
         tasksSection?.sectionData?.list?.filter((item) => !item.Done) || [];
 
       const newsSection = updatedSections.find(
         (section: ISection) =>
-          section.SectionName === "Новости" || section.SectionName === "News"
+          section.SectionName === "Новости" || section.SectionName === "News",
       );
       const unreadNews =
         newsSection?.sectionData?.list?.filter((item) => item.New) || [];
@@ -254,7 +255,7 @@ export const useAppStore = create<AppStore>()((set, get) => ({
             stack: err.stack,
           },
         },
-        isDebugMode
+        isDebugMode,
       );
 
       console.error("setTaskDoneStatus error:", err);
@@ -273,7 +274,7 @@ export const useAppStore = create<AppStore>()((set, get) => ({
           if (!section.sectionData?.list) return section;
 
           const updatedList = section?.sectionData?.list?.map((item) =>
-            item.ObjectID === id && item.New ? { ...item, New: false } : item
+            item.ObjectID === id && item.New ? { ...item, New: false } : item,
           );
 
           return {
@@ -284,7 +285,7 @@ export const useAppStore = create<AppStore>()((set, get) => ({
 
         const newsSection = updatedData.find(
           (section) =>
-            section.SectionName === "Новости" || section.SectionName === "News"
+            section.SectionName === "Новости" || section.SectionName === "News",
         );
         const unreadNews =
           newsSection?.sectionData?.list?.filter((item) => item.New) || [];
@@ -300,7 +301,7 @@ export const useAppStore = create<AppStore>()((set, get) => ({
           const updatedList = section.sectionData.list.map((item) =>
             item.ObjectID === id && item.New && item.ObjectType === "News"
               ? { ...item, New: false }
-              : item
+              : item,
           );
 
           return {
@@ -311,7 +312,7 @@ export const useAppStore = create<AppStore>()((set, get) => ({
 
         const newsSection = updatedData.find(
           (section) =>
-            section.SectionName === "Новости" || section.SectionName === "News"
+            section.SectionName === "Новости" || section.SectionName === "News",
         );
         const unreadNews =
           newsSection?.sectionData?.list?.filter((item) => item.New) || [];
@@ -339,7 +340,7 @@ export const useAppStore = create<AppStore>()((set, get) => ({
             stack: err.stack,
           },
         },
-        isDebugMode
+        isDebugMode,
       );
 
       console.error("setReadNews error:", err);
@@ -359,11 +360,11 @@ export const useAppStore = create<AppStore>()((set, get) => ({
 
       if (type === "Task" || type === "Задачи") {
         findAdditionalInfo = findAdditionalInfo?.find(
-          (info) => info.TaskID === id
+          (info) => info.TaskID === id,
         );
       } else {
         findAdditionalInfo = findAdditionalInfo?.find(
-          (info) => info.ObjectID === id
+          (info) => info.ObjectID === id,
         );
       }
       if (!findAdditionalInfo) {
@@ -450,7 +451,7 @@ export const useAppStore = create<AppStore>()((set, get) => ({
             stack: err.stack,
           },
         },
-        isDebugMode
+        isDebugMode,
       );
 
       console.error("setInstructionsState error:", err);

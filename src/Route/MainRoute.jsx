@@ -1,5 +1,5 @@
-import React from "react";
-import { Route, Routes } from "react-router-dom";
+import React, { useEffect, useLayoutEffect, useRef } from "react";
+import { Route, Routes, useLocation } from "react-router-dom";
 import Layout from "../Layout/Main/Layout";
 import TaskNewsLayout from "../Layout/DetailtTaskNews/LayoutCreateTask";
 
@@ -18,6 +18,7 @@ import DetailedFullTask from "../Page/DetailedTaskNews/Task/DetailedFull/Detaile
 
 function MainRoute() {
   const { isDebugMode } = useAppModeStore();
+
   return (
     <Routes>
       <Route element={<Layout />}>
