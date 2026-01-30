@@ -1,6 +1,6 @@
 import { CSSTransition, TransitionGroup } from "react-transition-group";
 import { useLocation } from "react-router-dom";
-import { useEffect } from "react";
+
 import "./PageTransition.scss";
 
 interface PageTransitionProps {

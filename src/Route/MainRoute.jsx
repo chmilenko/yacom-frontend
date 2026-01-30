@@ -1,6 +1,4 @@
 import { Route, Routes } from "react-router-dom";
-import Layout from "../Layout/Main/Layout";
-import TaskNewsLayout from "../Layout/DetailtTaskNews/LayoutCreateTask";
 
 import Home from "../Page/Home/Home";
 import Help from "../Page/Help/Help";

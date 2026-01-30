@@ -1,4 +1,4 @@
-import React, { lazy, Suspense, ComponentType } from "react";
+import React, { lazy, ComponentType } from "react";
 
 // Регистрируем все Layouts
 export const LAYOUTS = {
