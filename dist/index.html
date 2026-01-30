@@ -254,7 +254,7 @@
                 i = n.n(o)()(a());
               i.push([
                 e.id,
-                ".layout-switcher {\n  position: relative;\n  width: 100%;\n  height: 100vh;\n  overflow: hidden; /* Только здесь! */\n  background: #fff;\n}\n\n.layout-container {\n  position: absolute;\n  top: 0;\n  left: 0;\n  right: 0;\n  bottom: 0;\n  width: 100%;\n  height: 100%;\n  /* Убираем transition - используем только animation */\n  backface-visibility: hidden;\n  -webkit-backface-visibility: hidden;\n  transform-style: preserve-3d;\n  /* Предотвращаем дергание */\n  contain: layout style paint;\n  will-change: transform;\n  /* Отключаем любые возможные скроллы */\n  /* overflow: hidden !important; */\n}\n\n/* Скрываем скроллбары во время анимации */\n.layout-switcher.animating {\n  overflow: hidden;\n}\n\n.layout-switcher.animating * {\n  /* overflow: hidden !important; */\n}\n\n/* Изначально оба на месте */\n.layout-switcher:not(.animating) .previous-layout {\n  display: none;\n  visibility: hidden;\n}\n\n.layout-switcher:not(.animating) .current-layout {\n  transform: translateX(0);\n  position: relative;\n}\n\n/* АНИМАЦИЯ ВПЕРЕД (forward) */\n.layout-switcher.animating.direction-forward .previous-layout {\n  animation: slideOutToLeft 0.5s cubic-bezier(0.25, 0.46, 0.45, 0.94) forwards;\n  z-index: 1;\n}\n\n.layout-switcher.animating.direction-forward .current-layout {\n  animation: slideInFromRight 0.5s cubic-bezier(0.25, 0.46, 0.45, 0.94) forwards;\n  z-index: 2;\n}\n\n/* АНИМАЦИЯ НАЗАД (backward) */\n.layout-switcher.animating.direction-backward .previous-layout {\n  animation: slideOutToRight 0.5s cubic-bezier(0.25, 0.46, 0.45, 0.94) forwards;\n  z-index: 1;\n}\n\n.layout-switcher.animating.direction-backward .current-layout {\n  animation: slideInFromLeft 0.5s cubic-bezier(0.25, 0.46, 0.45, 0.94) forwards;\n  z-index: 2;\n}\n\n/* Анимации для ВПЕРЕД */\n@keyframes slideInFromRight {\n  0% {\n    transform: translateX(100%);\n    opacity: 1;\n  }\n  100% {\n    transform: translateX(0);\n    opacity: 1;\n  }\n}\n\n@keyframes slideOutToLeft {\n  0% {\n    transform: translateX(0);\n    opacity: 1;\n  }\n  100% {\n    transform: translateX(-100%);\n    opacity: 1;\n  }\n}\n\n/* Анимации для НАЗАД */\n@keyframes slideInFromLeft {\n  0% {\n    transform: translateX(-100%);\n    opacity: 1;\n  }\n  100% {\n    transform: translateX(0);\n    opacity: 1;\n  }\n}\n\n@keyframes slideOutToRight {\n  0% {\n    transform: translateX(0);\n    opacity: 1;\n  }\n  100% {\n    transform: translateX(100%);\n    opacity: 1;\n  }\n}\n\n/* Фикс для iOS Safari */\n@supports (-webkit-touch-callout: none) {\n  .layout-container {\n    -webkit-transform: translate3d(0, 0, 0);\n    transform: translate3d(0, 0, 0);\n  }\n\n  .layout-switcher {\n    -webkit-transform: translate3d(0, 0, 0);\n    transform: translate3d(0, 0, 0);\n  }\n}\n\n/* Отключаем анимации при reduced-motion */\n@media (prefers-reduced-motion: reduce) {\n  .layout-container,\n  .layout-switcher.animating .layout-container {\n    animation: none !important;\n    transition: none !important;\n  }\n\n  .layout-switcher.animating .previous-layout {\n    display: none;\n  }\n\n  .layout-switcher.animating .current-layout {\n    transform: translateX(0) !important;\n  }\n}\n",
+                ".layout-switcher {\n  position: relative;\n  width: 100%;\n  height: 100vh;\n  overflow: hidden; /* Только здесь! */\n  background: #fff;\n}\n\n.layout-container {\n  position: absolute;\n  top: 0;\n  left: 0;\n  right: 0;\n  bottom: 0;\n  width: 100%;\n  height: 100%;\n  /* Убираем transition - используем только animation */\n  backface-visibility: hidden;\n  -webkit-backface-visibility: hidden;\n  transform-style: preserve-3d;\n  /* Предотвращаем дергание */\n  contain: layout style paint;\n  will-change: transform;\n  /* Отключаем любые возможные скроллы */\n  /* overflow: hidden !important; */\n}\n\n/* Скрываем скроллбары во время анимации */\n.layout-switcher.animating {\n  overflow: hidden;\n}\n\n.layout-switcher.animating * {\n  /* overflow: hidden !important; */\n}\n\n/* Изначально оба на месте */\n.layout-switcher:not(.animating) .previous-layout {\n  display: none;\n  visibility: hidden;\n}\n\n.layout-switcher:not(.animating) .current-layout {\n  transform: translateX(0);\n  position: relative;\n}\n\n/* АНИМАЦИЯ ВПЕРЕД (forward) */\n.layout-switcher.animating.direction-forward .previous-layout {\n  animation: slideOutToLeft 0.7s cubic-bezier(0.25, 0.46, 0.45, 0.94) forwards;\n  z-index: 1;\n}\n\n.layout-switcher.animating.direction-forward .current-layout {\n  animation: slideInFromRight 0.7s cubic-bezier(0.25, 0.46, 0.45, 0.94) forwards;\n  z-index: 2;\n}\n\n/* АНИМАЦИЯ НАЗАД (backward) */\n.layout-switcher.animating.direction-backward .previous-layout {\n  animation: slideOutToRight 0.7s cubic-bezier(0.25, 0.46, 0.45, 0.94) forwards;\n  z-index: 1;\n}\n\n.layout-switcher.animating.direction-backward .current-layout {\n  animation: slideInFromLeft 0.7s cubic-bezier(0.25, 0.46, 0.45, 0.94) forwards;\n  z-index: 2;\n}\n\n/* Анимации для ВПЕРЕД */\n@keyframes slideInFromRight {\n  0% {\n    transform: translateX(100%);\n    opacity: 1;\n  }\n  100% {\n    transform: translateX(0);\n    opacity: 1;\n  }\n}\n\n@keyframes slideOutToLeft {\n  0% {\n    transform: translateX(0);\n    opacity: 1;\n  }\n  100% {\n    transform: translateX(-100%);\n    opacity: 1;\n  }\n}\n\n/* Анимации для НАЗАД */\n@keyframes slideInFromLeft {\n  0% {\n    transform: translateX(-100%);\n    opacity: 1;\n  }\n  100% {\n    transform: translateX(0);\n    opacity: 1;\n  }\n}\n\n@keyframes slideOutToRight {\n  0% {\n    transform: translateX(0);\n    opacity: 1;\n  }\n  100% {\n    transform: translateX(100%);\n    opacity: 1;\n  }\n}\n\n/* Фикс для iOS Safari */\n@supports (-webkit-touch-callout: none) {\n  .layout-container {\n    -webkit-transform: translate3d(0, 0, 0);\n    transform: translate3d(0, 0, 0);\n  }\n\n  .layout-switcher {\n    -webkit-transform: translate3d(0, 0, 0);\n    transform: translate3d(0, 0, 0);\n  }\n}\n\n/* Отключаем анимации при reduced-motion */\n@media (prefers-reduced-motion: reduce) {\n  .layout-container,\n  .layout-switcher.animating .layout-container {\n    animation: none !important;\n    transition: none !important;\n  }\n\n  .layout-switcher.animating .previous-layout {\n    display: none;\n  }\n\n  .layout-switcher.animating .current-layout {\n    transform: translateX(0) !important;\n  }\n}\n",
                 "",
               ]);
               const l = i;
@@ -26589,48 +26589,48 @@
               rl.A && rl.A.locals && rl.A.locals);
             const sl = () => {
                 const e = Q(),
-                  [n, r] =
-                    (K(), (0, t.useState)({ current: "MAIN", previous: null })),
+                  [n, r] = (0, t.useState)({ current: "MAIN", previous: null }),
                   [a, o] = (0, t.useState)("forward"),
                   [i, l] = (0, t.useState)(!1),
                   s = (0, t.useRef)(!0),
-                  c = (0, t.useRef)([]),
-                  u = (0, t.useRef)([]);
-                (0, t.useEffect)(() => {
-                  const t = ((e) => {
+                  c = (0, t.useRef)(""),
+                  u = (e) => {
                     for (const [t, n] of Object.entries(tl))
                       if (N(t, e)) return n;
                     return "MAIN";
-                  })(e.pathname);
+                  };
+                (0, t.useEffect)(() => {
+                  const t = u(e.pathname);
                   if (t !== n.current) {
-                    const a = ((e, t) => {
-                      if (0 === c.current.length) return "forward";
-                      c.current[c.current.length - 1];
-                      const n = u.current[u.current.length - 1],
-                        r = c.current.indexOf(e);
-                      return (-1 !== r && r < c.current.length - 1) ||
-                        ("TASK_NEWS" === n && "MAIN" === t)
-                        ? "backward"
-                        : "forward";
-                    })(e.pathname, t);
-                    if ((o(a), l(!0), s.current))
+                    const a = u(c.current),
+                      i = "TASK_NEWS" === a && "MAIN" === t;
+                    if (
+                      (o(i ? "backward" : "forward"),
+                      console.log(
+                        "Направление: ".concat(i ? "backward" : "forward"),
+                        {
+                          prevPath: c.current,
+                          prevLayout: a,
+                          newPath: e.pathname,
+                          newLayout: t,
+                        },
+                      ),
+                      l(!0),
+                      s.current)
+                    )
                       return (
                         r({ current: t, previous: null }),
                         (s.current = !1),
-                        c.current.push(e.pathname),
-                        void u.current.push(t)
+                        void (c.current = e.pathname)
                       );
                     (r({ current: t, previous: n.current }),
-                      c.current.push(e.pathname),
-                      u.current.push(t),
-                      c.current.length > 10 &&
-                        (c.current.shift(), u.current.shift()),
+                      (c.current = e.pathname),
                       setTimeout(() => {
                         (l(!1),
                           setTimeout(() => {
                             r((e) => il(il({}, e), {}, { previous: null }));
                           }, 100));
-                      }, 500));
+                      }, 700));
                   }
                 }, [e.pathname]);
                 const d = nl[n.current],

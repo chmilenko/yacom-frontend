@@ -1,5 +1,5 @@
 /* eslint-disable react-hooks/exhaustive-deps */
-import { useLocation, Outlet, matchPath, useNavigate } from "react-router-dom";
+import { useLocation, Outlet, matchPath } from "react-router-dom";
 import { useState, useEffect, useRef } from "react";
 import {
   LayoutType,
@@ -10,7 +10,6 @@ import "./AppLayoutSwitcher.css";
 
 const SmartLayoutSwitcher = () => {
   const location = useLocation();
-  const navigate = useNavigate();
   const [layouts, setLayouts] = useState<{
     current: LayoutType;
     previous: LayoutType | null;
@@ -19,10 +18,8 @@ const SmartLayoutSwitcher = () => {
   const [direction, setDirection] = useState<"forward" | "backward">("forward");
   const [isAnimating, setIsAnimating] = useState(false);
   const isInitialRender = useRef(true);
-  const locationHistory = useRef<string[]>([]);
-  const layoutHistory = useRef<LayoutType[]>([]);
+  const previousPath = useRef<string>("");
 
-  // Определяем Layout по пути
   const getLayoutForPath = (pathname: string): LayoutType => {
     for (const [pattern, layout] of Object.entries(PATH_TO_LAYOUT_MAP)) {
       if (matchPath(pattern, pathname)) {
@@ -32,76 +29,47 @@ const SmartLayoutSwitcher = () => {
     return "MAIN";
   };
 
-  // Надежное определение направления
-  const getDirection = (
-    newPath: string,
-    newLayout: LayoutType,
-  ): "forward" | "backward" => {
-    if (locationHistory.current.length === 0) return "forward";
-
-    const lastPath =
-      locationHistory.current[locationHistory.current.length - 1];
-    const lastLayout = layoutHistory.current[layoutHistory.current.length - 1];
-
-    // Если возвращаемся на предыдущий путь в истории - это backward
-    const pathIndex = locationHistory.current.indexOf(newPath);
-    if (pathIndex !== -1 && pathIndex < locationHistory.current.length - 1) {
-      return "backward";
-    }
-
-    // Эвристика: если переходим от TASK_NEWS к MAIN - часто это backward
-    if (lastLayout === "TASK_NEWS" && newLayout === "MAIN") {
-      return "backward";
-    }
-
-    return "forward";
-  };
-
   useEffect(() => {
     const newLayout = getLayoutForPath(location.pathname);
 
     if (newLayout !== layouts.current) {
-      // Определяем направление
-      const newDirection = getDirection(location.pathname, newLayout);
-      setDirection(newDirection);
+      // ПРОСТОЕ ПРАВИЛО:
+      // Если предыдущий путь был из TASK_NEWS лейаута, а новый из MAIN - это backward
+      const prevLayout = getLayoutForPath(previousPath.current);
+      const isBackward = prevLayout === "TASK_NEWS" && newLayout === "MAIN";
+
+      setDirection(isBackward ? "backward" : "forward");
+
+      console.log(`Направление: ${isBackward ? "backward" : "forward"}`, {
+        prevPath: previousPath.current,
+        prevLayout,
+        newPath: location.pathname,
+        newLayout,
+      });
 
       setIsAnimating(true);
 
-      // На первом рендере не анимируем
       if (isInitialRender.current) {
         setLayouts({ current: newLayout, previous: null });
         isInitialRender.current = false;
-
-        // Сохраняем в историю
-        locationHistory.current.push(location.pathname);
-        layoutHistory.current.push(newLayout);
+        previousPath.current = location.pathname;
         return;
       }
 
-      // Устанавливаем оба Layout'а одновременно
       setLayouts({
         current: newLayout,
         previous: layouts.current,
       });
 
-      // Обновляем историю
-      locationHistory.current.push(location.pathname);
-      layoutHistory.current.push(newLayout);
+      // Сохраняем текущий путь как предыдущий для следующего перехода
+      previousPath.current = location.pathname;
 
-      // Ограничиваем историю
-      if (locationHistory.current.length > 10) {
-        locationHistory.current.shift();
-        layoutHistory.current.shift();
-      }
-
-      // Завершаем анимацию
       setTimeout(() => {
         setIsAnimating(false);
-        // Очищаем предыдущий Layout после анимации
         setTimeout(() => {
           setLayouts((prev) => ({ ...prev, previous: null }));
         }, 100);
-      }, 500);
+      }, 700);
     }
   }, [location.pathname]);
 

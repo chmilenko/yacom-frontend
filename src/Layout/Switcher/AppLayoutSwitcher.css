@@ -47,23 +47,23 @@
 
 /* АНИМАЦИЯ ВПЕРЕД (forward) */
 .layout-switcher.animating.direction-forward .previous-layout {
-  animation: slideOutToLeft 20s cubic-bezier(0.25, 0.46, 0.45, 0.94) forwards;
+  animation: slideOutToLeft 0.7s cubic-bezier(0.25, 0.46, 0.45, 0.94) forwards;
   z-index: 1;
 }
 
 .layout-switcher.animating.direction-forward .current-layout {
-  animation: slideInFromRight 20s cubic-bezier(0.25, 0.46, 0.45, 0.94) forwards;
+  animation: slideInFromRight 0.7s cubic-bezier(0.25, 0.46, 0.45, 0.94) forwards;
   z-index: 2;
 }
 
 /* АНИМАЦИЯ НАЗАД (backward) */
 .layout-switcher.animating.direction-backward .previous-layout {
-  animation: slideOutToRight 20s cubic-bezier(0.25, 0.46, 0.45, 0.94) forwards;
+  animation: slideOutToRight 0.7s cubic-bezier(0.25, 0.46, 0.45, 0.94) forwards;
   z-index: 1;
 }
 
 .layout-switcher.animating.direction-backward .current-layout {
-  animation: slideInFromLeft 20s cubic-bezier(0.25, 0.46, 0.45, 0.94) forwards;
+  animation: slideInFromLeft 0.7s cubic-bezier(0.25, 0.46, 0.45, 0.94) forwards;
   z-index: 2;
 }
 
