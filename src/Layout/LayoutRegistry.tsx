@@ -1,5 +1,6 @@
 import React, { lazy, ComponentType } from "react";
-
+import TaskNewsLayout from "./DetailtTaskNews/LayoutCreateTask";
+import Layout from "./Main/Layout";
 // Регистрируем все Layouts
 export const LAYOUTS = {
   MAIN: "main",
@@ -26,12 +27,9 @@ export interface LayoutComponentProps {
 }
 
 // Динамические импорты для code splitting с правильными типами
-export const LayoutComponents: Record<
-  LayoutType,
-  React.LazyExoticComponent<ComponentType<LayoutComponentProps>>
-> = {
-  MAIN: lazy(() => import("./Main/Layout")),
-  TASK_NEWS: lazy(() => import("./DetailtTaskNews/LayoutCreateTask")),
+export const LayoutComponents = {
+  MAIN: Layout,
+  TASK_NEWS: TaskNewsLayout,
 };
 
 // Экспортируем fallback (используем где-то или удаляем если не нужен)

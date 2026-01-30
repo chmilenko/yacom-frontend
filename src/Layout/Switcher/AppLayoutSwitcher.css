@@ -2,7 +2,8 @@
   position: relative;
   width: 100%;
   height: 100vh;
-  overflow: hidden;
+  overflow: hidden; /* Только здесь! */
+  background: #fff;
 }
 
 .layout-container {
@@ -13,49 +14,64 @@
   bottom: 0;
   width: 100%;
   height: 100%;
-  transition:
-    transform 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94),
-    opacity 0.3s ease;
+  /* Убираем transition - используем только animation */
+  backface-visibility: hidden;
+  -webkit-backface-visibility: hidden;
+  transform-style: preserve-3d;
+  /* Предотвращаем дергание */
+  contain: layout style paint;
+  will-change: transform;
+  /* Отключаем любые возможные скроллы */
+  /* overflow: hidden !important; */
 }
 
-/* Начальное состояние */
-.layout-switcher.idle .layout-container {
+/* Скрываем скроллбары во время анимации */
+.layout-switcher.animating {
+  overflow: hidden;
+}
+
+.layout-switcher.animating * {
+  /* overflow: hidden !important; */
+}
+
+/* Изначально оба на месте */
+.layout-switcher:not(.animating) .previous-layout {
+  display: none;
+  visibility: hidden;
+}
+
+.layout-switcher:not(.animating) .current-layout {
   transform: translateX(0);
-  opacity: 1;
+  position: relative;
 }
 
-/* Анимация ВЫХОДА (старый layout уезжает) */
-.layout-switcher.exiting .layout-container {
-  opacity: 0;
+/* АНИМАЦИЯ ВПЕРЕД (forward) */
+.layout-switcher.animating.direction-forward .previous-layout {
+  animation: slideOutToLeft 20s cubic-bezier(0.25, 0.46, 0.45, 0.94) forwards;
+  z-index: 1;
 }
 
-.layout-switcher.exiting.direction-forward .layout-container {
-  transform: translateX(-100%);
+.layout-switcher.animating.direction-forward .current-layout {
+  animation: slideInFromRight 20s cubic-bezier(0.25, 0.46, 0.45, 0.94) forwards;
+  z-index: 2;
 }
 
-.layout-switcher.exiting.direction-backward .layout-container {
-  transform: translateX(100%);
+/* АНИМАЦИЯ НАЗАД (backward) */
+.layout-switcher.animating.direction-backward .previous-layout {
+  animation: slideOutToRight 20s cubic-bezier(0.25, 0.46, 0.45, 0.94) forwards;
+  z-index: 1;
 }
 
-/* Анимация ВХОДА (новый layout приезжает) */
-.layout-switcher.entering .layout-container {
-  opacity: 0;
+.layout-switcher.animating.direction-backward .current-layout {
+  animation: slideInFromLeft 20s cubic-bezier(0.25, 0.46, 0.45, 0.94) forwards;
+  z-index: 2;
 }
 
-.layout-switcher.entering.direction-forward .layout-container {
-  transform: translateX(100%);
-  animation: slideInFromRight 0.5s cubic-bezier(0.25, 0.46, 0.45, 0.94) forwards;
-}
-
-.layout-switcher.entering.direction-backward .layout-container {
-  transform: translateX(-100%);
-  animation: slideInFromLeft 0.5s cubic-bezier(0.25, 0.46, 0.45, 0.94) forwards;
-}
-
+/* Анимации для ВПЕРЕД */
 @keyframes slideInFromRight {
   0% {
     transform: translateX(100%);
-    opacity: 0.8;
+    opacity: 1;
   }
   100% {
     transform: translateX(0);
@@ -63,10 +79,22 @@
   }
 }
 
+@keyframes slideOutToLeft {
+  0% {
+    transform: translateX(0);
+    opacity: 1;
+  }
+  100% {
+    transform: translateX(-100%);
+    opacity: 1;
+  }
+}
+
+/* Анимации для НАЗАД */
 @keyframes slideInFromLeft {
   0% {
     transform: translateX(-100%);
-    opacity: 0.8;
+    opacity: 1;
   }
   100% {
     transform: translateX(0);
@@ -74,33 +102,43 @@
   }
 }
 
-/* Для плавности на мобильных */
-@media (max-width: 768px) {
+@keyframes slideOutToRight {
+  0% {
+    transform: translateX(0);
+    opacity: 1;
+  }
+  100% {
+    transform: translateX(100%);
+    opacity: 1;
+  }
+}
+
+/* Фикс для iOS Safari */
+@supports (-webkit-touch-callout: none) {
   .layout-container {
-    transition:
-      transform 0.35s cubic-bezier(0.1, 0.82, 0.25, 1),
-      opacity 0.25s ease;
+    -webkit-transform: translate3d(0, 0, 0);
+    transform: translate3d(0, 0, 0);
   }
 
-  @keyframes slideInFromRight {
-    0% {
-      transform: translateX(100%);
-      opacity: 0.9;
-    }
-    100% {
-      transform: translateX(0);
-      opacity: 1;
-    }
+  .layout-switcher {
+    -webkit-transform: translate3d(0, 0, 0);
+    transform: translate3d(0, 0, 0);
+  }
+}
+
+/* Отключаем анимации при reduced-motion */
+@media (prefers-reduced-motion: reduce) {
+  .layout-container,
+  .layout-switcher.animating .layout-container {
+    animation: none !important;
+    transition: none !important;
   }
 
-  @keyframes slideInFromLeft {
-    0% {
-      transform: translateX(-100%);
-      opacity: 0.9;
-    }
-    100% {
-      transform: translateX(0);
-      opacity: 1;
-    }
+  .layout-switcher.animating .previous-layout {
+    display: none;
+  }
+
+  .layout-switcher.animating .current-layout {
+    transform: translateX(0) !important;
   }
 }
