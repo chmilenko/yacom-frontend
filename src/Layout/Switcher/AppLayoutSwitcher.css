@@ -11,17 +11,96 @@
   left: 0;
   right: 0;
   bottom: 0;
+  width: 100%;
+  height: 100%;
   transition:
-    opacity 0.3s ease,
-    transform 0.3s ease;
+    transform 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94),
+    opacity 0.3s ease;
 }
 
-.layout-switcher.animating .layout-container {
-  opacity: 0;
-  transform: translateX(30px);
-}
-
-.layout-switcher .layout-container {
-  opacity: 1;
+/* Начальное состояние */
+.layout-switcher.idle .layout-container {
   transform: translateX(0);
+  opacity: 1;
+}
+
+/* Анимация ВЫХОДА (старый layout уезжает) */
+.layout-switcher.exiting .layout-container {
+  opacity: 0;
+}
+
+.layout-switcher.exiting.direction-forward .layout-container {
+  transform: translateX(-100%);
+}
+
+.layout-switcher.exiting.direction-backward .layout-container {
+  transform: translateX(100%);
+}
+
+/* Анимация ВХОДА (новый layout приезжает) */
+.layout-switcher.entering .layout-container {
+  opacity: 0;
+}
+
+.layout-switcher.entering.direction-forward .layout-container {
+  transform: translateX(100%);
+  animation: slideInFromRight 0.5s cubic-bezier(0.25, 0.46, 0.45, 0.94) forwards;
+}
+
+.layout-switcher.entering.direction-backward .layout-container {
+  transform: translateX(-100%);
+  animation: slideInFromLeft 0.5s cubic-bezier(0.25, 0.46, 0.45, 0.94) forwards;
+}
+
+@keyframes slideInFromRight {
+  0% {
+    transform: translateX(100%);
+    opacity: 0.8;
+  }
+  100% {
+    transform: translateX(0);
+    opacity: 1;
+  }
+}
+
+@keyframes slideInFromLeft {
+  0% {
+    transform: translateX(-100%);
+    opacity: 0.8;
+  }
+  100% {
+    transform: translateX(0);
+    opacity: 1;
+  }
+}
+
+/* Для плавности на мобильных */
+@media (max-width: 768px) {
+  .layout-container {
+    transition:
+      transform 0.35s cubic-bezier(0.1, 0.82, 0.25, 1),
+      opacity 0.25s ease;
+  }
+
+  @keyframes slideInFromRight {
+    0% {
+      transform: translateX(100%);
+      opacity: 0.9;
+    }
+    100% {
+      transform: translateX(0);
+      opacity: 1;
+    }
+  }
+
+  @keyframes slideInFromLeft {
+    0% {
+      transform: translateX(-100%);
+      opacity: 0.9;
+    }
+    100% {
+      transform: translateX(0);
+      opacity: 1;
+    }
+  }
 }

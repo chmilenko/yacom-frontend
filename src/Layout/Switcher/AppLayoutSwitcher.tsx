@@ -10,8 +10,11 @@ import "./AppLayoutSwitcher.css";
 
 const SmartLayoutSwitcher = () => {
   const location = useLocation();
-  const [currentLayout, setCurrentLayout] = useState<LayoutType>("MAIN");
-  const [isAnimating, setIsAnimating] = useState(false);
+  const [displayLayout, setDisplayLayout] = useState<LayoutType>("MAIN");
+  const [transitionStage, setTransitionStage] = useState<
+    "idle" | "exiting" | "entering"
+  >("idle");
+  const [direction, setDirection] = useState<"forward" | "backward">("forward");
 
   // Определяем Layout по пути
   const getLayoutForPath = (pathname: string): LayoutType => {
@@ -26,24 +29,35 @@ const SmartLayoutSwitcher = () => {
   useEffect(() => {
     const newLayout = getLayoutForPath(location.pathname);
 
-    if (newLayout !== currentLayout) {
-      setIsAnimating(true);
+    if (newLayout !== displayLayout) {
+      // Определяем направление (упрощенно, можно доработать)
+      const currentIndex = Object.keys(LayoutComponents).indexOf(displayLayout);
+      const newIndex = Object.keys(LayoutComponents).indexOf(newLayout);
+      setDirection(newIndex > currentIndex ? "forward" : "backward");
 
+      // Начинаем анимацию выхода
+      setTransitionStage("exiting");
+
+      // После анимации выхода меняем layout и запускаем анимацию входа
       setTimeout(() => {
-        setCurrentLayout(newLayout);
+        setDisplayLayout(newLayout);
+        setTransitionStage("entering");
 
+        // Завершаем анимацию
         setTimeout(() => {
-          setIsAnimating(false);
-        }, 150);
-      }, 150);
+          setTransitionStage("idle");
+        }, 500);
+      }, 300);
     }
   }, [location.pathname]);
 
-  const LayoutComponent = LayoutComponents[currentLayout];
+  const LayoutComponent = LayoutComponents[displayLayout];
 
   return (
-    <div className={`layout-switcher ${isAnimating ? "animating" : ""}`}>
-      <div className={`layout-container ${currentLayout.toLowerCase()}`}>
+    <div
+      className={`layout-switcher ${transitionStage} direction-${direction}`}
+    >
+      <div className={`layout-container layout-${displayLayout.toLowerCase()}`}>
         <Suspense fallback={<div>Загрузка...</div>}>
           <LayoutComponent>
             <Outlet />
