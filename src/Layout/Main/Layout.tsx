@@ -13,7 +13,7 @@ import { useAppModeStore } from "../../Core/Store/AppModeStore";
 import ContentTransition from "../../Components/PageTransition/PageTransition";
 // import usePageScroll from "../../Hooks/usePageScroll";
 
-function Layout() {
+function Layout({ children }) {
   const location = useLocation();
   const contentRef = useRef(null);
 
@@ -60,9 +60,7 @@ function Layout() {
           contentRef={contentRef}
           refreshFunk={() => funcRefresh(page)}
         >
-          <ContentTransition>
-            <Outlet />
-          </ContentTransition>
+          <ContentTransition>{children || <Outlet />}</ContentTransition>
         </PullToRefreshComponent>
       </main>
       <footer className="footer">

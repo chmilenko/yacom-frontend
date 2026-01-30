@@ -6,7 +6,7 @@ import ScrollToTop from "../../Components/ScrollToTop/ScrollToTop";
 import LayoutButtons from "./LayoutButton";
 import ContentTransition from "../../Components/PageTransition/PageTransition";
 
-function TaskNewsLayout() {
+function TaskNewsLayout({ children }) {
   const contentRef = useRef(null);
   const location = useLocation();
 
@@ -21,9 +21,7 @@ function TaskNewsLayout() {
       <ScrollToTop scrollContainerRef={contentRef} />
 
       <main className="create_task_content" ref={contentRef}>
-        <ContentTransition>
-          <Outlet />
-        </ContentTransition>
+        <ContentTransition>{children || <Outlet />}</ContentTransition>
       </main>
 
       <footer className="create_task_footer">

@@ -14,21 +14,20 @@ import DetailedTask from "../Page/DetailedTaskNews/Task/Detailed/DetailedTasks";
 import CreateTask from "../Page/DetailedTaskNews/Task/Create/CreateTask";
 import DetailedNews from "../Page/DetailedTaskNews/News/DetailedNews";
 import DetailedFullTask from "../Page/DetailedTaskNews/Task/DetailedFull/DetailedFullTask";
+import SmartLayoutSwitcher from "../Layout/Switcher/AppLayoutSwitcher";
 
 function MainRoute() {
   const { isDebugMode } = useAppModeStore();
 
   return (
     <Routes>
-      <Route element={<Layout />}>
+      <Route element={<SmartLayoutSwitcher />}>
         <Route path="/" element={<Home />} />
         <Route path="/instructions" element={<Instruction />} />
         <Route path="/help" element={<Help />} />
         <Route path="/journals" element={<Journals />} />
         <Route path="/products" element={<Products />} />
         {isDebugMode && <Route path="/errors" element={<Errors />} />}
-      </Route>
-      <Route path="/" element={<TaskNewsLayout />}>
         <Route path="/task/full" element={<DetailedTask />} />
         <Route path="/task/full/:id" element={<DetailedFullTask />} />
         <Route path="/task/create" element={<CreateTask />} />
