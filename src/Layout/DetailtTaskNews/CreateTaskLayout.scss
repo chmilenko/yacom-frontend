@@ -34,7 +34,7 @@
   bottom: 0;
   left: 0;
   right: 0;
-
+  border-top: 1px solid $primary;
   background: linear-gradient(135deg, #f0f7ff, #e1eeff);
   height: 62px;
 }
@@ -45,5 +45,4 @@
   align-items: center;
   height: 64px;
   padding: 0 10px;
-  border-top: 1px solid $primary;
 }

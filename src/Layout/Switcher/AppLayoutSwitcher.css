@@ -1,9 +1,27 @@
+/* AppLayoutSwitcher.css */
+
 .layout-switcher {
   position: relative;
   width: 100%;
   height: 100vh;
-  overflow: hidden; /* Только здесь! */
+  overflow: hidden;
   background: #fff;
+  /* Отключаем все события во время анимации */
+  pointer-events: auto;
+}
+
+.layout-switcher.animating {
+  /* Блокируем ВСЕ события на время анимации */
+  pointer-events: none !important;
+  cursor: wait !important;
+}
+
+/* Блокируем все интерактивные элементы внутри */
+.layout-switcher.animating * {
+  pointer-events: none !important;
+  user-select: none !important;
+  -webkit-user-select: none !important;
+  cursor: wait !important;
 }
 
 .layout-container {
@@ -14,38 +32,28 @@
   bottom: 0;
   width: 100%;
   height: 100%;
-  /* Убираем transition - используем только animation */
   backface-visibility: hidden;
   -webkit-backface-visibility: hidden;
   transform-style: preserve-3d;
-  /* Предотвращаем дергание */
-  contain: layout style paint;
   will-change: transform;
-  /* Отключаем любые возможные скроллы */
-  /* overflow: hidden !important; */
+  /* Отключаем скролл внутри лэйаутов */
+  overflow: hidden !important;
 }
 
-/* Скрываем скроллбары во время анимации */
-.layout-switcher.animating {
-  overflow: hidden;
-}
-
-.layout-switcher.animating * {
-  /* overflow: hidden !important; */
-}
-
-/* Изначально оба на месте */
+/* Скрываем предыдущий лэйаут когда не анимируем */
 .layout-switcher:not(.animating) .previous-layout {
   display: none;
   visibility: hidden;
 }
 
+/* Показываем только текущий когда не анимируем */
 .layout-switcher:not(.animating) .current-layout {
-  transform: translateX(0);
   position: relative;
+  opacity: 1;
+  transform: translateX(0);
 }
 
-/* АНИМАЦИЯ ВПЕРЕД (forward) */
+/* ВПЕРЕД анимация (MAIN → TASK_NEWS) */
 .layout-switcher.animating.direction-forward .previous-layout {
   animation: slideOutToLeft 0.7s cubic-bezier(0.25, 0.46, 0.45, 0.94) forwards;
   z-index: 1;
@@ -56,7 +64,7 @@
   z-index: 2;
 }
 
-/* АНИМАЦИЯ НАЗАД (backward) */
+/* НАЗАД анимация (TASK_NEWS → MAIN) */
 .layout-switcher.animating.direction-backward .previous-layout {
   animation: slideOutToRight 0.7s cubic-bezier(0.25, 0.46, 0.45, 0.94) forwards;
   z-index: 1;
@@ -67,7 +75,7 @@
   z-index: 2;
 }
 
-/* Анимации для ВПЕРЕД */
+/* Ключевые кадры */
 @keyframes slideInFromRight {
   0% {
     transform: translateX(100%);
@@ -90,7 +98,6 @@
   }
 }
 
-/* Анимации для НАЗАД */
 @keyframes slideInFromLeft {
   0% {
     transform: translateX(-100%);
@@ -113,20 +120,19 @@
   }
 }
 
-/* Фикс для iOS Safari */
+/* Для дебага: границы анимаций */
+.layout-switcher.animating .layout-container {
+  /* outline: 2px solid red; */ /* Раскомментировать для дебага */
+}
+
+/* iOS фикс */
 @supports (-webkit-touch-callout: none) {
   .layout-container {
     -webkit-transform: translate3d(0, 0, 0);
-    transform: translate3d(0, 0, 0);
-  }
-
-  .layout-switcher {
-    -webkit-transform: translate3d(0, 0, 0);
-    transform: translate3d(0, 0, 0);
   }
 }
 
-/* Отключаем анимации при reduced-motion */
+/* Reduced motion */
 @media (prefers-reduced-motion: reduce) {
   .layout-container,
   .layout-switcher.animating .layout-container {
@@ -135,10 +141,6 @@
   }
 
   .layout-switcher.animating .previous-layout {
-    display: none;
-  }
-
-  .layout-switcher.animating .current-layout {
-    transform: translateX(0) !important;
+    display: none !important;
   }
 }

@@ -7,9 +7,11 @@ import {
   LayoutComponents,
 } from "../LayoutRegistry";
 import "./AppLayoutSwitcher.css";
+import { useScrollLock } from "../../Utils/useScrollLock";
 
 const SmartLayoutSwitcher = () => {
   const location = useLocation();
+  const { lockScroll, unlockScroll } = useScrollLock();
   const [layouts, setLayouts] = useState<{
     current: LayoutType;
     previous: LayoutType | null;
@@ -46,7 +48,7 @@ const SmartLayoutSwitcher = () => {
         newPath: location.pathname,
         newLayout,
       });
-
+      lockScroll();
       setIsAnimating(true);
 
       if (isInitialRender.current) {
@@ -67,6 +69,7 @@ const SmartLayoutSwitcher = () => {
       setTimeout(() => {
         setIsAnimating(false);
         setTimeout(() => {
+          unlockScroll();
           setLayouts((prev) => ({ ...prev, previous: null }));
         }, 100);
       }, 700);

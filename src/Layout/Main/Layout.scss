@@ -1,4 +1,5 @@
-// Layout.scss
+@import "../../Styles/variables.scss";
+
 .layout {
   display: flex;
   flex-direction: column;
@@ -27,5 +28,6 @@
   min-height: min-content; // Важно для скролла
 }
 .footer {
-  height: 63px;
+  border-top: 1px solid $primary;
+  height: 62px;
 }

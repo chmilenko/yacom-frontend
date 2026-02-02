@@ -8,7 +8,7 @@
   @include flex-center-around;
   flex-direction: row;
   padding: 8px 0px 8px 0px;
-  border-top: 1px solid $primary;
+
   &-child {
     @include flex-column;
     gap: $gap-small;

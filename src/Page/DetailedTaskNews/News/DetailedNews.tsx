@@ -44,7 +44,6 @@ function DetailedNews() {
     const year = date.getFullYear();
     return `${year}${month}${day}`;
   };
-  console.log(actions);
 
   const formatMonthForDisplay = (yyyyMMdd: string): string => {
     if (!yyyyMMdd || yyyyMMdd.length !== 8) {

@@ -74,7 +74,7 @@
                 i = n.n(o)()(a());
               i.push([
                 e.id,
-                '.header-navigation *{color:inherit}.header-navigation{background:#fff;display:flex;align-items:center;justify-content:space-around;flex-direction:row;padding:8px 0px 8px 0px;border-top:1px solid #4fae1a}.header-navigation-child{display:flex;align-items:center;justify-content:center;flex-direction:column;gap:8px;padding:4px;box-sizing:border-box}.header-navigation-child-active{display:flex;align-items:center;justify-content:center;flex-direction:column;gap:8px;font-size:14px;padding:4px;box-sizing:border-box;color:#4fae1a}.header-navigation-child-text{font-family:"Roboto",sans-serif;letter-spacing:-0.01em;font-size:14px}nav{display:flex;justify-content:center;width:100%;height:100%}.material-symbols-outlined{display:flex;align-items:center;justify-content:center}.active{color:#4fae1a}.active-text{color:#4fae1a;font-weight:700}.breadcrumbs{display:flex;align-items:center;gap:4px;margin-bottom:8px}.navigation_button{display:flex;flex-direction:column-reverse}.menu-button{-webkit-tap-highlight-color:rgba(0,0,0,0)}.menu-button.active{color:#4fae1a !important}.menu-button .material-symbols-outlined{color:inherit !important}@media screen and (max-width: 385px){.menu-button{font-size:13px}}@media screen and (max-width: 350px){.menu-button{font-size:12px}}@media screen and (max-width: 330px){.menu-button{font-size:11px}}',
+                '.header-navigation *{color:inherit}.header-navigation{background:#fff;display:flex;align-items:center;justify-content:space-around;flex-direction:row;padding:8px 0px 8px 0px}.header-navigation-child{display:flex;align-items:center;justify-content:center;flex-direction:column;gap:8px;padding:4px;box-sizing:border-box}.header-navigation-child-active{display:flex;align-items:center;justify-content:center;flex-direction:column;gap:8px;font-size:14px;padding:4px;box-sizing:border-box;color:#4fae1a}.header-navigation-child-text{font-family:"Roboto",sans-serif;letter-spacing:-0.01em;font-size:14px}nav{display:flex;justify-content:center;width:100%;height:100%}.material-symbols-outlined{display:flex;align-items:center;justify-content:center}.active{color:#4fae1a}.active-text{color:#4fae1a;font-weight:700}.breadcrumbs{display:flex;align-items:center;gap:4px;margin-bottom:8px}.navigation_button{display:flex;flex-direction:column-reverse}.menu-button{-webkit-tap-highlight-color:rgba(0,0,0,0)}.menu-button.active{color:#4fae1a !important}.menu-button .material-symbols-outlined{color:inherit !important}@media screen and (max-width: 385px){.menu-button{font-size:13px}}@media screen and (max-width: 350px){.menu-button{font-size:12px}}@media screen and (max-width: 330px){.menu-button{font-size:11px}}',
                 "",
               ]);
               const l = i;
@@ -175,7 +175,7 @@
                 i = n.n(o)()(a());
               i.push([
                 e.id,
-                ".create_task_layout *{color:inherit}.create_task_layout{display:flex;flex-direction:column;height:100vh;position:relative;-webkit-tap-highlight-color:rgba(0,0,0,0)}.create_task_content{flex:1;overflow-y:auto;-webkit-overflow-scrolling:touch;width:100%;position:relative;display:flex;flex-direction:column;height:0}.create_task_content>div{flex:1;display:flex;flex-direction:column}.create_task_footer{position:fixed;bottom:0;left:0;right:0;border-top:1px solid #4fae1a;background:linear-gradient(135deg, #f0f7ff, #e1eeff)}.create_task_buttons{display:flex;justify-content:space-around;align-items:center;height:64px;padding:0 10px}",
+                ".create_task_layout *{color:inherit}.create_task_layout{display:flex;flex-direction:column;height:100vh;position:relative;-webkit-tap-highlight-color:rgba(0,0,0,0)}.create_task_content{flex:1;overflow-y:auto;-webkit-overflow-scrolling:touch;width:100%;position:relative;display:flex;flex-direction:column;height:0}.create_task_content>div{flex:1;display:flex;flex-direction:column}.create_task_footer{position:fixed;bottom:0;left:0;right:0;border-top:1px solid #4fae1a;background:linear-gradient(135deg, #f0f7ff, #e1eeff);height:62px}.create_task_buttons{display:flex;justify-content:space-around;align-items:center;height:64px;padding:0 10px}",
                 "",
               ]);
               const l = i;
@@ -12531,7 +12531,7 @@
                 i = n.n(o)()(a());
               i.push([
                 e.id,
-                ".layout{display:flex;flex-direction:column;height:100vh;position:relative}.content{flex:1;overflow:auto;width:100%;height:100%;display:flex;flex-direction:column;scrollbar-width:none}.content::-webkit-scrollbar{display:none}.content-inner{flex:1;min-height:min-content}",
+                ".layout{display:flex;flex-direction:column;height:100vh;position:relative}.content{flex:1;overflow:auto;width:100%;height:100%;display:flex;flex-direction:column;scrollbar-width:none}.content::-webkit-scrollbar{display:none}.content-inner{flex:1;min-height:min-content}.footer{border-top:1px solid #4fae1a;height:62px}",
                 "",
               ]);
               const l = i;
@@ -26589,62 +26589,96 @@
               rl.A && rl.A.locals && rl.A.locals);
             const sl = () => {
                 const e = Q(),
-                  [n, r] = (0, t.useState)({ current: "MAIN", previous: null }),
-                  [a, o] = (0, t.useState)("forward"),
-                  [i, l] = (0, t.useState)(!1),
-                  s = (0, t.useRef)(!0),
-                  c = (0, t.useRef)(""),
-                  u = (e) => {
+                  { lockScroll: n, unlockScroll: r } = (() => {
+                    const e = (0, t.useRef)(0),
+                      n = (0, t.useRef)(!1);
+                    return {
+                      lockScroll: () => {
+                        n.current ||
+                          ((e.current = window.scrollY),
+                          (document.body.style.overflow = "hidden"),
+                          (document.body.style.position = "fixed"),
+                          (document.body.style.top = "-".concat(
+                            e.current,
+                            "px",
+                          )),
+                          (document.body.style.width = "100%"),
+                          (document.body.style.touchAction = "none"),
+                          document.body.classList.add("ios-scroll-lock"),
+                          (n.current = !0));
+                      },
+                      unlockScroll: () => {
+                        n.current &&
+                          ((document.body.style.overflow = ""),
+                          (document.body.style.position = ""),
+                          (document.body.style.top = ""),
+                          (document.body.style.width = ""),
+                          (document.body.style.touchAction = ""),
+                          document.body.classList.remove("ios-scroll-lock"),
+                          window.scrollTo(0, e.current),
+                          (n.current = !1));
+                      },
+                      isLocked: n.current,
+                    };
+                  })(),
+                  [a, o] = (0, t.useState)({ current: "MAIN", previous: null }),
+                  [i, l] = (0, t.useState)("forward"),
+                  [s, c] = (0, t.useState)(!1),
+                  u = (0, t.useRef)(!0),
+                  d = (0, t.useRef)(""),
+                  f = (e) => {
                     for (const [t, n] of Object.entries(tl))
                       if (N(t, e)) return n;
                     return "MAIN";
                   };
                 (0, t.useEffect)(() => {
-                  const t = u(e.pathname);
-                  if (t !== n.current) {
-                    const a = u(c.current),
-                      i = "TASK_NEWS" === a && "MAIN" === t;
+                  const t = f(e.pathname);
+                  if (t !== a.current) {
+                    const i = f(d.current),
+                      s = "TASK_NEWS" === i && "MAIN" === t;
                     if (
-                      (o(i ? "backward" : "forward"),
+                      (l(s ? "backward" : "forward"),
                       console.log(
-                        "Направление: ".concat(i ? "backward" : "forward"),
+                        "Направление: ".concat(s ? "backward" : "forward"),
                         {
-                          prevPath: c.current,
-                          prevLayout: a,
+                          prevPath: d.current,
+                          prevLayout: i,
                           newPath: e.pathname,
                           newLayout: t,
                         },
                       ),
-                      l(!0),
-                      s.current)
+                      n(),
+                      c(!0),
+                      u.current)
                     )
                       return (
-                        r({ current: t, previous: null }),
-                        (s.current = !1),
-                        void (c.current = e.pathname)
+                        o({ current: t, previous: null }),
+                        (u.current = !1),
+                        void (d.current = e.pathname)
                       );
-                    (r({ current: t, previous: n.current }),
-                      (c.current = e.pathname),
+                    (o({ current: t, previous: a.current }),
+                      (d.current = e.pathname),
                       setTimeout(() => {
-                        (l(!1),
+                        (c(!1),
                           setTimeout(() => {
-                            r((e) => il(il({}, e), {}, { previous: null }));
+                            (r(),
+                              o((e) => il(il({}, e), {}, { previous: null })));
                           }, 100));
                       }, 700));
                   }
                 }, [e.pathname]);
-                const d = nl[n.current],
-                  f = n.previous ? nl[n.previous] : null;
+                const p = nl[a.current],
+                  m = a.previous ? nl[a.previous] : null;
                 return (0, Ze.jsxs)("div", {
                   className: "layout-switcher "
-                    .concat(i ? "animating" : "", " direction-")
-                    .concat(a),
+                    .concat(s ? "animating" : "", " direction-")
+                    .concat(i),
                   children: [
-                    n.previous &&
-                      f &&
+                    a.previous &&
+                      m &&
                       (0, Ze.jsx)("div", {
                         className: "layout-container previous-layout",
-                        children: (0, Ze.jsx)(f, {
+                        children: (0, Ze.jsx)(m, {
                           children: (0, Ze.jsx)("div", {
                             style: {
                               opacity: 0,
@@ -26657,7 +26691,7 @@
                       }),
                     (0, Ze.jsx)("div", {
                       className: "layout-container current-layout",
-                      children: (0, Ze.jsx)(d, {
+                      children: (0, Ze.jsx)(p, {
                         children: (0, Ze.jsx)(ce, {}),
                       }),
                     }),
