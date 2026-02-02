@@ -254,7 +254,7 @@
                 i = n.n(o)()(a());
               i.push([
                 e.id,
-                "/* AppLayoutSwitcher.css */\n\n.layout-switcher {\n  position: relative;\n  width: 100%;\n  height: 100vh;\n  overflow: hidden;\n  background: #fff;\n  /* Отключаем все события во время анимации */\n  pointer-events: auto;\n}\n\n.layout-switcher.animating {\n  /* Блокируем ВСЕ события на время анимации */\n  pointer-events: none !important;\n  cursor: wait !important;\n}\n\n/* Блокируем все интерактивные элементы внутри */\n.layout-switcher.animating * {\n  pointer-events: none !important;\n  user-select: none !important;\n  -webkit-user-select: none !important;\n  cursor: wait !important;\n}\n\n.layout-container {\n  position: absolute;\n  top: 0;\n  left: 0;\n  right: 0;\n  bottom: 0;\n  width: 100%;\n  height: 100%;\n  backface-visibility: hidden;\n  -webkit-backface-visibility: hidden;\n  transform-style: preserve-3d;\n  will-change: transform;\n  /* Отключаем скролл внутри лэйаутов */\n  overflow: hidden !important;\n}\n\n/* Скрываем предыдущий лэйаут когда не анимируем */\n.layout-switcher:not(.animating) .previous-layout {\n  display: none;\n  visibility: hidden;\n}\n\n/* Показываем только текущий когда не анимируем */\n.layout-switcher:not(.animating) .current-layout {\n  position: relative;\n  opacity: 1;\n  transform: translateX(0);\n}\n\n/* ВПЕРЕД анимация (MAIN → TASK_NEWS) */\n.layout-switcher.animating.direction-forward .previous-layout {\n  animation: slideOutToLeft 0.7s cubic-bezier(0.25, 0.46, 0.45, 0.94) forwards;\n  z-index: 1;\n}\n\n.layout-switcher.animating.direction-forward .current-layout {\n  animation: slideInFromRight 0.7s cubic-bezier(0.25, 0.46, 0.45, 0.94) forwards;\n  z-index: 2;\n}\n\n/* НАЗАД анимация (TASK_NEWS → MAIN) */\n.layout-switcher.animating.direction-backward .previous-layout {\n  animation: slideOutToRight 0.7s cubic-bezier(0.25, 0.46, 0.45, 0.94) forwards;\n  z-index: 1;\n}\n\n.layout-switcher.animating.direction-backward .current-layout {\n  animation: slideInFromLeft 0.7s cubic-bezier(0.25, 0.46, 0.45, 0.94) forwards;\n  z-index: 2;\n}\n\n/* Ключевые кадры */\n@keyframes slideInFromRight {\n  0% {\n    transform: translateX(100%);\n    opacity: 1;\n  }\n  100% {\n    transform: translateX(0);\n    opacity: 1;\n  }\n}\n\n@keyframes slideOutToLeft {\n  0% {\n    transform: translateX(0);\n    opacity: 1;\n  }\n  100% {\n    transform: translateX(-100%);\n    opacity: 1;\n  }\n}\n\n@keyframes slideInFromLeft {\n  0% {\n    transform: translateX(-100%);\n    opacity: 1;\n  }\n  100% {\n    transform: translateX(0);\n    opacity: 1;\n  }\n}\n\n@keyframes slideOutToRight {\n  0% {\n    transform: translateX(0);\n    opacity: 1;\n  }\n  100% {\n    transform: translateX(100%);\n    opacity: 1;\n  }\n}\n\n/* Для дебага: границы анимаций */\n.layout-switcher.animating .layout-container {\n  /* outline: 2px solid red; */ /* Раскомментировать для дебага */\n}\n\n/* iOS фикс */\n@supports (-webkit-touch-callout: none) {\n  .layout-container {\n    -webkit-transform: translate3d(0, 0, 0);\n  }\n}\n\n/* Reduced motion */\n@media (prefers-reduced-motion: reduce) {\n  .layout-container,\n  .layout-switcher.animating .layout-container {\n    animation: none !important;\n    transition: none !important;\n  }\n\n  .layout-switcher.animating .previous-layout {\n    display: none !important;\n  }\n}\n",
+                ".layout-switcher {\n  position: relative;\n  width: 100%;\n  height: 100vh;\n  overflow: hidden;\n  background: #fff;\n}\n\n.layout-container {\n  position: absolute;\n  top: 0;\n  left: 0;\n  right: 0;\n  bottom: 0;\n  width: 100%;\n  height: 100%;\n  overflow: hidden !important;\n  backface-visibility: hidden;\n  -webkit-backface-visibility: hidden;\n  will-change: transform;\n}\n\n/* ===== СОСТОЯНИЯ ===== */\n\n/* Подготовка нового layout'а - полностью скрыт */\n.layout-container.current-layout.preparing {\n  visibility: hidden !important;\n  opacity: 0 !important;\n  transform: translateX(0) !important;\n}\n\n/* Готовый к показу */\n.layout-container.current-layout.ready {\n  visibility: visible !important;\n  opacity: 1 !important;\n}\n\n/* Предыдущий layout */\n.layout-container.previous-layout {\n  visibility: visible !important;\n  opacity: 1 !important;\n  transform: translateX(0);\n}\n\n/* ===== АНИМАЦИИ ТОЛЬКО КОГДА .animating ===== */\n\n/* ВПЕРЕД анимация */\n.layout-switcher.animating.direction-forward .previous-layout {\n  animation: slideOutToLeft 0.7s cubic-bezier(0.25, 0.46, 0.45, 0.94) forwards;\n  z-index: 1;\n}\n\n.layout-switcher.animating.direction-forward .current-layout.ready {\n  animation: slideInFromRight 0.7s cubic-bezier(0.25, 0.46, 0.45, 0.94) forwards;\n  z-index: 2;\n}\n\n/* НАЗАД анимация */\n.layout-switcher.animating.direction-backward .previous-layout {\n  animation: slideOutToRight 0.7s cubic-bezier(0.25, 0.46, 0.45, 0.94) forwards;\n  z-index: 1;\n}\n\n.layout-switcher.animating.direction-backward .current-layout.ready {\n  animation: slideInFromLeft 0.7s cubic-bezier(0.25, 0.46, 0.45, 0.94) forwards;\n  z-index: 2;\n}\n\n/* Ключевые кадры */\n@keyframes slideInFromRight {\n  0% {\n    transform: translateX(100%);\n  }\n  100% {\n    transform: translateX(0);\n  }\n}\n\n@keyframes slideOutToLeft {\n  0% {\n    transform: translateX(0);\n  }\n  100% {\n    transform: translateX(-100%);\n  }\n}\n\n@keyframes slideInFromLeft {\n  0% {\n    transform: translateX(-100%);\n  }\n  100% {\n    transform: translateX(0);\n  }\n}\n\n@keyframes slideOutToRight {\n  0% {\n    transform: translateX(0);\n  }\n  100% {\n    transform: translateX(100%);\n  }\n}\n\n/* ===== БЛОКИРОВКА ===== */\n\n/* Блокируем всё во время анимации */\n.layout-switcher.animating {\n  pointer-events: none;\n  cursor: wait;\n}\n\n.layout-switcher.animating * {\n  pointer-events: none !important;\n  user-select: none !important;\n  -webkit-user-select: none !important;\n}\n\n/* Блокируем скролл на body */\nbody.layout-animating {\n  overflow: hidden !important;\n  position: fixed;\n  width: 100%;\n  height: 100%;\n}\n\n/* iOS фикс */\n@supports (-webkit-touch-callout: none) {\n  .layout-container {\n    -webkit-transform: translate3d(0, 0, 0);\n    transform: translate3d(0, 0, 0);\n  }\n}\n",
                 "",
               ]);
               const l = i;
@@ -17479,7 +17479,6 @@
               },
               setReadNews: async (n) => {
                 const r = ye.getState().isDebugMode;
-                alert("Вызов функции с ".concat(n));
                 try {
                   const { forState: r } = t();
                   if (ye.getState().useMockData) {
@@ -19380,13 +19379,14 @@
                 return (0, Ze.jsxs)("div", {
                   className: "search-container ".concat(o).trim(),
                   children: [
-                    (0, Ze.jsx)("span", {
-                      className: "material-symbols-outlined search ".concat(
-                        t ? "hidden" : "",
-                      ),
-                      "aria-hidden": "true",
-                      children: "search",
-                    }),
+                    !t &&
+                      (0, Ze.jsx)("span", {
+                        className: "material-symbols-outlined search ".concat(
+                          t ? "hidden" : "",
+                        ),
+                        "aria-hidden": "true",
+                        children: "search",
+                      }),
                     (0, Ze.jsx)("input", {
                       type: i,
                       value: t,
@@ -26599,94 +26599,94 @@
               rl.A && rl.A.locals && rl.A.locals);
             const sl = () => {
                 const e = Q(),
-                  { lockScroll: n, unlockScroll: r } = (() => {
-                    const e = (0, t.useRef)(0),
-                      n = (0, t.useRef)(!1);
-                    return {
-                      lockScroll: () => {
-                        n.current ||
-                          ((e.current = window.scrollY),
-                          (document.body.style.overflow = "hidden"),
-                          (document.body.style.position = "fixed"),
-                          (document.body.style.top = "-".concat(
-                            e.current,
-                            "px",
-                          )),
-                          (document.body.style.width = "100%"),
-                          (document.body.style.touchAction = "none"),
-                          document.body.classList.add("ios-scroll-lock"),
-                          (n.current = !0));
-                      },
-                      unlockScroll: () => {
-                        n.current &&
-                          ((document.body.style.overflow = ""),
-                          (document.body.style.position = ""),
-                          (document.body.style.top = ""),
-                          (document.body.style.width = ""),
-                          (document.body.style.touchAction = ""),
-                          document.body.classList.remove("ios-scroll-lock"),
-                          window.scrollTo(0, e.current),
-                          (n.current = !1));
-                      },
-                      isLocked: n.current,
-                    };
-                  })(),
-                  [a, o] = (0, t.useState)({ current: "MAIN", previous: null }),
-                  [i, l] = (0, t.useState)("forward"),
-                  [s, c] = (0, t.useState)(!1),
-                  u = (0, t.useRef)(!0),
-                  d = (0, t.useRef)(""),
+                  [n, r] = (0, t.useState)({
+                    current: "MAIN",
+                    previous: null,
+                    isNewLayoutReady: !0,
+                  }),
+                  [a, o] = (0, t.useState)("forward"),
+                  [i, l] = (0, t.useState)(!1),
+                  s = (0, t.useRef)(!0),
+                  c = (0, t.useRef)(""),
+                  u = (0, t.useRef)(null),
+                  d = (0, t.useRef)(null),
                   f = (e) => {
                     for (const [t, n] of Object.entries(tl))
                       if (N(t, e)) return n;
                     return "MAIN";
                   };
-                (0, t.useEffect)(() => {
+                (0, t.useLayoutEffect)(() => {
                   const t = f(e.pathname);
-                  if (t !== a.current) {
-                    const i = f(d.current),
-                      s = "TASK_NEWS" === i && "MAIN" === t;
-                    if (
-                      (l(s ? "backward" : "forward"),
-                      console.log(
-                        "Направление: ".concat(s ? "backward" : "forward"),
-                        {
-                          prevPath: d.current,
-                          prevLayout: i,
-                          newPath: e.pathname,
-                          newLayout: t,
-                        },
-                      ),
-                      n(),
-                      c(!0),
-                      u.current)
-                    )
+                  if (t !== n.current) {
+                    const a = ((e, t) => {
+                      console.log("Определяем направление:", {
+                        from: e,
+                        to: t,
+                      });
+                      const n = [["TASK_NEWS", "MAIN"]];
+                      for (const [r, a] of n)
+                        if (e === r && t === a)
+                          return (
+                            console.log(
+                              "→ Направление: BACKWARD (правило:",
+                              r,
+                              "→",
+                              a,
+                              ")",
+                            ),
+                            "backward"
+                          );
                       return (
-                        o({ current: t, previous: null }),
-                        (u.current = !1),
-                        void (d.current = e.pathname)
+                        console.log("→ Направление: FORWARD (по умолчанию)"),
+                        "forward"
                       );
-                    (o({ current: t, previous: a.current }),
-                      (d.current = e.pathname),
-                      setTimeout(() => {
-                        (c(!1),
-                          setTimeout(() => {
-                            (r(),
-                              o((e) => il(il({}, e), {}, { previous: null })));
-                          }, 100));
-                      }, 700));
+                    })(f(c.current), t);
+                    if ((o(a), s.current))
+                      return (
+                        r({ current: t, previous: null, isNewLayoutReady: !0 }),
+                        (s.current = !1),
+                        void (c.current = e.pathname)
+                      );
+                    (l(!0),
+                      r({
+                        current: n.current,
+                        previous: n.current,
+                        isNewLayoutReady: !1,
+                      }),
+                      requestAnimationFrame(() => {
+                        (r({
+                          current: t,
+                          previous: n.current,
+                          isNewLayoutReady: !1,
+                        }),
+                          requestAnimationFrame(() => {
+                            (r((e) =>
+                              il(il({}, e), {}, { isNewLayoutReady: !0 }),
+                            ),
+                              (c.current = e.pathname),
+                              setTimeout(() => {
+                                (l(!1),
+                                  setTimeout(() => {
+                                    r((e) =>
+                                      il(il({}, e), {}, { previous: null }),
+                                    );
+                                  }, 100));
+                              }, 700));
+                          }));
+                      }));
                   }
                 }, [e.pathname]);
-                const p = nl[a.current],
-                  m = a.previous ? nl[a.previous] : null;
+                const p = nl[n.current],
+                  m = n.previous ? nl[n.previous] : null;
                 return (0, Ze.jsxs)("div", {
                   className: "layout-switcher "
-                    .concat(s ? "animating" : "", " direction-")
-                    .concat(i),
+                    .concat(i ? "animating" : "", " direction-")
+                    .concat(a),
                   children: [
-                    a.previous &&
+                    n.previous &&
                       m &&
                       (0, Ze.jsx)("div", {
+                        ref: d,
                         className: "layout-container previous-layout",
                         children: (0, Ze.jsx)(m, {
                           children: (0, Ze.jsx)("div", {
@@ -26700,7 +26700,10 @@
                         }),
                       }),
                     (0, Ze.jsx)("div", {
-                      className: "layout-container current-layout",
+                      ref: u,
+                      className: "layout-container current-layout ".concat(
+                        n.isNewLayoutReady ? "ready" : "preparing",
+                      ),
                       children: (0, Ze.jsx)(p, {
                         children: (0, Ze.jsx)(ce, {}),
                       }),

@@ -1,6 +1,6 @@
-import React, { lazy, ComponentType } from "react";
 import TaskNewsLayout from "./DetailtTaskNews/LayoutCreateTask";
 import Layout from "./Main/Layout";
+
 // Регистрируем все Layouts
 export const LAYOUTS = {
   MAIN: "main",
@@ -31,18 +31,3 @@ export const LayoutComponents = {
   MAIN: Layout,
   TASK_NEWS: TaskNewsLayout,
 };
-
-// Экспортируем fallback (используем где-то или удаляем если не нужен)
-export const LayoutFallback = () => (
-  <div
-    style={{
-      width: "100%",
-      height: "100vh",
-      display: "flex",
-      alignItems: "center",
-      justifyContent: "center",
-    }}
-  >
-    Загрузка...
-  </div>
-);

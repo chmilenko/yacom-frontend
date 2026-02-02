@@ -1,26 +1,31 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 import { useLocation, Outlet, matchPath } from "react-router-dom";
-import { useState, useEffect, useRef } from "react";
+import { useState, useEffect, useRef, useLayoutEffect } from "react";
 import {
   LayoutType,
   PATH_TO_LAYOUT_MAP,
   LayoutComponents,
 } from "../LayoutRegistry";
 import "./AppLayoutSwitcher.css";
-import { useScrollLock } from "../../Utils/useScrollLock";
 
 const SmartLayoutSwitcher = () => {
   const location = useLocation();
-  const { lockScroll, unlockScroll } = useScrollLock();
   const [layouts, setLayouts] = useState<{
     current: LayoutType;
     previous: LayoutType | null;
-  }>({ current: "MAIN", previous: null });
+    isNewLayoutReady: boolean;
+  }>({
+    current: "MAIN",
+    previous: null,
+    isNewLayoutReady: true,
+  });
 
   const [direction, setDirection] = useState<"forward" | "backward">("forward");
   const [isAnimating, setIsAnimating] = useState(false);
   const isInitialRender = useRef(true);
   const previousPath = useRef<string>("");
+  const currentLayoutRef = useRef<HTMLDivElement>(null);
+  const prevLayoutRef = useRef<HTMLDivElement>(null);
 
   const getLayoutForPath = (pathname: string): LayoutType => {
     for (const [pattern, layout] of Object.entries(PATH_TO_LAYOUT_MAP)) {
@@ -31,48 +36,89 @@ const SmartLayoutSwitcher = () => {
     return "MAIN";
   };
 
-  useEffect(() => {
+  // ⭐⭐ ВАЖНО: Функция определения направления ⭐⭐
+  const getDirection = (
+    prevLayout: LayoutType,
+    newLayout: LayoutType,
+  ): "forward" | "backward" => {
+    console.log("Определяем направление:", { from: prevLayout, to: newLayout });
+
+    // Правила для backward анимации (возврат)
+    const backwardRules: [LayoutType, LayoutType][] = [
+      ["TASK_NEWS", "MAIN"], // Из задач на главную = назад
+    ];
+
+    // Проверяем правила
+    for (const [from, to] of backwardRules) {
+      if (prevLayout === from && newLayout === to) {
+        console.log("→ Направление: BACKWARD (правило:", from, "→", to, ")");
+        return "backward";
+      }
+    }
+
+    // ВСЕ остальные случаи = forward (вперед)
+    console.log("→ Направление: FORWARD (по умолчанию)");
+    return "forward";
+  };
+
+  useLayoutEffect(() => {
     const newLayout = getLayoutForPath(location.pathname);
 
     if (newLayout !== layouts.current) {
-      // ПРОСТОЕ ПРАВИЛО:
-      // Если предыдущий путь был из TASK_NEWS лейаута, а новый из MAIN - это backward
       const prevLayout = getLayoutForPath(previousPath.current);
-      const isBackward = prevLayout === "TASK_NEWS" && newLayout === "MAIN";
 
-      setDirection(isBackward ? "backward" : "forward");
-
-      console.log(`Направление: ${isBackward ? "backward" : "forward"}`, {
-        prevPath: previousPath.current,
-        prevLayout,
-        newPath: location.pathname,
-        newLayout,
-      });
-      lockScroll();
-      setIsAnimating(true);
+      // ⭐⭐ ИСПОЛЬЗУЕМ getDirection здесь! ⭐⭐
+      const direction = getDirection(prevLayout, newLayout);
+      setDirection(direction);
 
       if (isInitialRender.current) {
-        setLayouts({ current: newLayout, previous: null });
+        setLayouts({
+          current: newLayout,
+          previous: null,
+          isNewLayoutReady: true,
+        });
         isInitialRender.current = false;
         previousPath.current = location.pathname;
         return;
       }
 
+      // 1. Начинаем анимацию
+      setIsAnimating(true);
       setLayouts({
-        current: newLayout,
+        current: layouts.current,
         previous: layouts.current,
+        isNewLayoutReady: false,
       });
 
-      // Сохраняем текущий путь как предыдущий для следующего перехода
-      previousPath.current = location.pathname;
+      // 2. Через кадр устанавливаем новый layout
+      requestAnimationFrame(() => {
+        setLayouts({
+          current: newLayout,
+          previous: layouts.current,
+          isNewLayoutReady: false,
+        });
 
-      setTimeout(() => {
-        setIsAnimating(false);
-        setTimeout(() => {
-          unlockScroll();
-          setLayouts((prev) => ({ ...prev, previous: null }));
-        }, 100);
-      }, 700);
+        // 3. Показываем и запускаем анимацию
+        requestAnimationFrame(() => {
+          setLayouts((prev) => ({
+            ...prev,
+            isNewLayoutReady: true,
+          }));
+
+          previousPath.current = location.pathname;
+
+          // 4. Завершаем
+          setTimeout(() => {
+            setIsAnimating(false);
+            setTimeout(() => {
+              setLayouts((prev) => ({
+                ...prev,
+                previous: null,
+              }));
+            }, 100);
+          }, 700);
+        });
+      });
     }
   }, [location.pathname]);
 
@@ -85,11 +131,10 @@ const SmartLayoutSwitcher = () => {
     <div
       className={`layout-switcher ${isAnimating ? "animating" : ""} direction-${direction}`}
     >
-      {/* Предыдущий Layout (уезжает) */}
+      {/* Предыдущий Layout */}
       {layouts.previous && PreviousLayoutComponent && (
-        <div className="layout-container previous-layout">
+        <div ref={prevLayoutRef} className="layout-container previous-layout">
           <PreviousLayoutComponent>
-            {/* Скрытый Outlet для предыдущего Layout */}
             <div style={{ opacity: 0, height: "100%", pointerEvents: "none" }}>
               <Outlet />
             </div>
@@ -97,8 +142,11 @@ const SmartLayoutSwitcher = () => {
         </div>
       )}
 
-      {/* Текущий Layout (приезжает) */}
-      <div className="layout-container current-layout">
+      {/* Текущий Layout */}
+      <div
+        ref={currentLayoutRef}
+        className={`layout-container current-layout ${layouts.isNewLayoutReady ? "ready" : "preparing"}`}
+      >
         <CurrentLayoutComponent>
           <Outlet />
         </CurrentLayoutComponent>

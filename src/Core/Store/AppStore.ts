@@ -263,7 +263,6 @@ export const useAppStore = create<AppStore>()((set, get) => ({
 
   setReadNews: async (id: number | string) => {
     const isDebugMode = useAppModeStore.getState().isDebugMode;
-    alert(`Вызов функции с ${id}`);
     try {
       const { forState } = get();
       const useMockData = useAppModeStore.getState().useMockData;

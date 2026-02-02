@@ -1,27 +1,9 @@
-/* AppLayoutSwitcher.css */
-
 .layout-switcher {
   position: relative;
   width: 100%;
   height: 100vh;
   overflow: hidden;
   background: #fff;
-  /* Отключаем все события во время анимации */
-  pointer-events: auto;
-}
-
-.layout-switcher.animating {
-  /* Блокируем ВСЕ события на время анимации */
-  pointer-events: none !important;
-  cursor: wait !important;
-}
-
-/* Блокируем все интерактивные элементы внутри */
-.layout-switcher.animating * {
-  pointer-events: none !important;
-  user-select: none !important;
-  -webkit-user-select: none !important;
-  cursor: wait !important;
 }
 
 .layout-container {
@@ -32,45 +14,54 @@
   bottom: 0;
   width: 100%;
   height: 100%;
+  overflow: hidden !important;
   backface-visibility: hidden;
   -webkit-backface-visibility: hidden;
-  transform-style: preserve-3d;
   will-change: transform;
-  /* Отключаем скролл внутри лэйаутов */
-  overflow: hidden !important;
 }
 
-/* Скрываем предыдущий лэйаут когда не анимируем */
-.layout-switcher:not(.animating) .previous-layout {
-  display: none;
-  visibility: hidden;
+/* ===== СОСТОЯНИЯ ===== */
+
+/* Подготовка нового layout'а - полностью скрыт */
+.layout-container.current-layout.preparing {
+  visibility: hidden !important;
+  opacity: 0 !important;
+  transform: translateX(0) !important;
 }
 
-/* Показываем только текущий когда не анимируем */
-.layout-switcher:not(.animating) .current-layout {
-  position: relative;
-  opacity: 1;
+/* Готовый к показу */
+.layout-container.current-layout.ready {
+  visibility: visible !important;
+  opacity: 1 !important;
+}
+
+/* Предыдущий layout */
+.layout-container.previous-layout {
+  visibility: visible !important;
+  opacity: 1 !important;
   transform: translateX(0);
 }
 
-/* ВПЕРЕД анимация (MAIN → TASK_NEWS) */
+/* ===== АНИМАЦИИ ТОЛЬКО КОГДА .animating ===== */
+
+/* ВПЕРЕД анимация */
 .layout-switcher.animating.direction-forward .previous-layout {
   animation: slideOutToLeft 0.7s cubic-bezier(0.25, 0.46, 0.45, 0.94) forwards;
   z-index: 1;
 }
 
-.layout-switcher.animating.direction-forward .current-layout {
+.layout-switcher.animating.direction-forward .current-layout.ready {
   animation: slideInFromRight 0.7s cubic-bezier(0.25, 0.46, 0.45, 0.94) forwards;
   z-index: 2;
 }
 
-/* НАЗАД анимация (TASK_NEWS → MAIN) */
+/* НАЗАД анимация */
 .layout-switcher.animating.direction-backward .previous-layout {
   animation: slideOutToRight 0.7s cubic-bezier(0.25, 0.46, 0.45, 0.94) forwards;
   z-index: 1;
 }
 
-.layout-switcher.animating.direction-backward .current-layout {
+.layout-switcher.animating.direction-backward .current-layout.ready {
   animation: slideInFromLeft 0.7s cubic-bezier(0.25, 0.46, 0.45, 0.94) forwards;
   z-index: 2;
 }
@@ -79,68 +70,65 @@
 @keyframes slideInFromRight {
   0% {
     transform: translateX(100%);
-    opacity: 1;
   }
   100% {
     transform: translateX(0);
-    opacity: 1;
   }
 }
 
 @keyframes slideOutToLeft {
   0% {
     transform: translateX(0);
-    opacity: 1;
   }
   100% {
     transform: translateX(-100%);
-    opacity: 1;
   }
 }
 
 @keyframes slideInFromLeft {
   0% {
     transform: translateX(-100%);
-    opacity: 1;
   }
   100% {
     transform: translateX(0);
-    opacity: 1;
   }
 }
 
 @keyframes slideOutToRight {
   0% {
     transform: translateX(0);
-    opacity: 1;
   }
   100% {
     transform: translateX(100%);
-    opacity: 1;
   }
 }
 
-/* Для дебага: границы анимаций */
-.layout-switcher.animating .layout-container {
-  /* outline: 2px solid red; */ /* Раскомментировать для дебага */
+/* ===== БЛОКИРОВКА ===== */
+
+/* Блокируем всё во время анимации */
+.layout-switcher.animating {
+  pointer-events: none;
+  cursor: wait;
+}
+
+.layout-switcher.animating * {
+  pointer-events: none !important;
+  user-select: none !important;
+  -webkit-user-select: none !important;
+}
+
+/* Блокируем скролл на body */
+body.layout-animating {
+  overflow: hidden !important;
+  position: fixed;
+  width: 100%;
+  height: 100%;
 }
 
 /* iOS фикс */
 @supports (-webkit-touch-callout: none) {
   .layout-container {
     -webkit-transform: translate3d(0, 0, 0);
-  }
-}
-
-/* Reduced motion */
-@media (prefers-reduced-motion: reduce) {
-  .layout-container,
-  .layout-switcher.animating .layout-container {
-    animation: none !important;
-    transition: none !important;
-  }
-
-  .layout-switcher.animating .previous-layout {
-    display: none !important;
+    transform: translate3d(0, 0, 0);
   }
 }
