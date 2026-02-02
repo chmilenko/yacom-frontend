@@ -45,12 +45,14 @@ const Input = ({
 
   return (
     <div className={`search-container ${className}`.trim()}>
-      <span
-        className={`material-symbols-outlined search ${value ? "hidden" : ""}`}
-        aria-hidden="true"
-      >
-        search
-      </span>
+      {!value && (
+        <span
+          className={`material-symbols-outlined search ${value ? "hidden" : ""}`}
+          aria-hidden="true"
+        >
+          search
+        </span>
+      )}
       <input
         type={type}
         value={value}

@@ -263,7 +263,7 @@ export const useAppStore = create<AppStore>()((set, get) => ({
 
   setReadNews: async (id: number | string) => {
     const isDebugMode = useAppModeStore.getState().isDebugMode;
-
+    alert(`Вызов функции с ${id}`);
     try {
       const { forState } = get();
       const useMockData = useAppModeStore.getState().useMockData;
@@ -275,7 +275,7 @@ export const useAppStore = create<AppStore>()((set, get) => ({
           const updatedList = section?.sectionData?.list?.map((item) =>
             item.ObjectID === id && item.New ? { ...item, New: false } : item,
           );
-
+          alert();
           return {
             ...section,
             sectionData: { ...section.sectionData, list: updatedList },
@@ -297,10 +297,8 @@ export const useAppStore = create<AppStore>()((set, get) => ({
         const updatedData = forState.map((section) => {
           if (!section.sectionData?.list) return section;
 
-          const updatedList = section.sectionData.list.map((item) =>
-            item.ObjectID === id && item.New && item.ObjectType === "News"
-              ? { ...item, New: false }
-              : item,
+          const updatedList = section?.sectionData?.list?.map((item) =>
+            item.ObjectID === id && item.New ? { ...item, New: false } : item,
           );
 
           return {

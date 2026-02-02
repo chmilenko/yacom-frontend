@@ -254,7 +254,7 @@
                 i = n.n(o)()(a());
               i.push([
                 e.id,
-                ".layout-switcher {\n  position: relative;\n  width: 100%;\n  height: 100vh;\n  overflow: hidden; /* Только здесь! */\n  background: #fff;\n}\n\n.layout-container {\n  position: absolute;\n  top: 0;\n  left: 0;\n  right: 0;\n  bottom: 0;\n  width: 100%;\n  height: 100%;\n  /* Убираем transition - используем только animation */\n  backface-visibility: hidden;\n  -webkit-backface-visibility: hidden;\n  transform-style: preserve-3d;\n  /* Предотвращаем дергание */\n  contain: layout style paint;\n  will-change: transform;\n  /* Отключаем любые возможные скроллы */\n  /* overflow: hidden !important; */\n}\n\n/* Скрываем скроллбары во время анимации */\n.layout-switcher.animating {\n  overflow: hidden;\n}\n\n.layout-switcher.animating * {\n  /* overflow: hidden !important; */\n}\n\n/* Изначально оба на месте */\n.layout-switcher:not(.animating) .previous-layout {\n  display: none;\n  visibility: hidden;\n}\n\n.layout-switcher:not(.animating) .current-layout {\n  transform: translateX(0);\n  position: relative;\n}\n\n/* АНИМАЦИЯ ВПЕРЕД (forward) */\n.layout-switcher.animating.direction-forward .previous-layout {\n  animation: slideOutToLeft 0.7s cubic-bezier(0.25, 0.46, 0.45, 0.94) forwards;\n  z-index: 1;\n}\n\n.layout-switcher.animating.direction-forward .current-layout {\n  animation: slideInFromRight 0.7s cubic-bezier(0.25, 0.46, 0.45, 0.94) forwards;\n  z-index: 2;\n}\n\n/* АНИМАЦИЯ НАЗАД (backward) */\n.layout-switcher.animating.direction-backward .previous-layout {\n  animation: slideOutToRight 0.7s cubic-bezier(0.25, 0.46, 0.45, 0.94) forwards;\n  z-index: 1;\n}\n\n.layout-switcher.animating.direction-backward .current-layout {\n  animation: slideInFromLeft 0.7s cubic-bezier(0.25, 0.46, 0.45, 0.94) forwards;\n  z-index: 2;\n}\n\n/* Анимации для ВПЕРЕД */\n@keyframes slideInFromRight {\n  0% {\n    transform: translateX(100%);\n    opacity: 1;\n  }\n  100% {\n    transform: translateX(0);\n    opacity: 1;\n  }\n}\n\n@keyframes slideOutToLeft {\n  0% {\n    transform: translateX(0);\n    opacity: 1;\n  }\n  100% {\n    transform: translateX(-100%);\n    opacity: 1;\n  }\n}\n\n/* Анимации для НАЗАД */\n@keyframes slideInFromLeft {\n  0% {\n    transform: translateX(-100%);\n    opacity: 1;\n  }\n  100% {\n    transform: translateX(0);\n    opacity: 1;\n  }\n}\n\n@keyframes slideOutToRight {\n  0% {\n    transform: translateX(0);\n    opacity: 1;\n  }\n  100% {\n    transform: translateX(100%);\n    opacity: 1;\n  }\n}\n\n/* Фикс для iOS Safari */\n@supports (-webkit-touch-callout: none) {\n  .layout-container {\n    -webkit-transform: translate3d(0, 0, 0);\n    transform: translate3d(0, 0, 0);\n  }\n\n  .layout-switcher {\n    -webkit-transform: translate3d(0, 0, 0);\n    transform: translate3d(0, 0, 0);\n  }\n}\n\n/* Отключаем анимации при reduced-motion */\n@media (prefers-reduced-motion: reduce) {\n  .layout-container,\n  .layout-switcher.animating .layout-container {\n    animation: none !important;\n    transition: none !important;\n  }\n\n  .layout-switcher.animating .previous-layout {\n    display: none;\n  }\n\n  .layout-switcher.animating .current-layout {\n    transform: translateX(0) !important;\n  }\n}\n",
+                "/* AppLayoutSwitcher.css */\n\n.layout-switcher {\n  position: relative;\n  width: 100%;\n  height: 100vh;\n  overflow: hidden;\n  background: #fff;\n  /* Отключаем все события во время анимации */\n  pointer-events: auto;\n}\n\n.layout-switcher.animating {\n  /* Блокируем ВСЕ события на время анимации */\n  pointer-events: none !important;\n  cursor: wait !important;\n}\n\n/* Блокируем все интерактивные элементы внутри */\n.layout-switcher.animating * {\n  pointer-events: none !important;\n  user-select: none !important;\n  -webkit-user-select: none !important;\n  cursor: wait !important;\n}\n\n.layout-container {\n  position: absolute;\n  top: 0;\n  left: 0;\n  right: 0;\n  bottom: 0;\n  width: 100%;\n  height: 100%;\n  backface-visibility: hidden;\n  -webkit-backface-visibility: hidden;\n  transform-style: preserve-3d;\n  will-change: transform;\n  /* Отключаем скролл внутри лэйаутов */\n  overflow: hidden !important;\n}\n\n/* Скрываем предыдущий лэйаут когда не анимируем */\n.layout-switcher:not(.animating) .previous-layout {\n  display: none;\n  visibility: hidden;\n}\n\n/* Показываем только текущий когда не анимируем */\n.layout-switcher:not(.animating) .current-layout {\n  position: relative;\n  opacity: 1;\n  transform: translateX(0);\n}\n\n/* ВПЕРЕД анимация (MAIN → TASK_NEWS) */\n.layout-switcher.animating.direction-forward .previous-layout {\n  animation: slideOutToLeft 0.7s cubic-bezier(0.25, 0.46, 0.45, 0.94) forwards;\n  z-index: 1;\n}\n\n.layout-switcher.animating.direction-forward .current-layout {\n  animation: slideInFromRight 0.7s cubic-bezier(0.25, 0.46, 0.45, 0.94) forwards;\n  z-index: 2;\n}\n\n/* НАЗАД анимация (TASK_NEWS → MAIN) */\n.layout-switcher.animating.direction-backward .previous-layout {\n  animation: slideOutToRight 0.7s cubic-bezier(0.25, 0.46, 0.45, 0.94) forwards;\n  z-index: 1;\n}\n\n.layout-switcher.animating.direction-backward .current-layout {\n  animation: slideInFromLeft 0.7s cubic-bezier(0.25, 0.46, 0.45, 0.94) forwards;\n  z-index: 2;\n}\n\n/* Ключевые кадры */\n@keyframes slideInFromRight {\n  0% {\n    transform: translateX(100%);\n    opacity: 1;\n  }\n  100% {\n    transform: translateX(0);\n    opacity: 1;\n  }\n}\n\n@keyframes slideOutToLeft {\n  0% {\n    transform: translateX(0);\n    opacity: 1;\n  }\n  100% {\n    transform: translateX(-100%);\n    opacity: 1;\n  }\n}\n\n@keyframes slideInFromLeft {\n  0% {\n    transform: translateX(-100%);\n    opacity: 1;\n  }\n  100% {\n    transform: translateX(0);\n    opacity: 1;\n  }\n}\n\n@keyframes slideOutToRight {\n  0% {\n    transform: translateX(0);\n    opacity: 1;\n  }\n  100% {\n    transform: translateX(100%);\n    opacity: 1;\n  }\n}\n\n/* Для дебага: границы анимаций */\n.layout-switcher.animating .layout-container {\n  /* outline: 2px solid red; */ /* Раскомментировать для дебага */\n}\n\n/* iOS фикс */\n@supports (-webkit-touch-callout: none) {\n  .layout-container {\n    -webkit-transform: translate3d(0, 0, 0);\n  }\n}\n\n/* Reduced motion */\n@media (prefers-reduced-motion: reduce) {\n  .layout-container,\n  .layout-switcher.animating .layout-container {\n    animation: none !important;\n    transition: none !important;\n  }\n\n  .layout-switcher.animating .previous-layout {\n    display: none !important;\n  }\n}\n",
                 "",
               ]);
               const l = i;
@@ -17479,10 +17479,62 @@
               },
               setReadNews: async (n) => {
                 const r = ye.getState().isDebugMode;
+                alert("Вызов функции с ".concat(n));
                 try {
                   const { forState: r } = t();
                   if (ye.getState().useMockData) {
                     var a;
+                    const t = r.map((e) => {
+                        var t, r;
+                        if (
+                          null === (t = e.sectionData) ||
+                          void 0 === t ||
+                          !t.list
+                        )
+                          return e;
+                        const a =
+                          null == e ||
+                          null === (r = e.sectionData) ||
+                          void 0 === r ||
+                          null === (r = r.list) ||
+                          void 0 === r
+                            ? void 0
+                            : r.map((e) =>
+                                e.ObjectID === n && e.New
+                                  ? we(we({}, e), {}, { New: !1 })
+                                  : e,
+                              );
+                        return (
+                          alert(),
+                          we(
+                            we({}, e),
+                            {},
+                            {
+                              sectionData: we(
+                                we({}, e.sectionData),
+                                {},
+                                { list: a },
+                              ),
+                            },
+                          )
+                        );
+                      }),
+                      o = t.find(
+                        (e) =>
+                          "Новости" === e.SectionName ||
+                          "News" === e.SectionName,
+                      ),
+                      i =
+                        (null == o ||
+                        null === (a = o.sectionData) ||
+                        void 0 === a ||
+                        null === (a = a.list) ||
+                        void 0 === a
+                          ? void 0
+                          : a.filter((e) => e.New)) || [];
+                    e({ forState: t, countUnreadNews: i.length });
+                  } else {
+                    var o;
                     const t = r.map((e) => {
                         var t, r;
                         if (
@@ -17511,47 +17563,6 @@
                               we({}, e.sectionData),
                               {},
                               { list: a },
-                            ),
-                          },
-                        );
-                      }),
-                      o = t.find(
-                        (e) =>
-                          "Новости" === e.SectionName ||
-                          "News" === e.SectionName,
-                      ),
-                      i =
-                        (null == o ||
-                        null === (a = o.sectionData) ||
-                        void 0 === a ||
-                        null === (a = a.list) ||
-                        void 0 === a
-                          ? void 0
-                          : a.filter((e) => e.New)) || [];
-                    e({ forState: t, countUnreadNews: i.length });
-                  } else {
-                    var o;
-                    const t = r.map((e) => {
-                        var t;
-                        if (
-                          null === (t = e.sectionData) ||
-                          void 0 === t ||
-                          !t.list
-                        )
-                          return e;
-                        const r = e.sectionData.list.map((e) =>
-                          e.ObjectID === n && e.New && "News" === e.ObjectType
-                            ? we(we({}, e), {}, { New: !1 })
-                            : e,
-                        );
-                        return we(
-                          we({}, e),
-                          {},
-                          {
-                            sectionData: we(
-                              we({}, e.sectionData),
-                              {},
-                              { list: r },
                             ),
                           },
                         );
@@ -20641,9 +20652,8 @@
                     n = String(e.getMonth() + 1).padStart(2, "0"),
                     r = e.getFullYear();
                   return "".concat(r).concat(n).concat(t);
-                };
-              console.log(o);
-              const f = (e, t, n) => {
+                },
+                f = (e, t, n) => {
                   console.log("Клик по вложению:", {
                     attachment: e,
                     isFile: t,
