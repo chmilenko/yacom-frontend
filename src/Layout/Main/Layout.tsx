@@ -54,14 +54,14 @@ function Layout({ children }) {
 
   return (
     <div className="layout">
-      <ScrollToTop scrollContainerRef={contentRef} />
+      {/* <ScrollToTop scrollContainerRef={contentRef} /> */}
       <main className="content" ref={contentRef}>
-        <PullToRefreshComponent
+        {/* <PullToRefreshComponent
           contentRef={contentRef}
           refreshFunk={() => funcRefresh(page)}
-        >
-          <ContentTransition>{children || <Outlet />}</ContentTransition>
-        </PullToRefreshComponent>
+        > */}
+        <ContentTransition>{children || <Outlet />}</ContentTransition>
+        {/* </PullToRefreshComponent> */}
       </main>
       <footer className="footer">
         <MenuBar />

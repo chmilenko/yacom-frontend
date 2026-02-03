@@ -1,6 +1,6 @@
 /* eslint-disable eqeqeq */
 /* eslint-disable jsx-a11y/img-redundant-alt */
-import { useCallback, useEffect, useState } from "react";
+import { useCallback, useEffect, useRef, useState } from "react";
 import "./AdditionalInfo.css";
 import clickTo1C from "../../../../Utils/clicker";
 import { createMarkupUniversal } from "../../../../Utils/createMarkup";
@@ -23,6 +23,29 @@ function AdditionalInfo({ onTaskExecute, taskFulfill }) {
     if (typeof data === "string") return [{ address: data }];
     return [];
   }, []);
+
+  const scrollRef = useRef(null);
+  const [isScrolling, setIsScrolling] = useState(false);
+  const [startX, setStartX] = useState(0);
+  const [scrollLeft, setScrollLeft] = useState(0);
+
+  const handleTouchStart = (e) => {
+    setIsScrolling(true);
+    setStartX(e.touches[0].pageX - scrollRef.current.offsetLeft);
+    setScrollLeft(scrollRef.current.scrollLeft);
+  };
+
+  const handleTouchMove = (e) => {
+    if (!isScrolling) return;
+    e.preventDefault();
+    const x = e.touches[0].pageX - scrollRef.current.offsetLeft;
+    const walk = (x - startX) * 1.5; // Множитель для скорости
+    scrollRef.current.scrollLeft = scrollLeft - walk;
+  };
+
+  const handleTouchEnd = () => {
+    setIsScrolling(false);
+  };
 
   function clickHandler(id) {
     setActions({
@@ -60,20 +83,47 @@ function AdditionalInfo({ onTaskExecute, taskFulfill }) {
 
   const renderImages = () => {
     const images = normalizeImageData(additionalInfo?.images);
+
+    if (images.length === 0) return null;
+
     return (
-      images.length > 0 && (
-        <div className="image-container">
-          {images.map((image, index) => (
-            <img
-              key={index}
-              src={image.address}
-              alt={`Image ${index + 1}`}
-              className="swipe_content_info_image"
-              onClick={() => clickHandler(image?.ImageID)}
-            />
-          ))}
+      <div className="horizontal-images-container">
+        <div
+          ref={scrollRef}
+          className="image-scroll-container"
+          onTouchStart={handleTouchStart}
+          onTouchMove={handleTouchMove}
+          onTouchEnd={handleTouchEnd}
+          style={{
+            overflowX: "auto",
+            overflowY: "hidden",
+            display: "flex",
+            WebkitOverflowScrolling: "touch",
+          }}
+        >
+          <div className="image-scroll-content">
+            {images.map((image, index) => (
+              <div key={index} className="image-item">
+                <img
+                  src={image.address}
+                  alt={`Изображение ${index + 1}`}
+                  className="swipe_content_info_image"
+                  onClick={() => clickHandler(image?.ImageID)}
+                  loading="lazy"
+                  style={{ pointerEvents: "auto" }}
+                />
+              </div>
+            ))}
+          </div>
         </div>
-      )
+
+        {images.length > 3 && (
+          <div className="scroll-hint">
+            <span className="material-symbols-outlined">swipe</span>
+            <span>Прокрутите в сторону</span>
+          </div>
+        )}
+      </div>
     );
   };
 
@@ -144,7 +194,7 @@ function AdditionalInfo({ onTaskExecute, taskFulfill }) {
     if (!additionalInfo?.ResultType) return null;
 
     const isTaskType = ["3", "4", "5", 3, 4, 5].includes(
-      additionalInfo?.ResultType
+      additionalInfo?.ResultType,
     );
     const isTaskTypeTwo = ["2", "7", 2, 7].includes(additionalInfo?.ResultType);
     const isInfoAcknowledged = additionalInfo?.ResultType == "8";

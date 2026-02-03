@@ -274,7 +274,6 @@ export const useAppStore = create<AppStore>()((set, get) => ({
           const updatedList = section?.sectionData?.list?.map((item) =>
             item.ObjectID === id && item.New ? { ...item, New: false } : item,
           );
-          alert();
           return {
             ...section,
             sectionData: { ...section.sectionData, list: updatedList },

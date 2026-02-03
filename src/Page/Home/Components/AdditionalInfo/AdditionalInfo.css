@@ -1,3 +1,117 @@
+.horizontal-images-container {
+  width: 100%;
+  margin: 10px 0;
+}
+
+/* ⭐ ПРОСТОЙ РАБОЧИЙ КОНТЕЙНЕР */
+.image-scroll-container {
+  width: 100%;
+  display: block;
+  overflow-x: auto; /* Просто auto */
+  overflow-y: hidden;
+  padding: 10px 0;
+
+  /* ⭐ ВАЖНО: отключаем все iOS фиксы которые могут мешать */
+  -webkit-overflow-scrolling: auto;
+  scroll-snap-type: none;
+
+  /* Показываем скроллбар для понимания что можно скроллить */
+  scrollbar-width: thin;
+  scrollbar-color: #888 transparent;
+
+  &::-webkit-scrollbar {
+    height: 8px;
+  }
+
+  &::-webkit-scrollbar-track {
+    background: #f1f1f1;
+    border-radius: 4px;
+    margin: 0 10px;
+  }
+
+  &::-webkit-scrollbar-thumb {
+    background: #888;
+    border-radius: 4px;
+
+    &:hover {
+      background: #555;
+    }
+  }
+}
+
+/* ⭐ ВАЖНО: обычный flex без лишних свойств */
+.image-scroll-content {
+  display: flex;
+  gap: 12px;
+  padding: 0 5px;
+  min-height: 160px;
+}
+
+.image-item {
+  flex: 0 0 auto;
+}
+
+.swipe_content_info_image {
+  width: 150px;
+  height: 150px;
+  object-fit: cover;
+  border-radius: 8px;
+  display: block;
+  cursor: pointer;
+
+  /* ⭐ УБИРАЕМ все user-select и touch фиксы */
+  -webkit-user-select: auto;
+  user-select: auto;
+
+  @media (max-width: 768px) {
+    width: 130px;
+    height: 130px;
+  }
+}
+
+.scroll-hint {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  margin-top: 8px;
+  font-size: 12px;
+  color: #666;
+  opacity: 0.7;
+
+  .material-symbols-outlined {
+    font-size: 16px;
+  }
+}
+
+@keyframes swipeHint {
+  0%,
+  100% {
+    transform: translateX(0);
+  }
+  50% {
+    transform: translateX(5px);
+  }
+}
+
+/* Если только одно изображение - центрируем и скрываем подсказку */
+.horizontal-images-container:has(
+  .image-scroll-content > .image-item:only-child
+) {
+  .image-scroll-container {
+    overflow: hidden;
+  }
+
+  .image-scroll-content {
+    justify-content: center;
+  }
+
+  .scroll-hint {
+    display: none;
+  }
+}
+/* ===== ОСТАЛЬНЫЕ СТИЛИ ===== */
+
 .attachment_child {
   display: flex;
   flex-direction: row;
@@ -13,52 +127,57 @@
   align-items: center;
   gap: 6px;
 }
+
 .tag_container {
   display: flex;
   justify-content: space-between;
 }
+
 .tag_content {
   display: flex;
   gap: 6px;
+
   @media screen and (max-width: 600px) {
     flex-wrap: wrap;
   }
 }
+
 .tag_child {
   display: flex;
   flex-direction: row;
   align-items: center;
   gap: 8px;
 }
+
 .tag_child_image {
   width: 24px;
   height: 24px;
 }
+
 .tag_child_date {
   display: flex;
   align-items: flex-end;
   font-size: 13px;
   color: gray;
+
   @media screen and (max-width: 600px) {
     display: flex;
     align-items: center;
   }
 }
+
 .bottom_button_container {
   display: flex;
   justify-content: center;
   margin-top: auto;
   padding: 10px;
 }
+
 .swipe_content_info {
   display: flex;
   flex-direction: column;
-  gap: 8px !important;
-  padding: 10px !important;
+  gap: 16px !important;
+  padding: 12px !important;
   flex: 1;
   overflow: auto;
-}
-.swipe_content_info_image {
-  width: 150px;
-  height: 150px;
 }
