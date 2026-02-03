@@ -123,7 +123,10 @@ interface CreateTaskStore {
 
   // Методы
   setFullTasks: (tasks: string) => Promise<void>;
+  setExtendFullTasks: (tasks: string) => Promise<void>;
   setFullNews: (news: string) => Promise<void>;
+  setExtendFullNews: (news: string) => Promise<void>;
+
   setChapters: (chapters: string) => Promise<void>;
   setResultTypes: (types: string) => Promise<void>;
   updateTaskFormData: (field: keyof ITaskFormData, value: string) => void;
@@ -198,10 +201,70 @@ export const useCreateTaskStore = create<CreateTaskStore>()(
               stack: err.stack,
             },
           },
-          isDebugMode
+          isDebugMode,
         );
 
         console.error("setAppState error:", err);
+      }
+    },
+
+    setExtendFullTasks: async (newTasks: string) => {
+      const isDebugMode = useAppModeStore.getState().isDebugMode;
+
+      try {
+        const { useMockData } = useAppModeStore.getState();
+        let newTasksParsed;
+
+        if (useMockData) {
+          const mockModule = await import("../Mock/fullTasks");
+          newTasksParsed = mockModule.fullTasks || [];
+        } else {
+          newTasksParsed = JSON.parse(newTasks) as ITask[];
+        }
+
+        // Получаем текущие задачи
+        const currentState = get();
+        const currentTasks = currentState.fullTasks || [];
+
+        // Объединяем, исключая дубликаты
+        const combinedTasks = [...currentTasks, ...newTasksParsed];
+
+        // Убираем дубликаты по ID
+        const uniqueTasks = Array.from(
+          new Map(combinedTasks.map((task) => [task.TaskID, task])).values(),
+        );
+
+        set({
+          fullTasks: uniqueTasks,
+        });
+      } catch (err: any) {
+        const { addError } = (
+          await import("./ErrorsStore")
+        ).useErrorsStore.getState();
+
+        addError(
+          {
+            type: "parsing",
+            message: "Ошибка парсинга данных для расширения задач",
+            severity: "error",
+            context: "setExtendFullTasks",
+            details: `Не удалось распарсить данные в setExtendFullTasks\nОшибка ${
+              err.name
+            }: ${err.message}\nДанные: ${
+              typeof newTasks === "string"
+                ? newTasks.substring(0, 200) + "..."
+                : typeof newTasks
+            }\n${err.stack}`,
+            originalError: {
+              name: err.name,
+              message: err.message,
+              stack: err.stack,
+            },
+          },
+          isDebugMode,
+        );
+
+        console.error("extendFullTasks error:", err);
       }
     },
     //изменить типизацию
@@ -246,10 +309,70 @@ export const useCreateTaskStore = create<CreateTaskStore>()(
               stack: err.stack,
             },
           },
-          isDebugMode
+          isDebugMode,
         );
 
         console.error("setFullNews error:", err);
+      }
+    },
+
+    setExtendFullNews: async (newNews: string) => {
+      const isDebugMode = useAppModeStore.getState().isDebugMode;
+
+      try {
+        const { useMockData } = useAppModeStore.getState();
+        let newNewssParsed;
+
+        if (useMockData) {
+          const mockModule = await import("../Mock/fullTasks");
+          newNewssParsed = mockModule.fullTasks || [];
+        } else {
+          newNewssParsed = JSON.parse(newNews) as INews[];
+        }
+
+        // Получаем текущие задачи
+        const currentState = get();
+        const currentTNews = currentState.fullNews || [];
+
+        // Объединяем, исключая дубликаты
+        const combinedNews = [...currentTNews, ...newNewssParsed];
+
+        // Убираем дубликаты по ID
+        const uniqueTasks = Array.from(
+          new Map(combinedNews.map((news) => [news.ObjectID, news])).values(),
+        );
+
+        set({
+          fullNews: uniqueTasks,
+        });
+      } catch (err: any) {
+        const { addError } = (
+          await import("./ErrorsStore")
+        ).useErrorsStore.getState();
+
+        addError(
+          {
+            type: "parsing",
+            message: "Ошибка парсинга данных для расширения новостей",
+            severity: "error",
+            context: "setExtendFullNews",
+            details: `Не удалось распарсить данные в setExtendFullNews\nОшибка ${
+              err.name
+            }: ${err.message}\nДанные: ${
+              typeof newNews === "string"
+                ? newNews.substring(0, 200) + "..."
+                : typeof newNews
+            }\n${err.stack}`,
+            originalError: {
+              name: err.name,
+              message: err.message,
+              stack: err.stack,
+            },
+          },
+          isDebugMode,
+        );
+
+        console.error("setExtendFullNews error:", err);
       }
     },
 
@@ -295,7 +418,7 @@ export const useCreateTaskStore = create<CreateTaskStore>()(
               stack: err.stack,
             },
           },
-          isDebugMode
+          isDebugMode,
         );
 
         console.error("setChapters error:", err);
@@ -344,7 +467,7 @@ export const useCreateTaskStore = create<CreateTaskStore>()(
               stack: err.stack,
             },
           },
-          isDebugMode
+          isDebugMode,
         );
 
         console.error("setResultTypes error:", err);
@@ -468,7 +591,7 @@ export const useCreateTaskStore = create<CreateTaskStore>()(
     clearErrors: () => {
       set({ createTaskError: null });
     },
-  })
+  }),
   // {
   //   name: "create-task-storage",
   //   partialize: (state) => ({}),

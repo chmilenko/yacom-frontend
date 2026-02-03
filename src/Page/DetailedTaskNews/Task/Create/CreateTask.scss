@@ -117,3 +117,64 @@
     padding: 20px;
   }
 }
+/* Нормализация инпута date для всех браузеров */
+input[type="date"] {
+  /* Сброс стилей WebKit */
+  -webkit-appearance: none;
+  appearance: none;
+
+  /* Фиксированные размеры */
+  min-height: 44px; /* Минимальная высота для тач-устройств */
+  padding: 12px 15px !important;
+  font-size: 16px !important;
+  line-height: 1.5 !important;
+
+  /* Единый внешний вид */
+  background-color: white;
+  border: 1px solid #ddd;
+  border-radius: 8px;
+  color: #333;
+
+  /* Для корректного отображения в Safari */
+  &::-webkit-date-and-time-value {
+    text-align: left;
+    margin: 0;
+    padding: 0;
+    height: auto;
+    line-height: normal;
+  }
+
+  &::-webkit-datetime-edit {
+    padding: 0;
+  }
+
+  &::-webkit-inner-spin-button,
+  &::-webkit-calendar-picker-indicator {
+    color: #3498db;
+    opacity: 1;
+    width: 20px;
+    height: 20px;
+    padding: 0;
+    margin-left: 8px;
+
+    &:hover {
+      background-color: transparent;
+      opacity: 0.8;
+    }
+  }
+
+  &::-webkit-clear-button {
+    display: none;
+  }
+}
+
+/* Ховер и фокус состояния */
+input[type="date"]:focus {
+  outline: none;
+  border-color: $primary;
+  box-shadow: 0 0 0 2px rgba(52, 152, 219, 0.2);
+}
+
+input[type="date"].error {
+  border-color: #ff4757;
+}

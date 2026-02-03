@@ -19,18 +19,18 @@ function MainRoute() {
 
   return (
     <Routes>
-      {/* <Route element={<SmartLayoutSwitcher />}> */}
-      <Route path="/" element={<Home />} />
-      <Route path="/instructions" element={<Instruction />} />
-      <Route path="/help" element={<Help />} />
-      <Route path="/journals" element={<Journals />} />
-      <Route path="/products" element={<Products />} />
-      {isDebugMode && <Route path="/errors" element={<Errors />} />}
-      <Route path="/task/full" element={<DetailedTask />} />
-      <Route path="/task/full/:id" element={<DetailedFullTask />} />
-      <Route path="/task/create" element={<CreateTask />} />
-      <Route path="/news/full" element={<DetailedNews />} />
-      {/* </Route> */}
+      <Route element={<SmartLayoutSwitcher />}>
+        <Route path="/" element={<Home />} />
+        <Route path="/instructions" element={<Instruction />} />
+        <Route path="/help" element={<Help />} />
+        <Route path="/journals" element={<Journals />} />
+        <Route path="/products" element={<Products />} />
+        {isDebugMode && <Route path="/errors" element={<Errors />} />}
+        <Route path="/task/full" element={<DetailedTask />} />
+        <Route path="/task/full/:id" element={<DetailedFullTask />} />
+        <Route path="/task/create" element={<CreateTask />} />
+        <Route path="/news/full" element={<DetailedNews />} />
+      </Route>
     </Routes>
   );
 }

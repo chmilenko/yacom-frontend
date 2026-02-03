@@ -170,7 +170,7 @@ function DetailedTask() {
                 </div>
 
                 <div className="task_sub_tag">
-                  <img src={task.Tag} alt="" className="sub_tag_icon" />
+                  <img src={task.tag} alt="" className="sub_tag_icon" />
                   <div className="sub_tag_fallback">🔖</div>
                 </div>
               </div>

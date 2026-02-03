@@ -61,6 +61,12 @@ declare global {
       setFullNews: ReturnType<
         typeof useCreateTaskStore.getState
       >["setFullNews"];
+      setExtendFullTasks: ReturnType<
+        typeof useCreateTaskStore.getState
+      >["setExtendFullTasks"];
+      setExtendFullNews: ReturnType<
+        typeof useCreateTaskStore.getState
+      >["setExtendFullNews"];
 
       //debug
       isDebugMode: ReturnType<typeof useAppModeStore.getState>["isDebugMode"];
@@ -105,6 +111,8 @@ const PageComponentInitializer = () => {
       setChapters: fullTasks.setChapters,
       setResultTypes: fullTasks.setResultTypes,
       setFullNews: fullTasks.setFullNews,
+      setExtendFullTasks: fullTasks.setExtendFullTasks,
+      setExtendFullNews: fullTasks.setExtendFullNews,
       //debug
       isDebugMode: useAppModeStore.getState().isDebugMode,
       setDebugMode: useAppModeStore.getState().setDebugMode,
