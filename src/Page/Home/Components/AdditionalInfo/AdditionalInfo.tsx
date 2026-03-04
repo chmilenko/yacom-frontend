@@ -79,12 +79,6 @@ function AdditionalInfo({ onTaskExecute, taskFulfill }) {
                   className="swipe_content_info_image"
                   onClick={() => clickHandler(image?.ImageID)}
                   loading="lazy"
-                  onError={(e) =>
-                    console.log(
-                      "❌ Ошибка загрузки изображения:",
-                      image.address,
-                    )
-                  }
                   onLoad={() => console.log("✅ Изображение загружено:", index)}
                 />
               </div>

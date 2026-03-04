@@ -226,7 +226,7 @@ export const useCreateTaskStore = create<CreateTaskStore>()(
 
         if (useMockData) {
           const mockModule = await import("../Mock/fullTasks");
-          newNewssParsed = mockModule.fullTasks || [];
+          newNewssParsed = mockModule.fullNews || [];
         } else {
           newNewssParsed = JSON.parse(News) as INews[];
         }
@@ -486,8 +486,6 @@ export const useCreateTaskStore = create<CreateTaskStore>()(
         const mockModule = await import("../Mock/fullTasks");
         const oneTaskData = mockModule.oneTask || [];
         const res = oneTaskData.find((task) => task.TaskID === id);
-        console.log(res);
-
         set({
           oneTask: res || [],
         });

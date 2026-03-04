@@ -76,7 +76,6 @@ const CustomSelect = ({
       setIsOpen(true);
     }
   };
-  console.log(error, showError);
 
   return (
     <div className={`custom-select-container ${className}`}>

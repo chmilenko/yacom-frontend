@@ -41,7 +41,6 @@ const SmartLayoutSwitcher = () => {
     prevLayout: LayoutType,
     newLayout: LayoutType,
   ): "forward" | "backward" => {
-    console.log("Определяем направление:", { from: prevLayout, to: newLayout });
 
     // Правила для backward анимации (возврат)
     const backwardRules: [LayoutType, LayoutType][] = [
@@ -51,13 +50,11 @@ const SmartLayoutSwitcher = () => {
     // Проверяем правила
     for (const [from, to] of backwardRules) {
       if (prevLayout === from && newLayout === to) {
-        console.log("→ Направление: BACKWARD (правило:", from, "→", to, ")");
         return "backward";
       }
     }
 
     // ВСЕ остальные случаи = forward (вперед)
-    console.log("→ Направление: FORWARD (по умолчанию)");
     return "forward";
   };
 

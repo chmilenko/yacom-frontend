@@ -15,8 +15,6 @@ const usePageScroll = (scrollContainerRef: React.RefObject<HTMLElement>) => {
 
     if (!container) return;
 
-    console.log("📍 Page:", path);
-
     // Сохраняем текущую высоту контента перед уходом
     if (!isFirstLoad.current) {
       contentHeights.current[path] = container.scrollHeight;
@@ -36,23 +34,12 @@ const usePageScroll = (scrollContainerRef: React.RefObject<HTMLElement>) => {
         if (savedHeight !== currentHeight && savedHeight > 0) {
           const ratio = saved.absolute / savedHeight;
           scrollTo = Math.round(currentHeight * ratio);
-          console.log("📐 Adjusted scroll due to content height change:", {
-            savedHeight,
-            currentHeight,
-            ratio,
-            savedAbsolute: saved.absolute,
-            newScroll: scrollTo,
-          });
         }
-
-        console.log("↩️ Restoring to:", scrollTo);
         container.scrollTop = scrollTo;
       } else {
-        console.log("🆕 No saved position");
         container.scrollTop = 0;
       }
     } else {
-      console.log("🚀 First load");
       isFirstLoad.current = false;
     }
 

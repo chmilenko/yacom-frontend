@@ -41,7 +41,6 @@ function CreateTask() {
   const getValue = (value) => {
     return value === null ? "" : value;
   };
-  console.log(createTaskError?.chapter);
 
   return (
     <div className="tasks_container">

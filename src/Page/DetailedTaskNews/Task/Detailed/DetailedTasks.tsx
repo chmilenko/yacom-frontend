@@ -138,7 +138,7 @@ function DetailedTask() {
       clickTo1C();
     }
   };
-  console.log(user.subdivisionGuid);
+
 
   return (
     <div className="task_list">

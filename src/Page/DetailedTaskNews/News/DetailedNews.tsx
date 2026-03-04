@@ -24,6 +24,7 @@ function DetailedNews() {
     useMockData && setFullNews("");
     initMonths();
   }, []);
+  console.log(fullNews);
 
   const initMonths = () => {
     const monthsArray: string[] = [];
@@ -105,13 +106,7 @@ function DetailedNews() {
     attachment: IAttachment,
     isFile: boolean,
     isPrint: boolean,
-  ) => {
-    console.log("Клик по вложению:", {
-      attachment,
-      isFile,
-      isPrint,
-    });
-  };
+  ) => {};
 
   const getButtonText = (): string => {
     const currentMonth = getCurrentMonthName();
@@ -139,7 +134,6 @@ function DetailedNews() {
     });
     !useMockData && clickTo1C();
   }
-  console.log(actions);
 
   return (
     <div className="detailed-news-container">
