@@ -1,6 +1,6 @@
 /* eslint-disable eqeqeq */
 /* eslint-disable jsx-a11y/img-redundant-alt */
-import { useCallback, useEffect, useRef, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import "./AdditionalInfo.css";
 import clickTo1C from "../../../../Utils/clicker";
 import { createMarkupUniversal } from "../../../../Utils/createMarkup";
@@ -23,29 +23,6 @@ function AdditionalInfo({ onTaskExecute, taskFulfill }) {
     if (typeof data === "string") return [{ address: data }];
     return [];
   }, []);
-
-  const scrollRef = useRef(null);
-  const [isScrolling, setIsScrolling] = useState(false);
-  const [startX, setStartX] = useState(0);
-  const [scrollLeft, setScrollLeft] = useState(0);
-
-  const handleTouchStart = (e) => {
-    setIsScrolling(true);
-    setStartX(e.touches[0].pageX - scrollRef.current.offsetLeft);
-    setScrollLeft(scrollRef.current.scrollLeft);
-  };
-
-  const handleTouchMove = (e) => {
-    if (!isScrolling) return;
-    e.preventDefault();
-    const x = e.touches[0].pageX - scrollRef.current.offsetLeft;
-    const walk = (x - startX) * 1.5; // Множитель для скорости
-    scrollRef.current.scrollLeft = scrollLeft - walk;
-  };
-
-  const handleTouchEnd = () => {
-    setIsScrolling(false);
-  };
 
   function clickHandler(id) {
     setActions({
@@ -83,22 +60,14 @@ function AdditionalInfo({ onTaskExecute, taskFulfill }) {
 
   const renderImages = () => {
     const images = normalizeImageData(additionalInfo?.images);
-
     if (images.length === 0) return null;
 
     return (
       <div className="horizontal-images-container">
         <div
-          ref={scrollRef}
           className="image-scroll-container"
-          onTouchStart={handleTouchStart}
-          onTouchMove={handleTouchMove}
-          onTouchEnd={handleTouchEnd}
-          style={{
-            overflowX: "auto",
-            overflowY: "hidden",
-            display: "flex",
-            WebkitOverflowScrolling: "touch",
+          ref={(el) => {
+            if (el) console.log("✅ image-scroll-container создан:", el);
           }}
         >
           <div className="image-scroll-content">
@@ -110,7 +79,13 @@ function AdditionalInfo({ onTaskExecute, taskFulfill }) {
                   className="swipe_content_info_image"
                   onClick={() => clickHandler(image?.ImageID)}
                   loading="lazy"
-                  style={{ pointerEvents: "auto" }}
+                  onError={(e) =>
+                    console.log(
+                      "❌ Ошибка загрузки изображения:",
+                      image.address,
+                    )
+                  }
+                  onLoad={() => console.log("✅ Изображение загружено:", index)}
                 />
               </div>
             ))}
@@ -126,7 +101,6 @@ function AdditionalInfo({ onTaskExecute, taskFulfill }) {
       </div>
     );
   };
-
   const renderContent = () =>
     additionalInfo?.Content && (
       <div
@@ -200,7 +174,12 @@ function AdditionalInfo({ onTaskExecute, taskFulfill }) {
     const isInfoAcknowledged = additionalInfo?.ResultType == "8";
 
     if ((isTaskType && taskDone) || (isTaskTypeTwo && taskDone)) {
-      return <Button text="Результат выполнения" onClick={taskFulfill} />;
+      return (
+        <Button
+          text="Результат выполнения"
+          onClick={() => taskFulfill(null, additionalInfo)}
+        />
+      );
     } else if (isTaskType) {
       return (
         <Button
@@ -210,7 +189,7 @@ function AdditionalInfo({ onTaskExecute, taskFulfill }) {
               add_photo_alternate
             </span>
           }
-          onClick={taskFulfill}
+          onClick={() => taskFulfill(null, additionalInfo)}
         />
       );
     } else if (isInfoAcknowledged && taskDone) {
@@ -219,22 +198,22 @@ function AdditionalInfo({ onTaskExecute, taskFulfill }) {
       return (
         <Button
           text="Ознакомиться"
-          onClick={() => onTaskExecute(additionalInfo?.TaskID)}
+          onClick={() => onTaskExecute(additionalInfo?.TaskID, additionalInfo)}
         />
       );
     } else if (taskDone && additionalInfo?.ResultType == "1") {
       return (
         <Button
-          text={`Done ${additionalInfo?.DoneDate}`}
+          text={`Выполнено ${additionalInfo?.DoneDate}`}
           icon={<span className="material-symbols-outlined">check</span>}
-          onClick={taskFulfill}
+          onClick={() => taskFulfill(null, additionalInfo)}
         />
       );
     } else {
       return (
         <Button
           text="Выполнить"
-          onClick={() => taskFulfill(additionalInfo?.TaskID)}
+          onClick={() => taskFulfill(additionalInfo?.TaskID, additionalInfo)}
         />
       );
     }

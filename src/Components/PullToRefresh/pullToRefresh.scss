@@ -1,0 +1,19 @@
+@import "../../Styles/variables.scss";
+.ptr-element {
+  transition: transform 0.2s ease;
+}
+
+.ptr-icon-arrow {
+  color: #666;
+  font-size: 24px;
+  transition: transform 0.2s ease;
+}
+
+.ptr-icon-refreshing {
+  color: $primary;
+  font-size: 24px;
+}
+
+.ptr-pull-to-refresh.ptr-refreshing .ptr-icon-arrow {
+  transform: rotate(180deg);
+}

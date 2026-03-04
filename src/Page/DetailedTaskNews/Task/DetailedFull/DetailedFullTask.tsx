@@ -30,6 +30,21 @@ function DetailedFullTask() {
     useMockData && getFullTaskDeveloper(Number(params.id));
   }, []);
 
+  function clickHandler(id) {
+    setActions({
+      ImageID: id,
+      actionName: "imgClicked",
+      objectId: oneTask?.TaskID,
+      objectType: oneTask?.ObjectType,
+      listImageID:
+        oneTask?.images.length > 1
+          ? [...oneTask?.images.map((el) => el.ImageID)]
+          : [],
+      active: true,
+    });
+    !useMockData && clickTo1C();
+  }
+
   const renderImages = () => {
     const images = normalizeImageData(oneTask?.images);
     return (
@@ -41,6 +56,7 @@ function DetailedFullTask() {
               src={image.address}
               alt={`Image ${index + 1}`}
               className="swipe_content_info_image"
+              onClick={() => clickHandler(image?.ImageID)}
             />
           ))}
         </div>
@@ -190,14 +206,12 @@ function DetailedFullTask() {
 
             <div className="info-row">
               <span className="info-label">Дата:</span>
-              <span className="info-value">{formatDate(oneTask.date)}</span>
+              <span className="info-value">{oneTask.date}</span>
             </div>
 
             <div className="info-row">
               <span className="info-label">Выполнить до:</span>
-              <span className="info-value deadline">
-                {formatDate(oneTask.deadline)}
-              </span>
+              <span className="info-value deadline">{oneTask.deadline}</span>
             </div>
 
             <div className="info-row">
@@ -224,13 +238,13 @@ function DetailedFullTask() {
             <div className="info-row">
               <span className="info-label">Ответственный:</span>
               <span className="info-value">
-                {oneTask.Responsible || "Не указано"}
+                {oneTask.responsible || "Не указано"}
               </span>
             </div>
 
             <div className="info-row">
               <span className="info-label">Дата выполнения:</span>
-              <span className="info-value">{formatDate(oneTask.DoneDate)}</span>
+              <span className="info-value">{oneTask.completedDate}</span>
             </div>
 
             <div className="info-row">

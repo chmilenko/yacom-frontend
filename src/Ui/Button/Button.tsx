@@ -2,8 +2,6 @@ import {
   useState,
   useRef,
   useEffect,
-  cloneElement,
-  ReactElement,
   ReactNode,
   MouseEvent,
   TouchEvent,
@@ -18,7 +16,7 @@ interface IconProps {
 interface ButtonProps {
   text?: string;
   onClick?: (
-    event: MouseEvent<HTMLButtonElement> | TouchEvent<HTMLButtonElement>
+    event: MouseEvent<HTMLButtonElement> | TouchEvent<HTMLButtonElement>,
   ) => void;
   icon?: IconProps;
   className?: string;
@@ -43,20 +41,23 @@ function Button({
   className = "",
   type = "default",
   children,
+  disabled = false, // ⬅️ ДОБАВЛЯЕМ С ЗНАЧЕНИЕМ ПО УМОЛЧАНИЮ
+  style, // ⬅️ ДОБАВЛЯЕМ style
 }: ButtonProps) {
   const [isActive, setIsActive] = useState(false);
   const timerRef = useRef<NodeJS.Timeout | null>(null);
   const touchStartedRef = useRef(false);
 
   const handleInteractionStart = () => {
+    if (disabled) return; // ⬅️ ПРОВЕРЯЕМ DISABLED
     setIsActive(true);
     touchStartedRef.current = true;
   };
 
   const handleInteractionEnd = (
-    e: MouseEvent<HTMLButtonElement> | TouchEvent<HTMLButtonElement>
+    e: MouseEvent<HTMLButtonElement> | TouchEvent<HTMLButtonElement>,
   ) => {
-    if (!touchStartedRef.current) return;
+    if (disabled || !touchStartedRef.current) return; // ⬅️ ПРОВЕРЯЕМ DISABLED
 
     if (timerRef.current) {
       clearTimeout(timerRef.current);
@@ -73,6 +74,7 @@ function Button({
   };
 
   const handleTouchCancel = () => {
+    if (disabled) return; // ⬅️ ПРОВЕРЯЕМ DISABLED
     setIsActive(false);
     touchStartedRef.current = false;
   };
@@ -89,6 +91,8 @@ function Button({
 
   return (
     <button
+      disabled={disabled} // ⬅️ ТЕПЕРЬ disabled ОПРЕДЕЛЁН
+      style={style} // ⬅️ ПЕРЕДАЁМ STYLE
       onTouchStart={handleInteractionStart}
       onTouchEnd={handleInteractionEnd}
       onTouchCancel={handleTouchCancel}
@@ -97,7 +101,7 @@ function Button({
       onMouseLeave={handleTouchCancel}
       className={`button_base ${type}_button ${className} ${
         isActive ? "active" : ""
-      }`.trim()}
+      } ${disabled ? "disabled" : ""}`.trim()} // ⬅️ ДОБАВЛЯЕМ КЛАСС DISABLED
       onTouchMove={(e: TouchEvent<HTMLButtonElement>) => e.preventDefault()}
       type="button"
     >

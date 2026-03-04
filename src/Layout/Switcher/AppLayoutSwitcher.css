@@ -33,6 +33,7 @@
 .layout-container.current-layout.ready {
   visibility: visible !important;
   opacity: 1 !important;
+  pointer-events: auto;
 }
 
 /* Предыдущий layout */
@@ -40,6 +41,7 @@
   visibility: visible !important;
   opacity: 1 !important;
   transform: translateX(0);
+  pointer-events: none;
 }
 
 /* ===== АНИМАЦИИ ТОЛЬКО КОГДА .animating ===== */
@@ -107,12 +109,12 @@
 
 /* Блокируем всё во время анимации */
 .layout-switcher.animating {
-  pointer-events: none;
+  /* pointer-events: none; */
   cursor: wait;
 }
 
 .layout-switcher.animating * {
-  pointer-events: none !important;
+  /* pointer-events: none !important; */
   user-select: none !important;
   -webkit-user-select: none !important;
 }

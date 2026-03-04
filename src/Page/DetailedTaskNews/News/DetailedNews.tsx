@@ -104,7 +104,7 @@ function DetailedNews() {
   const handleAttachmentClick = (
     attachment: IAttachment,
     isFile: boolean,
-    isPrint: boolean
+    isPrint: boolean,
   ) => {
     console.log("Клик по вложению:", {
       attachment,
@@ -125,6 +125,21 @@ function DetailedNews() {
   const isNewNews = (news: INews) => {
     return news.New === true;
   };
+
+  function clickHandler(news, id) {
+    setActions({
+      ImageID: id,
+      actionName: "imgClicked",
+      objectId: news?.ObjectID,
+      listImageID:
+        news?.Images.length > 1
+          ? [...news?.Images.map((el) => el.ImageID)]
+          : [],
+      active: true,
+    });
+    !useMockData && clickTo1C();
+  }
+  console.log(actions);
 
   return (
     <div className="detailed-news-container">
@@ -160,6 +175,7 @@ function DetailedNews() {
                         src={image?.Адрес}
                         alt={`Изображение ${index + 1}`}
                         className="news-image"
+                        onClick={() => clickHandler(news, image.ImageID)}
                       />
                     </div>
                   ))}

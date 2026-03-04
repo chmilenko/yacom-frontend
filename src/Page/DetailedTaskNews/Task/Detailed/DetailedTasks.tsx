@@ -8,11 +8,12 @@ import clickTo1C from "../../../../Utils/clicker";
 import { useCreateTaskStore } from "../../../../Core/Store/CreateTaskNews";
 import { useAppModeStore } from "../../../../Core/Store/AppModeStore";
 import DoneImg from "./DoneImg";
+import { useAppStore } from "../../../../Core/Store/AppStore";
 
 function DetailedTask() {
   const { setFullTasks, fullTasks } = useCreateTaskStore();
   const { useMockData } = useAppModeStore();
-
+  const { user } = useAppStore();
   const { setActions } = useActionsStore();
 
   const navigate = useNavigate();
@@ -107,20 +108,37 @@ function DetailedTask() {
     return `Раннее за ${currentMonth}`;
   };
 
-  const handleClickCard = (id) => {
+  const handleClickCard = (task) => {
     if (useMockData) {
-      navigate(`/task/full/${id}`);
-    } else {
+      navigate(`/task/full/${task.TaskID}`);
+      return;
+    }
+
+    if (task.ObjectType && task.ObjectType !== "Poll") {
       setActions({
         actionName: "clickElement",
         page: "oneTask",
         active: true,
-        TaskId: id,
+        TaskId: task.TaskID,
+        ClientID: user.subdivisionGuid,
+        objectType: task.ObjectType,
       });
-      !useMockData && clickTo1C();
-      navigate(`/task/full/${id}`);
+      clickTo1C();
+      task.TaskID
+        ? navigate(`/task/full/${task.TaskID}`)
+        : alert("TaskID не найден");
+    } else {
+      setActions({
+        actionName: "clickElement",
+        active: true,
+        objectId: task.TaskID,
+        objectType: task.ObjectType,
+        subSection: "Задачи",
+      });
+      clickTo1C();
     }
   };
+  console.log(user.subdivisionGuid);
 
   return (
     <div className="task_list">
@@ -129,7 +147,7 @@ function DetailedTask() {
           <div
             key={task.TaskID}
             className="task_card"
-            onClick={() => handleClickCard(task.TaskID)}
+            onClick={() => handleClickCard(task)}
           >
             <div className="task_header">
               <DoneImg done={task.Done} />
@@ -169,10 +187,16 @@ function DetailedTask() {
                   <span className="creator_name">{task.creator}</span>
                 </div>
 
-                <div className="task_sub_tag">
-                  <img src={task.tag} alt="" className="sub_tag_icon" />
-                  <div className="sub_tag_fallback">🔖</div>
-                </div>
+                {task.ResultImage && (
+                  <div className="task_sub_tag">
+                    <img
+                      src={task.ResultImage}
+                      alt=""
+                      className="sub_tag_icon"
+                    />
+                    <div className="sub_tag_fallback">🔖</div>
+                  </div>
+                )}
               </div>
             </div>
           </div>

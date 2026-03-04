@@ -1,3 +1,5 @@
+/* ===== ИСПРАВЛЕННЫЙ Swiper.css ===== */
+
 .swipe-container {
   position: fixed;
   bottom: 0;
@@ -5,14 +7,16 @@
   box-shadow: 0 -2px 10px rgba(0, 0, 0, 0.1);
   transition: transform 0.2s ease;
   border-radius: 12px 12px 0px 0px;
-  z-index: 1000;
+  z-index: 1000 !important;
   width: 100vw;
   max-width: 100%;
   box-sizing: border-box;
   transition: slideUp 0.3s ease-out;
 
-  overscroll-behavior: contain; // Предотвращает передачу скролла родителю
-  touch-action: pan-y; // Разрешаем только вертикальный скролл
+  overscroll-behavior: contain;
+  /* ⭐ УБИРАЕМ touch-action: pan-y отсюда! */
+  /* touch-action: pan-y;  ← УДАЛИТЬ! */
+  touch-action: auto !important;
 
   &-content {
     display: flex;
@@ -26,9 +30,8 @@
 
     overflow-y: auto;
     -webkit-overflow-scrolling: touch;
-
-    // Предотвращаем передачу скролла
     overscroll-behavior: contain;
+
     &-header {
       display: flex;
       flex-direction: column;
@@ -40,6 +43,7 @@
       border-radius: 12px 12px 0px 0px;
     }
   }
+
   &-remove {
     width: 60px;
     height: 5px;
@@ -47,6 +51,7 @@
     border-radius: 10px;
   }
 }
+
 @keyframes slideUp {
   from {
     height: 0;

@@ -66,6 +66,7 @@ function Layout({ children }) {
       <footer className="footer">
         <MenuBar />
       </footer>
+      <div className="safe-area-bottom" />
     </div>
   );
 }

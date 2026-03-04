@@ -1,50 +1,42 @@
+/* ===== ИСПРАВЛЕННЫЙ AdditionalInfo.css ===== */
+
 .horizontal-images-container {
   width: 100%;
   margin: 10px 0;
 }
 
-/* ⭐ ПРОСТОЙ РАБОЧИЙ КОНТЕЙНЕР */
 .image-scroll-container {
   width: 100%;
-  display: block;
-  overflow-x: auto; /* Просто auto */
+  overflow-x: scroll !important; /* ОДНО объявление с !important */
   overflow-y: hidden;
+  -webkit-overflow-scrolling: touch; /* ОДНО объявление */
   padding: 10px 0;
-
-  /* ⭐ ВАЖНО: отключаем все iOS фиксы которые могут мешать */
-  -webkit-overflow-scrolling: auto;
-  scroll-snap-type: none;
-
-  /* Показываем скроллбар для понимания что можно скроллить */
   scrollbar-width: thin;
   scrollbar-color: #888 transparent;
 
-  &::-webkit-scrollbar {
-    height: 8px;
-  }
-
-  &::-webkit-scrollbar-track {
-    background: #f1f1f1;
-    border-radius: 4px;
-    margin: 0 10px;
-  }
-
-  &::-webkit-scrollbar-thumb {
-    background: #888;
-    border-radius: 4px;
-
-    &:hover {
-      background: #555;
-    }
-  }
+  /* Разрешаем горизонтальный скролл жестами */
+  touch-action: pan-x !important; /* ⭐ ДОБАВИТЬ! Переопределяем родительский pan-y */
 }
 
-/* ⭐ ВАЖНО: обычный flex без лишних свойств */
+.image-scroll-container::-webkit-scrollbar {
+  height: 8px;
+  -webkit-appearance: none;
+}
+
+.image-scroll-container::-webkit-scrollbar-thumb {
+  background-color: rgba(0, 0, 0, 0.3);
+  border-radius: 4px;
+}
+
+/* ⭐ ВАЖНО: контент должен быть шире контейнера */
 .image-scroll-content {
   display: flex;
   gap: 12px;
   padding: 0 5px;
   min-height: 160px;
+  flex-wrap: nowrap;
+  width: max-content; /* ⭐ ДОБАВИТЬ! Принудительно растягиваем */
+  min-width: 100%;
 }
 
 .image-item {
@@ -58,8 +50,6 @@
   border-radius: 8px;
   display: block;
   cursor: pointer;
-
-  /* ⭐ УБИРАЕМ все user-select и touch фиксы */
   -webkit-user-select: auto;
   user-select: auto;
 
@@ -84,34 +74,25 @@
   }
 }
 
-@keyframes swipeHint {
-  0%,
-  100% {
-    transform: translateX(0);
-  }
-  50% {
-    transform: translateX(5px);
-  }
-}
-
-/* Если только одно изображение - центрируем и скрываем подсказку */
+/* Если только одно изображение */
 .horizontal-images-container:has(
   .image-scroll-content > .image-item:only-child
 ) {
   .image-scroll-container {
-    overflow: hidden;
+    overflow: hidden !important;
   }
 
   .image-scroll-content {
     justify-content: center;
+    width: 100%; /* Не нужно max-content для одного изображения */
   }
 
   .scroll-hint {
     display: none;
   }
 }
-/* ===== ОСТАЛЬНЫЕ СТИЛИ ===== */
 
+/* ===== ОСТАЛЬНЫЕ СТИЛИ ===== */
 .attachment_child {
   display: flex;
   flex-direction: row;
@@ -179,5 +160,10 @@
   gap: 16px !important;
   padding: 12px !important;
   flex: 1;
-  overflow: auto;
+  overflow-y: auto;
+  overflow-x: hidden;
+  -webkit-overflow-scrolling: touch;
+  width: 100%;
+  box-sizing: border-box;
+  overscroll-behavior: auto;
 }

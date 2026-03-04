@@ -1,8 +1,10 @@
 .detailed-task {
   padding: 16px;
   background-color: #fff;
-  min-height: 100vh;
-
+  position: relative;
+  // min-height: 100vh;
+  // flex: 1;
+  // overflow: auto;
   .task-not-found {
     display: flex;
     justify-content: center;

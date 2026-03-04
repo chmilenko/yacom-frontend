@@ -25,7 +25,7 @@ export const useHomeActions = () => {
   const { useMockData } = useAppModeStore();
 
   const taskAction = (TypeResult) => {
-    switch (TypeResult) {
+    switch (String(TypeResult)) {
       case "1":
         return "do";
       case "2":
@@ -85,15 +85,16 @@ export const useHomeActions = () => {
     }
   };
 
-  const onTaskExecute = (id) => {
+  const onTaskExecute = (id, info?: any) => {
     if (!additionalInfo.Done) {
       setActions({
         actionName: "TaskExecute",
-        objectType: additionalInfo.ObjectType,
-        taskCurrentAction: taskAction(additionalInfo.ResultType),
-        objectId: additionalInfo.TaskID,
-        ClientID: additionalInfo.ClientID,
-        IsChecked: additionalInfo.Done,
+        objectType: info.ObjectType,
+        taskCurrentAction: taskAction(info.ResultType || info.resultTypeNumber),
+        objectId: info.TaskID,
+        ClientID: info.ClientID,
+        IsChecked: info.Done,
+        ResultType: info.ResultType || info.resultTypeNumber,
         active: true,
       });
     }
@@ -101,20 +102,20 @@ export const useHomeActions = () => {
     !useMockData && clickTo1C();
   };
 
-  const taskFulfill = (id) => {
+  const taskFulfill = (id?: number, info?: any) => {
     const obj = {
       actionName: "TaskFulfill",
-      objectType: additionalInfo.ObjectType,
-      taskCurrentAction: taskAction(additionalInfo.ResultType),
-      objectId: additionalInfo.TaskID,
-      ClientID: additionalInfo.ClientID,
-      IsChecked: additionalInfo.Done,
+      objectType: info.ObjectType,
+      taskCurrentAction: taskAction(info.ResultType || info.resultTypeNumber),
+      objectId: info.TaskID,
+      TaskID: info.TaskID,
+      ResultType: info.ResultType || info.resultTypeNumber,
+      ClientID: info.ClientID,
+      IsChecked: info.Done,
       active: true,
     };
     if (id) {
       setTaskDoneStatus(id);
-      //проверить состояние списка после выполнение action
-      // setListState();
     }
     setActions(obj);
     !useMockData && clickTo1C();

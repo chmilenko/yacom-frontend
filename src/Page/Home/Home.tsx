@@ -36,6 +36,50 @@ function Home() {
     useMockData && setUser("");
   }, []);
 
+  useEffect(() => {
+    // Находим контейнер с контентом
+    const contentWrapper = document.querySelector(
+      ".content_wrapper",
+    ) as HTMLElement | null;
+    const mainContent = document.querySelector(".main") as HTMLElement | null;;
+
+    if (openSwiper) {
+      // Блокируем скролл на контенте
+      if (contentWrapper) {
+        contentWrapper.style.overflow = "hidden";
+        contentWrapper.style.touchAction = "none";
+        contentWrapper.style.pointerEvents = "none"; // Блокируем клики
+      }
+
+      // Также блокируем main если нужно
+      if (mainContent) {
+        mainContent.style.overflow = "hidden";
+        mainContent.style.touchAction = "none";
+      }
+
+      // Добавляем класс на body для дополнительной блокировки
+      document.body.classList.add("home-swiper-open");
+    } else {
+      // Возвращаем скролл
+      if (contentWrapper) {
+        contentWrapper.style.overflow = "";
+        contentWrapper.style.touchAction = "";
+        contentWrapper.style.pointerEvents = "";
+      }
+
+      if (mainContent) {
+        mainContent.style.overflow = "";
+        mainContent.style.touchAction = "";
+      }
+
+      document.body.classList.remove("home-swiper-open");
+    }
+
+    return () => {
+      // Очистка
+      document.body.classList.remove("home-swiper-open");
+    };
+  }, [openSwiper]);
 
   return (
     <div className="main">

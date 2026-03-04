@@ -9,9 +9,11 @@ export interface ITask {
   title?: string;
   mainTag?: string;
   tagTitle?: string;
+  Done?: boolean;
   date?: string;
   Content?: string;
   deadline?: string;
+  resultTypeNumber?: string;
   creator?: string;
   subTag?: string;
   attachments?: IAttachment[];
@@ -123,9 +125,7 @@ interface CreateTaskStore {
 
   // Методы
   setFullTasks: (tasks: string) => Promise<void>;
-  setExtendFullTasks: (tasks: string) => Promise<void>;
   setFullNews: (news: string) => Promise<void>;
-  setExtendFullNews: (news: string) => Promise<void>;
 
   setChapters: (chapters: string) => Promise<void>;
   setResultTypes: (types: string) => Promise<void>;
@@ -158,59 +158,8 @@ export const useCreateTaskStore = create<CreateTaskStore>()(
     createTaskError: null,
 
     // Методы
-    setFullTasks: async (tasks: string) => {
+    setFullTasks: async (Tasks: string) => {
       const isDebugMode = useAppModeStore.getState().isDebugMode;
-
-      try {
-        const { useMockData } = useAppModeStore.getState();
-        let fullTasksMock;
-
-        if (useMockData) {
-          const mockModule = await import("../Mock/fullTasks");
-          fullTasksMock = mockModule.fullTasks || [];
-        }
-
-        const res = !useMockData
-          ? (JSON.parse(tasks) as ITask[])
-          : fullTasksMock;
-
-        set({
-          fullTasks: res,
-        });
-      } catch (err: any) {
-        const { addError } = (
-          await import("./ErrorsStore")
-        ).useErrorsStore.getState();
-
-        addError(
-          {
-            type: "parsing",
-            message: "Ошибка парсинга данных задачи",
-            severity: "error",
-            context: "setFullTasks",
-            details: `Не удалось распарсить данные в setFullTasks\nОшибка ${
-              err.name
-            }: ${err.message}\nДанные: ${
-              typeof tasks === "string"
-                ? tasks.substring(0, 200) + "..."
-                : typeof tasks
-            }\n${err.stack}`,
-            originalError: {
-              name: err.name,
-              message: err.message,
-              stack: err.stack,
-            },
-          },
-          isDebugMode,
-        );
-
-        console.error("setAppState error:", err);
-      }
-    },
-
-    setExtendFullTasks: async (newTasks: string) => {
-      const isDebugMode = useAppModeStore.getState().isDebugMode;
-
       try {
         const { useMockData } = useAppModeStore.getState();
         let newTasksParsed;
@@ -219,7 +168,7 @@ export const useCreateTaskStore = create<CreateTaskStore>()(
           const mockModule = await import("../Mock/fullTasks");
           newTasksParsed = mockModule.fullTasks || [];
         } else {
-          newTasksParsed = JSON.parse(newTasks) as ITask[];
+          newTasksParsed = JSON.parse(Tasks) as ITask[];
         }
 
         // Получаем текущие задачи
@@ -247,13 +196,13 @@ export const useCreateTaskStore = create<CreateTaskStore>()(
             type: "parsing",
             message: "Ошибка парсинга данных для расширения задач",
             severity: "error",
-            context: "setExtendFullTasks",
-            details: `Не удалось распарсить данные в setExtendFullTasks\nОшибка ${
+            context: "setFullTasks",
+            details: `Не удалось распарсить данные в setFullTasks\nОшибка ${
               err.name
             }: ${err.message}\nДанные: ${
-              typeof newTasks === "string"
-                ? newTasks.substring(0, 200) + "..."
-                : typeof newTasks
+              typeof Tasks === "string"
+                ? Tasks.substring(0, 200) + "..."
+                : typeof Tasks
             }\n${err.stack}`,
             originalError: {
               name: err.name,
@@ -264,59 +213,11 @@ export const useCreateTaskStore = create<CreateTaskStore>()(
           isDebugMode,
         );
 
-        console.error("extendFullTasks error:", err);
-      }
-    },
-    //изменить типизацию
-    setFullNews: async (news: string) => {
-      const isDebugMode = useAppModeStore.getState().isDebugMode;
-
-      try {
-        const { useMockData } = useAppModeStore.getState();
-        let fullNewsMock;
-
-        if (useMockData) {
-          const mockModule = await import("../Mock/fullTasks");
-          fullNewsMock = mockModule.fullNews || [];
-        }
-
-        const res = !useMockData ? (JSON.parse(news) as INews[]) : fullNewsMock;
-
-        set({
-          fullNews: res,
-        });
-      } catch (err: any) {
-        const { addError } = (
-          await import("./ErrorsStore")
-        ).useErrorsStore.getState();
-
-        addError(
-          {
-            type: "parsing",
-            message: "Ошибка парсинга полного списка Новостей",
-            severity: "error",
-            context: "setFullNews",
-            details: `Не удалось распарсить данные в setFullNews\nОшибка ${
-              err.name
-            }: ${err.message}\nДанные: ${
-              typeof news === "string"
-                ? news.substring(0, 200) + "..."
-                : typeof news
-            }\n${err.stack}`,
-            originalError: {
-              name: err.name,
-              message: err.message,
-              stack: err.stack,
-            },
-          },
-          isDebugMode,
-        );
-
-        console.error("setFullNews error:", err);
+        console.error("setFullTasks error:", err);
       }
     },
 
-    setExtendFullNews: async (newNews: string) => {
+    setFullNews: async (News: string) => {
       const isDebugMode = useAppModeStore.getState().isDebugMode;
 
       try {
@@ -327,7 +228,7 @@ export const useCreateTaskStore = create<CreateTaskStore>()(
           const mockModule = await import("../Mock/fullTasks");
           newNewssParsed = mockModule.fullTasks || [];
         } else {
-          newNewssParsed = JSON.parse(newNews) as INews[];
+          newNewssParsed = JSON.parse(News) as INews[];
         }
 
         // Получаем текущие задачи
@@ -355,13 +256,13 @@ export const useCreateTaskStore = create<CreateTaskStore>()(
             type: "parsing",
             message: "Ошибка парсинга данных для расширения новостей",
             severity: "error",
-            context: "setExtendFullNews",
-            details: `Не удалось распарсить данные в setExtendFullNews\nОшибка ${
+            context: "setFullNews",
+            details: `Не удалось распарсить данные в setFullNews\nОшибка ${
               err.name
             }: ${err.message}\nДанные: ${
-              typeof newNews === "string"
-                ? newNews.substring(0, 200) + "..."
-                : typeof newNews
+              typeof News === "string"
+                ? News.substring(0, 200) + "..."
+                : typeof News
             }\n${err.stack}`,
             originalError: {
               name: err.name,
@@ -372,8 +273,14 @@ export const useCreateTaskStore = create<CreateTaskStore>()(
           isDebugMode,
         );
 
-        console.error("setExtendFullNews error:", err);
+        console.error("setFullNews error:", err);
       }
+    },
+
+    setFullTaskDone: async () => {
+      try {
+        const { oneTask } = get();
+      } catch (err) {}
     },
 
     setChapters: async (chapters: string) => {
@@ -579,6 +486,7 @@ export const useCreateTaskStore = create<CreateTaskStore>()(
         const mockModule = await import("../Mock/fullTasks");
         const oneTaskData = mockModule.oneTask || [];
         const res = oneTaskData.find((task) => task.TaskID === id);
+        console.log(res);
 
         set({
           oneTask: res || [],

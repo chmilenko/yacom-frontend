@@ -1,7 +1,6 @@
 /* eslint-disable jsx-a11y/img-redundant-alt */
 import { useState, useRef, useCallback, useEffect } from "react";
-
-import { Swipe } from "react-swipe-component";
+import { createPortal } from "react-dom"; // Добавить импорт
 
 import "./Swiper.scss";
 import { useAppStore } from "../../Core/Store/AppStore";
@@ -20,20 +19,6 @@ const Swiper = ({ children, header, closeSwiper }) => {
       return Math.max(newPosition, 0);
     });
   }, []);
-
-  useEffect(() => {
-    // Хак для iOS - предотвращаем скролл body
-    const preventDefault = (e) => {
-      if (openSwiper) {
-        e.preventDefault();
-      }
-    };
-    document.addEventListener("touchmove", preventDefault, { passive: false });
-
-    return () => {
-      document.removeEventListener("touchmove", preventDefault);
-    };
-  }, [openSwiper]);
 
   const handleMouseDown = useCallback(
     (event) => {
@@ -77,10 +62,13 @@ const Swiper = ({ children, header, closeSwiper }) => {
 
       const handleTouchMove = (event) => {
         if (isDragging.current) {
+          event.preventDefault();
+          event.stopPropagation();
+
           const currentY = event.touches[0].clientY;
           const deltaY = currentY - initialY.current;
           handleDrag(deltaY);
-          initialY.current = currentY; // Теперь тоже обновляем начальную позицию
+          initialY.current = currentY;
         }
       };
 
@@ -99,7 +87,7 @@ const Swiper = ({ children, header, closeSwiper }) => {
         });
       };
 
-      window.addEventListener("touchmove", handleTouchMove);
+      window.addEventListener("touchmove", handleTouchMove, { passive: false });
       window.addEventListener("touchend", handleTouchEnd);
     },
     [closeSwiper, handleDrag],
@@ -118,24 +106,25 @@ const Swiper = ({ children, header, closeSwiper }) => {
     }
   }, [position, openSwiper]);
 
-  return (
-    <>
-      {openSwiper && (
-        <div className="swipe-container" ref={swipeRef}>
-          <Swipe className="swipe-container-content">
-            <div
-              className="swipe-container-content-header"
-              onMouseDown={handleMouseDown}
-              onTouchStart={handleTouchStart}
-            >
-              <div className="swipe-container-remove"></div>
-              {header}
-            </div>
-            {children}
-          </Swipe>
+  // Если свайпер не открыт - ничего не рендерим
+  if (!openSwiper) return null;
+
+  // Рендерим через портал в body
+  return createPortal(
+    <div className="swipe-container" ref={swipeRef}>
+      <div className="swipe-container-content" style={{ touchAction: "auto" }}>
+        <div
+          className="swipe-container-content-header"
+          onMouseDown={handleMouseDown}
+          onTouchStart={handleTouchStart}
+        >
+          <div className="swipe-container-remove"></div>
+          {header}
         </div>
-      )}
-    </>
+        {children}
+      </div>
+    </div>,
+    document.body,
   );
 };
 

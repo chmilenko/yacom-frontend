@@ -26,7 +26,7 @@ const CustomSelect = ({
   // Фильтрация опций по поиску
   const filteredOptions = searchTerm
     ? options.filter((option) =>
-        option[optionLabel].toLowerCase().includes(searchTerm.toLowerCase())
+        option[optionLabel].toLowerCase().includes(searchTerm.toLowerCase()),
       )
     : options;
 
@@ -76,6 +76,7 @@ const CustomSelect = ({
       setIsOpen(true);
     }
   };
+  console.log(error, showError);
 
   return (
     <div className={`custom-select-container ${className}`}>
@@ -149,7 +150,9 @@ const CustomSelect = ({
       </div>
 
       {showError && error && (
-        <span className="custom-select-error">{error}</span>
+        <span className="custom-select-error" style={{ color: "#ff4757" }}>
+          {error}
+        </span>
       )}
     </div>
   );

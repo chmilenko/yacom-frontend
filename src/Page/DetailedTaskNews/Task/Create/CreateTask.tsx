@@ -41,6 +41,7 @@ function CreateTask() {
   const getValue = (value) => {
     return value === null ? "" : value;
   };
+  console.log(createTaskError?.chapter);
 
   return (
     <div className="tasks_container">
@@ -107,7 +108,9 @@ function CreateTask() {
               {String(taskFormData?.title || "")?.length}/100 символов
             </div>
             {createTaskError?.title && (
-              <span className="error_text">{createTaskError.title}</span>
+              <span className="error_text" style={{ color: "#ff4757" }}>
+                {createTaskError.title}
+              </span>
             )}
           </div>
         </div>
@@ -127,7 +130,9 @@ function CreateTask() {
             onChange={handleChange}
           />
           {createTaskError?.deadline && (
-            <span className="error_text">{createTaskError.deadline}</span>
+            <span className="error_text" style={{ color: "#ff4757" }}>
+              {createTaskError.deadline}
+            </span>
           )}
         </div>
 
@@ -152,7 +157,9 @@ function CreateTask() {
               {String(taskFormData?.content || "").length}/1000 символов
             </div>
             {createTaskError?.content && (
-              <span className="error_text">{createTaskError.content}</span>
+              <span className="error_text" style={{ color: "#ff4757" }}>
+                {createTaskError.content}
+              </span>
             )}
           </div>
         </div>

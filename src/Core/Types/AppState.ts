@@ -34,6 +34,8 @@ export interface ISection {
 
   sectionData?: {
     list?: Array<Task>;
+    TaskID?: string;
+    ObjectID?: string;
     [key: string]: any;
   };
 }

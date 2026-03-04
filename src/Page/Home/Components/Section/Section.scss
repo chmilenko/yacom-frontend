@@ -36,9 +36,13 @@
       border: 1px solid #d1d1d6;
       background-color: #f0f8ff;
       border-radius: 5px;
-      z-index: -1;
+      z-index: 0;
       opacity: 1;
       transition: opacity 0.2s ease;
+    }
+    & > * {
+      position: relative;
+      z-index: 1;
     }
   }
 
@@ -146,6 +150,37 @@
     &.bold_date {
       font-weight: bold;
       font-size: 11px !important;
+    }
+  }
+}
+
+.section_item_header {
+  font-weight: 400;
+  font-family: "Roboto", sans-serif;
+  line-height: 143%;
+  font-size: 14px;
+  transition: all 0.1s ease;
+  padding: 2px 4px;
+  border-radius: 4px;
+
+  &._done {
+    text-decoration: line-through;
+  }
+
+  &.bold {
+    font-weight: bold;
+  }
+
+  // Эффект при нажатии на заголовок
+  &.active_header {
+    background-color: #e0e0e0;
+    transform: translateX(2px);
+    box-shadow: inset 2px 0 0 $primary;
+
+    // Для iOS можно добавить
+    @media (hover: none) and (pointer: coarse) {
+      background-color: #d0d0d0;
+      transform: translateX(4px);
     }
   }
 }

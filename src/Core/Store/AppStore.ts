@@ -8,6 +8,7 @@ import {
   User,
 } from "@core/Types/AppState";
 import { useAppModeStore } from "./AppModeStore";
+import { notify } from "../../Utils/oneSNotification";
 
 interface AppStore extends AppState {
   setAppState: (appData: string) => Promise<void>;
@@ -153,7 +154,6 @@ export const useAppStore = create<AppStore>()((set, get) => ({
 
   setTaskDoneStatus: async (id: number | string) => {
     const isDebugMode = useAppModeStore.getState().isDebugMode;
-
     try {
       const { forState } = get();
 
