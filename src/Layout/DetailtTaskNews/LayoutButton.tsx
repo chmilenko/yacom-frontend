@@ -39,6 +39,15 @@ function LayoutButtons() {
     !useMockData && clickTo1C();
   };
 
+  const handleGetReport = () => {
+    setActions({
+      actionName: "clickElement",
+      active: true,
+      action: "getReport",
+    });
+    !useMockData && clickTo1C();
+  };
+
   const handleCreateTask = async () => {
     try {
       const result = await postTask();
@@ -188,7 +197,7 @@ function LayoutButtons() {
           type="navigation"
           text="Создать"
         />
-        <Button type="navigation" text="Отчет" />
+        <Button type="navigation" text="Отчет" onClick={handleGetReport} />
       </>
     );
   }

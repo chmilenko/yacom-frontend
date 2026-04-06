@@ -13,9 +13,12 @@ function MenuBar() {
   const { useMockData } = useAppModeStore();
   const { setActions } = useActionsStore();
 
+  const closePathsMenu = ["/journals", "/products", "/help"];
   const handleNavigation = (item) => {
     if (location.pathname !== item.path) {
-      navigate(item.path);
+      if (!closePathsMenu.includes(item.path)) {
+        navigate(item.path);
+      }
       openChildMenu(item);
     }
   };

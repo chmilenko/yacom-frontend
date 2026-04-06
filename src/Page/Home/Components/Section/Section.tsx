@@ -9,7 +9,7 @@ import { ITask } from "@core/Store/CreateTaskNews";
 function Section({ section, onOpenSwiper, openSectionForm, type }) {
   const [isActive, setIsActive] = useState(false);
   const [isExpanded, setIsExpanded] = useState(true);
-  const [activeItemId, setActiveItemId] = useState(null); // Добавляем состояние
+  const [activeItemId, setActiveItemId] = useState(null);
   const navigate = useNavigate();
 
   const { openSwiper, countActualTasks, countUnreadNews } = useAppStore();
@@ -67,7 +67,6 @@ function Section({ section, onOpenSwiper, openSectionForm, type }) {
     setTimeout(() => setIsActive(false), 200);
   };
 
-  // Обработчики для item
   const handleItemTouchStart = (itemId) => {
     setActiveItemId(itemId);
   };
@@ -189,29 +188,41 @@ function Section({ section, onOpenSwiper, openSectionForm, type }) {
                   >
                     {type === "Задачи" ? (
                       <>
-                        <div className="section_item_checker">
-                          {(item.ResultType == "3" ||
-                            item.ResultType == "4" ||
-                            item.ResultType == "5") &&
-                          !item.Done ? (
+                        {item.TaskClass === "HighPriorityTask" && (
+                          <div className="section_item_priority priority-gradient">
                             <span className="material-symbols-outlined">
-                              add_photo_alternate
+                              priority_high
                             </span>
-                          ) : (
-                            <Checkbox
-                              checked={item.Done}
-                              readonly={true}
-                              className={openSwiper && "dark"}
-                              id={item.TaskID}
-                            />
-                          )}
-                        </div>
-                        <div
-                          className={`section_item_header ${
-                            activeItemId === item.TaskID ? "active_header" : ""
-                          } ${item.Done && item.ResultType != "8" ? "_done" : ""}`}
-                        >
-                          {item.Header}
+                            <span>Срочно</span>
+                          </div>
+                        )}
+                        <div className="section_item_main">
+                          <div className="section_item_checker">
+                            {(item.ResultType == "3" ||
+                              item.ResultType == "4" ||
+                              item.ResultType == "5") &&
+                            !item.Done ? (
+                              <span className="material-symbols-outlined">
+                                add_photo_alternate
+                              </span>
+                            ) : (
+                              <Checkbox
+                                checked={item.Done}
+                                readonly={true}
+                                className={openSwiper && "dark"}
+                                id={item.TaskID}
+                              />
+                            )}
+                          </div>
+                          <div
+                            className={`section_item_header ${
+                              activeItemId === item.TaskID
+                                ? "active_header"
+                                : ""
+                            } ${item.Done && item.ResultType != "8" ? "_done" : ""}`}
+                          >
+                            {item.Header}
+                          </div>
                         </div>
                       </>
                     ) : (
@@ -239,8 +250,12 @@ function Section({ section, onOpenSwiper, openSectionForm, type }) {
                     )}
                   </div>
                 ))
-              : type !== "Сигналы" && (
-                  <div className="section_empty">No items</div>
+              : type !== "Signals" && (
+                  <div className="section_empty">
+                    {type === "Задачи"
+                      ? "Новых задач нет"
+                      : "Актуальных новостей нет"}
+                  </div>
                 )}
           </div>
         )}

@@ -14,7 +14,6 @@ export const useHomeActions = () => {
   const {
     additionalInfo,
     setAdditionalInfo,
-
     setTaskDoneStatus,
     setReadNews,
     openSwiper,

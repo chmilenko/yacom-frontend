@@ -156,7 +156,7 @@ export const useAppStore = create<AppStore>()((set, get) => ({
     const isDebugMode = useAppModeStore.getState().isDebugMode;
     try {
       const { forState } = get();
-
+      
       const updatedData = JSON.parse(JSON.stringify(forState));
       let taskToMove = null;
 
@@ -379,8 +379,6 @@ export const useAppStore = create<AppStore>()((set, get) => ({
   },
 
   setListState: async (ListData) => {
-    const isDebugMode = useAppModeStore.getState().isDebugMode;
-
     try {
       const res = JSON.parse(ListData).reduce((acc, val) => {
         acc = val;

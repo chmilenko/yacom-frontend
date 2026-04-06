@@ -14,7 +14,7 @@ const createMarkup = (htmlContent: string) => {
 function DetailedNews() {
   const { useMockData } = useAppModeStore();
   const { setFullNews, fullNews } = useCreateTaskStore();
-  const { setActions, actions } = useActionsStore();
+  const { setActions } = useActionsStore();
 
   const [currentMonthIndex, setCurrentMonthIndex] = useState(0);
 
@@ -24,7 +24,6 @@ function DetailedNews() {
     useMockData && setFullNews("");
     initMonths();
   }, []);
-  console.log(fullNews);
 
   const initMonths = () => {
     const monthsArray: string[] = [];

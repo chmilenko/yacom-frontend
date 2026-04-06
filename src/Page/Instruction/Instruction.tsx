@@ -8,7 +8,6 @@ import clickTo1C from "../../Utils/clicker";
 import InstructionItem from "./InstructionItem";
 import { useAppModeStore } from "../../Core/Store/AppModeStore";
 
-// Ключи для localStorage
 const STORAGE_KEYS = {
   OPEN_INDEXES: "instructions_open_indexes",
   FILTER_TEXT: "instructions_filter_text",
@@ -16,10 +15,10 @@ const STORAGE_KEYS = {
 
 function Instruction() {
   const { instructions, setInstructionsState } = useAppStore();
-  const { setActions } = useActionsStore();
+  const { setActions, actions } = useActionsStore();
   const { useMockData } = useAppModeStore();
+  console.log(actions);
 
-  // Восстанавливаем состояние из localStorage
   const [openIndexes, setOpenIndexes] = useState(() => {
     try {
       const saved = localStorage.getItem(STORAGE_KEYS.OPEN_INDEXES);
@@ -42,7 +41,6 @@ function Instruction() {
     useMockData && setInstructionsState("");
   }, []);
 
-  // Сохраняем openIndexes в localStorage при изменении
   useEffect(() => {
     localStorage.setItem(
       STORAGE_KEYS.OPEN_INDEXES,
@@ -50,15 +48,13 @@ function Instruction() {
     );
   }, [openIndexes]);
 
-  // Сохраняем filterText в localStorage при изменении
   useEffect(() => {
     localStorage.setItem(STORAGE_KEYS.FILTER_TEXT, filterText);
   }, [filterText]);
 
-  // Очистка localStorage при размонтировании (опционально)
   useEffect(() => {
     return () => {
-      // Если хотите очищать при уходе со страницы, раскомментируйте:
+      // Очистка перед уходом:
       // localStorage.removeItem(STORAGE_KEYS.OPEN_INDEXES);
       // localStorage.removeItem(STORAGE_KEYS.FILTER_TEXT);
     };
@@ -166,10 +162,8 @@ function Instruction() {
       .filter(Boolean);
   };
 
-  // Обновленный useEffect для фильтрации
   useEffect(() => {
     if (!filterText) {
-      // При очистке фильтра НЕ очищаем openIndexes, а оставляем как есть
       return;
     }
 
