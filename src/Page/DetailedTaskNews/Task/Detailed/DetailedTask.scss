@@ -1,32 +1,31 @@
 @import "../../../../Styles/variables.scss";
 .task_list {
   position: relative;
-  // padding-bottom: 90px;
   width: 100%;
-  // min-height: 100%;
 }
 .task_list_container {
-  flex: 1; // Занимает все доступное пространство
-  overflow-y: auto; // Скролл если много карточек
+  flex: 1;
+  overflow-y: auto;
   display: flex;
   flex-direction: column;
   gap: 20px;
-  padding: 20px;
+  padding: 8px;
   max-width: 800px;
   margin: 0 auto;
 }
 
 .task_card {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
   background: white;
   border-radius: 16px;
-  padding: 20px;
+  padding: 12px;
   box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
-  // transition: all 0.3s ease;
   position: relative;
   overflow: hidden;
 
   &:hover {
-    // transform: translateY(-4px);
     box-shadow: 0 8px 30px rgba(0, 0, 0, 0.12);
   }
 
@@ -47,7 +46,6 @@
   display: flex;
   justify-content: space-between;
   align-items: center;
-  margin-bottom: 16px;
   position: relative;
 }
 
@@ -93,8 +91,6 @@
   align-items: center;
 
   .main_tag_icon {
-    // width: 32px !important;
-    // height: 32px !important;
     object-fit: contain;
     border-radius: 8px;
     border: 2px solid #f0f0f0;
@@ -110,36 +106,28 @@
 // Разделитель
 .task_divider {
   height: 1px;
-  // background: linear-gradient(
-  //   90deg,
-  //   transparent 0%,
-  //   rgba($primary, 0.2) 20%,
-  //   rgba($primary, 0.2) 80%,
-  //   transparent 100%
-  // );
   margin: 16px 0;
 }
 
 // Основное тело
 .task_body {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
   .task_title {
-    margin: 0 0 20px 0;
     font-size: 18px;
     font-weight: 600;
     color: #222;
-    line-height: 1.4;
     text-align: center;
-    padding: 0 20px;
   }
 }
 
 .task_deadline {
   display: flex;
   align-items: center;
-  justify-content: center;
+  justify-content: row;
   gap: 12px;
-  margin-bottom: 24px;
-  padding: 12px;
+  padding: 4px;
   background: linear-gradient(135deg, #fff9f0, #fff4e6);
   border-radius: 12px;
   border: 1px solid rgba(#ff9800, 0.1);
@@ -171,8 +159,6 @@
   display: flex;
   justify-content: space-between;
   align-items: center;
-  padding-top: 16px;
-  border-top: 1px dashed #eee;
 }
 
 .task_creator {
@@ -268,7 +254,12 @@
     justify-content: center;
     text-align: center;
   }
-
+  .task_tag_title {
+    position: relative;
+    margin-top: -2.2rem;
+    margin-bottom: 0.5rem;
+    z-index: 2;
+  }
   .task_main_tag {
     order: -1;
   }
@@ -279,9 +270,11 @@
   }
 
   .task_deadline {
-    flex-direction: column;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: row;
     gap: 8px;
-    padding: 16px;
 
     .deadline_icon {
       font-size: 20px;
@@ -300,10 +293,6 @@
 }
 
 @media (max-width: 396px) {
-  // .main_tag_icon {
-  //   width: 28px !important;
-  //   height: 28px !important;
-  // }
   .tag_badge {
     font-size: 12px !important;
     padding: 3px 12px !important;
@@ -315,25 +304,3 @@
     font-size: 12px;
   }
 }
-
-// Анимация появления
-// @keyframes fadeInUp {
-//   from {
-//     opacity: 0;
-//     transform: translateY(20px);
-//   }
-//   to {
-//     opacity: 1;
-//     transform: translateY(0);
-//   }
-// }
-
-// .task_card {
-//   animation: fadeInUp 0.5s ease forwards;
-
-//   @for $i from 1 through 10 {
-//     &:nth-child(#{$i}) {
-//       animation-delay: $i * 0.1s;
-//     }
-//   }
-// }

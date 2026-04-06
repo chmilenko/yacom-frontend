@@ -139,7 +139,6 @@ function DetailedTask() {
     }
   };
 
-
   return (
     <div className="task_list">
       <div className="task_list_container">
@@ -151,11 +150,8 @@ function DetailedTask() {
           >
             <div className="task_header">
               <DoneImg done={task.Done} />
-              <div className="task_tag_title">
-                <span className="tag_badge">{task.tagTitle}</span>
-              </div>
+
               <div className="task_date">
-                <span className="date_icon">📅</span>
                 <span className="date_text">
                   {task.date
                     ? new Date(task.date)
@@ -169,21 +165,19 @@ function DetailedTask() {
                 </span>
               </div>
             </div>
-
-            <div className="task_divider"></div>
-
             <div className="task_body">
-              <h3 className="task_title">{task.title}</h3>
+              <div className="task_tag_title">
+                <span className="tag_badge">{task.tagTitle}</span>
+              </div>
+              <div className="task_title">{task.title}</div>
 
               <div className="task_deadline">
-                <span className="deadline_icon">⏰</span>
                 <span className="deadline_label">Выполнить до:</span>
                 <span className="deadline_date">{task.deadline}</span>
               </div>
 
               <div className="task_footer">
                 <div className="task_creator">
-                  <span className="creator_icon">👤</span>
                   <span className="creator_name">{task.creator}</span>
                 </div>
 
